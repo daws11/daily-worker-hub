@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Welcome Screen</title>
+<!-- Material Symbols Link -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom styles for smooth rendering */
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display">
+<div class="relative flex h-screen w-full flex-col overflow-hidden group/design-root">
+<!-- Hero Section (Top 55-60%) -->
+<div class="relative h-[60vh] w-full shrink-0">
+<!-- Background Image -->
+<div class="absolute inset-0 bg-cover bg-center bg-no-repeat" data-alt="Modern bright open-air cafe interior in Bali with greenery and wooden furniture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBSHbokEQ_O4nZ4SKXFKhOXDQ-F0BMerEprwMYeC7q1Zxsnu_20Ol5s93CzMmJ0NGGhic40ajXj-sTQtmFNYKmbc9od-5FV_hx6qs93JsuAyetvq_JiQHX2FOTQP99UKajlBIhSQyb-oawlO6yPed9klRG0gekJedDkEYbT0vvGvZAgFtoVnBYkD079YUPpcTcO9_IFRxB_hh1obcA9AWPJOIcYoKfooOZ63GqbWuN4bs8CzObZebgsWvCIYZyIwcpfjCSAhHGJQyc');">
+<!-- subtle gradient overlay for better text contrast if header elements overlay, and aesthetic depth -->
+<div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/10"></div>
+</div>
+<!-- Top Header Area (Language Toggle) -->
+<div class="absolute top-0 left-0 right-0 p-4 pt-14 flex justify-end items-center z-10">
+<!-- Glassmorphism Pill Toggle -->
+<div class="flex items-center gap-2 bg-black/20 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 shadow-sm transition-all hover:bg-black/30 cursor-pointer">
+<span class="text-white text-xs font-bold tracking-wide">ID</span>
+<span class="h-3 w-px bg-white/40"></span>
+<span class="text-white/60 text-xs font-medium tracking-wide">EN</span>
+</div>
+</div>
+</div>
+<!-- Content Bottom Sheet -->
+<!-- Negative margin pulls it up over the image to create the sheet effect -->
+<div class="relative z-10 -mt-10 flex flex-1 flex-col rounded-t-3xl bg-white dark:bg-background-dark shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
+<!-- Handle bar (visual cue for bottom sheet) -->
+<div class="flex justify-center pt-3 pb-1">
+<div class="h-1.5 w-12 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col flex-1 px-6 pt-4 pb-8">
+<!-- Headline -->
+<div class="mb-3">
+<h1 class="text-slate-900 dark:text-white text-[32px] leading-[1.15] font-extrabold tracking-tight">
+                        Temukan pekerja harian terbaik untuk bisnis Anda
+                    </h1>
+</div>
+<!-- Subheadline -->
+<div class="mb-6">
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-relaxed">
+                        Solusi cepat rekrutmen staff harian untuk hotel, restoran, dan café di Bali. Terinspirasi oleh kecepatan Gojek.
+                    </p>
+</div>
+<!-- Spacer to push actions to the bottom -->
+<div class="flex-1"></div>
+<!-- Actions -->
+<div class="flex flex-col gap-4 mt-4">
+<!-- Primary Button -->
+<button class="group relative flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-primary h-14 px-5 text-white shadow-lg shadow-blue-500/25 transition-all active:scale-[0.98] hover:bg-blue-600 hover:shadow-blue-500/40">
+<span class="text-lg font-bold tracking-wide mr-2">Mulai Rekrut</span>
+<span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<!-- Secondary Link -->
+<div class="flex items-center justify-center gap-1 py-2">
+<span class="text-slate-500 dark:text-slate-400 text-sm font-medium">Sudah punya akun?</span>
+<button class="text-primary text-sm font-bold hover:text-blue-600 transition-colors">
+                            Masuk
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

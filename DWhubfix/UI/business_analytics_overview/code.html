@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Analytics Overview</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#13ec5b",
+              "primary-dark": "#0ea340",
+              "background-light": "#f6f8f6",
+              "background-dark": "#102216",
+              "surface-light": "#ffffff",
+              "surface-dark": "#1A3825", // Slightly lighter than bg-dark for cards
+              "text-light": "#111813",
+              "text-dark": "#ffffff",
+              "subtext-light": "#61896f",
+              "subtext-dark": "#8fae9b",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark pb-24 overflow-x-hidden shadow-2xl">
+<!-- Header -->
+<header class="flex flex-col gap-2 p-4 pb-2">
+<div class="flex items-center h-12 justify-between">
+<div>
+<p class="text-sm font-medium text-subtext-light dark:text-subtext-dark">Welcome back,</p>
+<h1 class="text-2xl font-bold leading-tight">Business Insights</h1>
+</div>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-surface-dark shadow-sm text-text-light dark:text-text-dark hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined">calendar_month</span>
+</button>
+</div>
+</header>
+<!-- Date Chips -->
+<div class="flex gap-3 px-4 py-2 overflow-x-auto no-scrollbar pb-4">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-[#0b3316] pl-5 pr-5 shadow-sm shadow-primary/20 transition-transform active:scale-95">
+<span class="text-sm font-bold leading-normal">This Week</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 text-subtext-light dark:text-gray-300 pl-5 pr-5 transition-transform active:scale-95">
+<span class="text-sm font-medium leading-normal">Last Month</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 text-subtext-light dark:text-gray-300 pl-5 pr-5 transition-transform active:scale-95">
+<span class="text-sm font-medium leading-normal">Custom</span>
+</button>
+</div>
+<!-- Stats Overview -->
+<div class="grid grid-cols-2 gap-3 px-4 mb-6">
+<!-- Total Spent Card (Span 2) -->
+<div class="col-span-2 flex flex-col gap-1 rounded-xl p-5 bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-medium">Total Spent</p>
+<p class="text-3xl font-bold tracking-tight mt-1">IDR 12.5M</p>
+</div>
+<div class="flex items-center gap-1 bg-primary/10 dark:bg-primary/20 px-2 py-1 rounded-lg">
+<span class="material-symbols-outlined text-primary-dark dark:text-primary text-sm font-bold">trending_up</span>
+<span class="text-primary-dark dark:text-primary text-xs font-bold">+12%</span>
+</div>
+</div>
+</div>
+<!-- Active Workers -->
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-subtext-light dark:text-gray-400">group</span>
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-medium">Active</p>
+</div>
+<p class="text-2xl font-bold">12</p>
+<p class="text-primary-dark dark:text-primary text-xs font-bold">+2 workers</p>
+</div>
+<!-- Satisfaction -->
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-yellow-500">star</span>
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-medium">Rating</p>
+</div>
+<p class="text-2xl font-bold">4.8</p>
+<p class="text-primary-dark dark:text-primary text-xs font-bold">+0.1 score</p>
+</div>
+</div>
+<!-- Chart Section -->
+<div class="px-4 mb-8">
+<h2 class="text-lg font-bold mb-4 px-1">Overview Pengeluaran</h2>
+<div class="bg-white dark:bg-surface-dark rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="flex justify-between items-end mb-6">
+<div>
+<p class="text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider">Weekly Spending</p>
+<p class="text-xl font-bold mt-1">IDR 4.200.000</p>
+</div>
+<div class="flex gap-2 text-xs font-medium text-subtext-light dark:text-subtext-dark">
+<span>Aug 1 - Aug 7</span>
+</div>
+</div>
+<!-- Custom SVG Chart -->
+<div class="relative h-40 w-full">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 350 100">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#13ec5b" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#13ec5b" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Area Fill -->
+<path d="M0,100 L0,60 C20,60 40,40 60,45 C80,50 100,20 120,25 C140,30 160,80 180,75 C200,70 220,30 240,35 C260,40 280,10 300,15 C320,20 340,50 350,55 L350,100 Z" fill="url(#chartGradient)"></path>
+<!-- Line -->
+<path d="M0,60 C20,60 40,40 60,45 C80,50 100,20 120,25 C140,30 160,80 180,75 C200,70 220,30 240,35 C260,40 280,10 300,15 C320,20 340,50 350,55" fill="none" stroke="#13ec5b" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Tooltip Dot (Mocked) -->
+<circle cx="300" cy="15" fill="#ffffff" r="4" stroke="#13ec5b" stroke-width="2"></circle>
+</svg>
+<!-- X Axis Labels -->
+<div class="flex justify-between mt-2 text-xs font-medium text-subtext-light dark:text-subtext-dark opacity-70">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+<span>Sun</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Feedback Collection CTA -->
+<div class="px-4 mb-8">
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-[#0f2416] p-5 shadow-lg">
+<!-- Decorative background circle -->
+<div class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/20 blur-xl"></div>
+<div class="flex items-center justify-between relative z-10">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">reviews</span>
+<h3 class="text-white font-bold text-lg">Feedback Collection</h3>
+</div>
+<p class="text-gray-300 text-sm">You have 3 unrated workers from yesterday's shift.</p>
+</div>
+</div>
+<div class="mt-4 flex gap-3">
+<button class="flex-1 bg-primary hover:bg-primary-dark text-[#00210e] font-bold text-sm py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+<span>Rate Workers</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+<button class="bg-white/10 hover:bg-white/20 text-white font-medium text-sm py-2.5 px-4 rounded-lg transition-colors">
+                        Later
+                    </button>
+</div>
+</div>
+</div>
+<!-- Job History List -->
+<div class="px-4 flex-1">
+<div class="flex justify-between items-center mb-4 px-1">
+<h2 class="text-lg font-bold">Riwayat Job</h2>
+<button class="text-primary-dark dark:text-primary text-sm font-medium">See All</button>
+</div>
+<div class="flex flex-col gap-3">
+<!-- List Item 1 -->
+<div class="flex items-center gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="h-12 w-12 rounded-full overflow-hidden shrink-0 bg-gray-200">
+<img alt="Portrait of Wayan, a young Balinese bartender smiling" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANLiPInDbJdbkRhHghoFjQUSIwiC57XHvqSeD4nWHGBAVYokC2bYEqm5i82NIMHseoAn6SFSULu9qyK-t1sDe93flZSP9H0tmr_e2TASB4YoRSlfvvQcGpjdoUb1IPu4N12Q75el0JAk73aOGb_97dBD8Mr96fq-EiksZLQaQibTDejFLPwFpblMbVo1unHLwtz2a2JRT7cykLk5vry5hfrVTK9tsoGIMZS04-EVmYTIusR78Wf9AEfEVznZtlsw0H52yilGqDMbw"/>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<p class="font-bold text-sm truncate">Wayan S.</p>
+<span class="text-xs font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded-full">Completed</span>
+</div>
+<p class="text-xs text-subtext-light dark:text-subtext-dark truncate">Bartender • 6 Hours</p>
+<p class="text-xs font-semibold mt-1">IDR 250.000</p>
+</div>
+<button class="h-8 w-8 flex items-center justify-center rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+<!-- List Item 2 -->
+<div class="flex items-center gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="h-12 w-12 rounded-full overflow-hidden shrink-0 bg-gray-200">
+<img alt="Portrait of Putri, a hospitality server" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA786kHbgpSxM7fitO1qZenf9HrUJETZ3wupgxix3nh4p2cmjsZcSoGuV2MAXi1MwcQ7qAGnOsceMdmEUSJt5MuSJr_mLEYD6PHWv0gEBAgDI0nl2h66OIoBG_2_ljalAKH8pCJAFp09GgM9dLFKx4hmILkvkseEASTeB4abKmSFelWlGKLrX-xZMcPhcsOy-aK9xaiU3h8lGGbqr2bHC5E89QSLYMsKuo2GA_SAEliKEux6e82Zugvu4_zCgtR4uZZqetAc0exkTw"/>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<p class="font-bold text-sm truncate">Putri A.</p>
+<span class="text-xs font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded-full">Completed</span>
+</div>
+<p class="text-xs text-subtext-light dark:text-subtext-dark truncate">Server • 4 Hours</p>
+<p class="text-xs font-semibold mt-1">IDR 200.000</p>
+</div>
+<button class="h-8 w-8 flex items-center justify-center rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+<!-- List Item 3 -->
+<div class="flex items-center gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800/50 opacity-60">
+<div class="h-12 w-12 rounded-full overflow-hidden shrink-0 bg-gray-200 flex items-center justify-center text-gray-500 text-xs font-bold">
+                        AG
+                    </div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<p class="font-bold text-sm truncate">Agus T.</p>
+<span class="text-xs font-bold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">Cancelled</span>
+</div>
+<p class="text-xs text-subtext-light dark:text-subtext-dark truncate">Cleaning • -- Hours</p>
+<p class="text-xs font-semibold mt-1 text-gray-400">IDR 0</p>
+</div>
+<button class="h-8 w-8 flex items-center justify-center rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl fill-current">analytics</span>
+<span class="text-[10px] font-medium">Insights</span>
+</button>
+<button class="relative flex h-12 w-12 items-center justify-center rounded-full bg-primary text-[#00210e] shadow-lg shadow-primary/40 -mt-8 border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-2xl">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">work_history</span>
+<span class="text-[10px] font-medium">Jobs</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</nav>
+</div>
+</body></html>

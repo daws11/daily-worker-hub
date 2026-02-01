@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Basic Profile Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c3024",
+                        "input-light": "#f0fdf4",
+                        "input-dark": "#162b1e",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "2rem", 
+                        "xl": "3rem", 
+                        "2xl": "1.5rem", // Adding for inputs
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* Custom scrollbar hiding for clean mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col antialiased selection:bg-primary/30">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm p-4 pb-2">
+<div class="flex items-center justify-between">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full active:bg-black/5 dark:active:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[#0d1b12] dark:text-white" style="font-size: 24px;">arrow_back</span>
+</button>
+<h2 class="text-[#0d1b12] dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Setup Profil</h2>
+</div>
+</div>
+<!-- Page Indicators -->
+<div class="flex w-full flex-row items-center justify-center gap-2 py-4">
+<div class="h-2 w-8 rounded-full bg-primary shadow-sm shadow-primary/30 transition-all"></div>
+<div class="h-2 w-2 rounded-full bg-[#cfe7d7] dark:bg-white/20"></div>
+<div class="h-2 w-2 rounded-full bg-[#cfe7d7] dark:bg-white/20"></div>
+</div>
+<!-- Main Content Scrollable Area -->
+<div class="flex-1 overflow-y-auto no-scrollbar pb-24 px-6">
+<!-- Headline Text -->
+<div class="flex flex-col mb-6">
+<h1 class="text-[#0d1b12] dark:text-white tracking-tight text-[32px] font-bold leading-[1.1] text-left mb-2">Lengkapi Profil Anda</h1>
+<p class="text-[#0d1b12]/70 dark:text-white/70 text-base font-normal leading-normal">Agar bisnis mudah mengenali Anda saat melamar pekerjaan.</p>
+</div>
+<!-- Avatar Upload Section -->
+<div class="flex flex-col items-center justify-center py-6 mb-4">
+<div class="relative group cursor-pointer">
+<!-- Avatar Circle -->
+<div class="w-32 h-32 rounded-full bg-input-light dark:bg-input-dark border-4 border-white dark:border-white/10 shadow-lg flex items-center justify-center overflow-hidden relative">
+<!-- Placeholder Icon when no image -->
+<span class="material-symbols-outlined text-green-800/20 dark:text-white/20 text-6xl">person</span>
+<!-- Overlay for "tap" effect -->
+<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+</div>
+<!-- Camera Badge -->
+<div class="absolute bottom-1 right-1 bg-primary text-[#003314] rounded-full p-2.5 shadow-md border-[3px] border-background-light dark:border-background-dark flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+</div>
+</div>
+<p class="mt-4 text-[#0d1b12] dark:text-white text-lg font-bold">Upload Foto Profil</p>
+<p class="text-primary text-sm font-medium">Tap untuk mengambil foto</p>
+</div>
+<!-- Form Section -->
+<div class="flex flex-col gap-6 w-full">
+<!-- Name Input -->
+<div class="flex flex-col gap-2 group">
+<label class="text-[#0d1b12] dark:text-white font-bold ml-1 text-sm uppercase tracking-wider opacity-80" for="fullname">Nama Lengkap</label>
+<div class="relative flex items-center">
+<input class="w-full bg-white dark:bg-surface-dark text-[#0d1b12] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 text-lg font-medium px-5 py-4 rounded-2xl border-2 border-transparent focus:border-primary focus:ring-0 outline-none transition-all shadow-sm group-hover:shadow-md" id="fullname" placeholder="Nama sesuai KTP" type="text"/>
+<span class="material-symbols-outlined absolute right-4 text-gray-400 dark:text-gray-500">badge</span>
+</div>
+</div>
+<!-- Skill Selector -->
+<div class="flex flex-col gap-2 group">
+<label class="text-[#0d1b12] dark:text-white font-bold ml-1 text-sm uppercase tracking-wider opacity-80" for="skill">Kategori Skill Utama</label>
+<div class="relative">
+<button class="w-full bg-white dark:bg-surface-dark text-left flex items-center justify-between px-5 py-4 rounded-2xl border-2 border-transparent focus:border-primary outline-none transition-all shadow-sm hover:shadow-md active:scale-[0.99]" type="button">
+<span class="text-gray-400 dark:text-gray-500 text-lg font-medium">Pilih kategori (misal: Waiter)</span>
+<span class="material-symbols-outlined text-[#0d1b12] dark:text-white">keyboard_arrow_down</span>
+</button>
+<!-- Dropdown Illustration (Hidden by default in static view, implying interaction) -->
+</div>
+</div>
+<!-- Quick Tags (Suggestions) -->
+<div class="flex flex-wrap gap-2 px-1">
+<button class="bg-primary/10 dark:bg-primary/20 text-[#054019] dark:text-primary px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors">Housekeeping</button>
+<button class="bg-primary/10 dark:bg-primary/20 text-[#054019] dark:text-primary px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors">Cook Helper</button>
+<button class="bg-primary/10 dark:bg-primary/20 text-[#054019] dark:text-primary px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors">Server</button>
+</div>
+</div>
+</div>
+<!-- Fixed Bottom Button -->
+<div class="fixed bottom-0 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-6 border-t border-black/5 dark:border-white/5">
+<button class="w-full bg-primary hover:bg-[#0fd650] active:scale-[0.98] text-[#003314] text-lg font-bold py-4 px-6 rounded-full shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+<span>Lanjut</span>
+<span class="material-symbols-outlined text-[20px] font-bold">arrow_forward</span>
+</button>
+</div>
+<!-- Decorative background elements (Abstract Balinese vibes) -->
+<div class="fixed top-20 right-[-50px] w-48 h-48 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+<div class="fixed bottom-20 left-[-50px] w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+</body></html>

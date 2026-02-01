@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Metode Pembayaran</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "primary-dark": "#0eb345",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1A2C22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar hide for cleaner mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased transition-colors duration-200">
+<!-- Main Container (Mobile Form Factor) -->
+<div class="relative min-h-screen w-full max-w-md mx-auto flex flex-col bg-background-light dark:bg-background-dark overflow-x-hidden shadow-2xl">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center justify-between">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold text-gray-900 dark:text-white tracking-tight">Metode Pembayaran</h1>
+<div class="size-10"></div> <!-- Spacer for center alignment -->
+</header>
+<!-- Scrollable Content -->
+<main class="flex-1 p-4 pb-32">
+<!-- Description -->
+<div class="mb-6">
+<p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                    Pilih metode pembayaran utama untuk operasional bisnis Anda. Data Anda disimpan dengan aman.
+                </p>
+</div>
+<!-- Payment Options List -->
+<div class="flex flex-col gap-4">
+<!-- Option 1: Bank Transfer (Collapsed) -->
+<button class="group w-full bg-surface-light dark:bg-surface-dark rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-primary/50 transition-all text-left flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div>
+<h3 class="font-semibold text-gray-900 dark:text-white">Rekening Bank</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">BCA, Mandiri, BNI, BRI</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">expand_more</span>
+</button>
+<!-- Option 2: E-Wallet (Collapsed) -->
+<button class="group w-full bg-surface-light dark:bg-surface-dark rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-primary/50 transition-all text-left flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<div>
+<h3 class="font-semibold text-gray-900 dark:text-white">E-wallet Bisnis</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">GoPay, OVO, Dana</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">expand_more</span>
+</button>
+<!-- Option 3: Credit Card (Expanded / Active) -->
+<div class="w-full bg-surface-light dark:bg-surface-dark rounded-xl border-2 border-primary dark:border-primary shadow-md overflow-hidden transition-all">
+<!-- Header of Active Card -->
+<div class="p-4 flex items-center justify-between border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-white/5">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-primary/20 flex items-center justify-center text-green-700 dark:text-primary">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<div>
+<h3 class="font-semibold text-gray-900 dark:text-white">Kartu Kredit</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">Visa, Mastercard, JCB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary">expand_less</span>
+</div>
+<!-- Form Content -->
+<div class="p-4 space-y-4">
+<!-- Card Number -->
+<div class="space-y-1.5">
+<label class="block text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider" for="cardNumber">Nomor Kartu</label>
+<div class="relative">
+<span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 material-symbols-outlined" style="font-size: 20px;">credit_card</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-50 dark:bg-[#15261d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-shadow text-sm font-medium" id="cardNumber" placeholder="0000 0000 0000 0000" type="text"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
+<div class="w-8 h-5 bg-gray-200 dark:bg-gray-600 rounded" data-alt="Visa Card Logo placeholder"></div>
+<div class="w-8 h-5 bg-gray-200 dark:bg-gray-600 rounded" data-alt="Mastercard Logo placeholder"></div>
+</div>
+</div>
+</div>
+<!-- Expiry & CVV -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="block text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider" for="expiry">Masa Berlaku</label>
+<div class="relative">
+<input class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-[#15261d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-shadow text-sm font-medium text-center" id="expiry" placeholder="MM/YY" type="text"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider flex items-center justify-between" for="cvv">
+                                    CVV
+                                    <span class="material-symbols-outlined text-gray-400 cursor-help" style="font-size: 14px;">help</span>
+</label>
+<div class="relative">
+<input class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-[#15261d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-shadow text-sm font-medium text-center" id="cvv" placeholder="123" type="password"/>
+<span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined" style="font-size: 18px;">lock</span>
+</div>
+</div>
+</div>
+<!-- Cardholder Name -->
+<div class="space-y-1.5">
+<label class="block text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider" for="cardName">Nama Pemegang Kartu</label>
+<input class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-[#15261d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-shadow text-sm font-medium" id="cardName" placeholder="Nama Lengkap sesuai Kartu" type="text"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Trust / Security Signal -->
+<div class="mt-8 flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">verified_user</span>
+<span class="text-xs font-medium">Enkripsi 256-bit Aman &amp; Terpercaya</span>
+</div>
+</main>
+<!-- Sticky Bottom Action -->
+<div class="fixed bottom-0 w-full max-w-md bg-surface-light dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 p-4 pb-8 z-40">
+<button class="w-full bg-primary hover:bg-primary-dark active:scale-[0.98] transition-all text-gray-900 font-bold py-3.5 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 20px;">check_circle</span>
+                Simpan Metode Pembayaran
+            </button>
+</div>
+</div>
+<!-- Toggle Dark Mode Script (For Demo Purposes Only) -->
+<script>
+        // Simple script to toggle dark mode based on system preference or manual toggle if implemented
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</body></html>

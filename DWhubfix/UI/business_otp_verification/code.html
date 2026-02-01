@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business OTP Verification</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display antialiased overflow-x-hidden selection:bg-primary/30">
+<!-- Top Navigation -->
+<header class="flex items-center px-6 pt-6 pb-2 justify-between sticky top-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm z-20">
+<button aria-label="Go back" class="text-[#111813] dark:text-white flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50">
+<span class="material-symbols-outlined text-[28px]">arrow_back_ios_new</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col px-6 max-w-md mx-auto w-full">
+<!-- Instructional Text -->
+<div class="mt-4 mb-8">
+<h1 class="text-[#111813] dark:text-white tracking-tight text-[32px] font-bold leading-tight mb-3">
+                Verify it's you
+            </h1>
+<p class="text-gray-600 dark:text-gray-400 text-base font-normal leading-relaxed">
+                We sent a code to <span class="font-semibold text-[#111813] dark:text-white whitespace-nowrap">+62 812-3456-7890</span>. Enter it below to verify your business account.
+            </p>
+</div>
+<!-- Input Field: Confirmation Code -->
+<div class="flex justify-between gap-2 sm:gap-3 mb-8">
+<fieldset class="contents">
+<!-- 1st Digit (Filled) -->
+<input class="flex h-14 w-full sm:w-14 text-center bg-white dark:bg-[#1a2e22] rounded border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 text-2xl font-semibold text-[#111813] dark:text-white transition-all shadow-sm [appearance:textfield] [&amp;::-webkit-inner-spin-button]:appearance-none [&amp;::-webkit-outer-spin-button]:appearance-none caret-primary" maxlength="1" type="number" value="5"/>
+<!-- 2nd Digit (Filled) -->
+<input class="flex h-14 w-full sm:w-14 text-center bg-white dark:bg-[#1a2e22] rounded border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 text-2xl font-semibold text-[#111813] dark:text-white transition-all shadow-sm [appearance:textfield] [&amp;::-webkit-inner-spin-button]:appearance-none [&amp;::-webkit-outer-spin-button]:appearance-none caret-primary" maxlength="1" type="number" value="2"/>
+<!-- 3rd Digit (Active) -->
+<input autofocus="" class="flex h-14 w-full sm:w-14 text-center bg-white dark:bg-[#1a2e22] rounded border-2 border-primary ring-4 ring-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/20 text-2xl font-semibold text-[#111813] dark:text-white transition-all shadow-md shadow-primary/10 [appearance:textfield] [&amp;::-webkit-inner-spin-button]:appearance-none [&amp;::-webkit-outer-spin-button]:appearance-none caret-primary animate-pulse" maxlength="1" type="number"/>
+<!-- 4th Digit (Empty) -->
+<input class="flex h-14 w-full sm:w-14 text-center bg-white dark:bg-[#1a2e22] rounded border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 text-2xl font-semibold text-[#111813] dark:text-white transition-all shadow-sm [appearance:textfield] [&amp;::-webkit-inner-spin-button]:appearance-none [&amp;::-webkit-outer-spin-button]:appearance-none caret-primary" maxlength="1" type="number" value=""/>
+<!-- 5th Digit (Empty) -->
+<input class="flex h-14 w-full sm:w-14 text-center bg-white dark:bg-[#1a2e22] rounded border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 text-2xl font-semibold text-[#111813] dark:text-white transition-all shadow-sm [appearance:textfield] [&amp;::-webkit-inner-spin-button]:appearance-none [&amp;::-webkit-outer-spin-button]:appearance-none caret-primary" maxlength="1" type="number" value=""/>
+<!-- 6th Digit (Empty) -->
+<input class="flex h-14 w-full sm:w-14 text-center bg-white dark:bg-[#1a2e22] rounded border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 text-2xl font-semibold text-[#111813] dark:text-white transition-all shadow-sm [appearance:textfield] [&amp;::-webkit-inner-spin-button]:appearance-none [&amp;::-webkit-outer-spin-button]:appearance-none caret-primary" maxlength="1" type="number" value=""/>
+</fieldset>
+</div>
+<!-- Timer & Resend Action -->
+<div class="flex flex-col items-center justify-center gap-4 mb-auto">
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-[#1a2e22] border border-gray-100 dark:border-gray-800 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">timer</span>
+<p class="text-[#111813] dark:text-white text-sm font-medium">
+                    Resend code in <span class="font-bold tabular-nums">00:30</span>
+</p>
+</div>
+<button class="text-sm font-semibold text-gray-400 dark:text-gray-600 cursor-not-allowed hover:text-primary transition-colors flex items-center gap-1 group" disabled="">
+<span>I didn't receive a code</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</button>
+</div>
+<!-- Primary Action Button -->
+<div class="mt-8 mb-8 sticky bottom-8">
+<button class="w-full bg-primary hover:brightness-95 active:scale-[0.98] text-[#102216] text-lg font-bold h-14 rounded-full transition-all shadow-[0_8px_20px_-6px_rgba(19,236,91,0.4)] flex items-center justify-center gap-2 group">
+<span>Verify Account</span>
+<span class="material-symbols-outlined text-[22px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<!-- Keyboard spacer for mobile view visualization -->
+<div class="h-[280px] w-full hidden sm:flex items-center justify-center border-t border-gray-100 dark:border-gray-800 mt-8 rounded-t-xl bg-gray-50 dark:bg-[#15281e] opacity-50">
+<span class="text-sm text-gray-400 font-medium">Native iOS Keyboard Area</span>
+</div>
+</div>
+</main>
+</body></html>

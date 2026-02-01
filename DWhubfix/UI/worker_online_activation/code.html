@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Online Activation</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom map marker pulse */
+        @keyframes ripple {
+            0% { box-shadow: 0 0 0 0 rgba(19, 236, 91, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(19, 236, 91, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(19, 236, 91, 0); }
+        }
+        .user-marker {
+            animation: ripple 2s infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-white h-screen w-full flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center bg-background-dark/90 backdrop-blur-md px-5 py-4 justify-between z-20 border-b border-[#28392e]">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border-2 border-[#28392e]" data-alt="User profile picture of a worker" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAR8bJnG_BUCX-7BrtTA99DAdi8rLsDzjK3zyFaruYI-eemXE9n20_Dy7IDR-48zl0MzIzHQrnTT7rXK5Lyw5m3MGE9cvKvBKWAZhDAfqAUfG3Ec4tsOlEExFU3dzfdGwePHZ69Y2Ymh9hLm5J_nB9EWI4vK3wJRwSTGtvbuGVlFTplUMrlfC7z5z6yg_ocTM8kCzj1LtqDdmIqvHpoAhWUpwwRF4n87lRE24iNY3Su6UKtKVy8Uk9Rq6wIt0oKr419FSI-YQS6Pnc");'></div>
+<div class="absolute bottom-0 right-0 size-3 bg-primary rounded-full border-2 border-background-dark"></div>
+</div>
+<div>
+<h2 class="text-white text-base font-bold leading-tight tracking-[-0.015em]">You're Online</h2>
+<p class="text-[#9db9a6] text-xs font-normal">Active in Canggu</p>
+</div>
+</div>
+<div class="flex items-center justify-end bg-[#1c271f] px-3 py-1.5 rounded-full border border-[#28392e]">
+<span class="text-[#9db9a6] mr-2 material-symbols-outlined text-[18px]">account_balance_wallet</span>
+<p class="text-primary text-sm font-bold leading-normal tracking-[0.015em]">Rp 0</p>
+</div>
+</header>
+<!-- Main Map Area -->
+<main class="relative flex-1 w-full bg-[#111813] group/design-root overflow-hidden">
+<!-- Map Background -->
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Dark themed map of Bali streets with highlighted roads" data-location="Bali, Indonesia" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDa58tyhcoeqUQ8aUoktv8ZTY4FyOAVJceY9ZXlcDWBNfxvuHU4t4Ui4gmRTtmVYl5jcWpCHAzUrkPyYS1I9DuDgE9eQEiQP8KwIiM5x_jzqVksZhFsm33ztu03-B2LLx1eY1XN6-tRZkZHt-o7XReCsRUiCQBlOzfZlybpwr95bQa07ZX9CYNJTARGtv0ryAV-HkLq6qFYON_lgoBYyldImeC31ExD5bODaqSQ-WxuWR6ZsD6R7CvQP0tH9Xofd5qVkg97-tkpUPc"); filter: grayscale(100%) contrast(120%) brightness(60%);'></div>
+<!-- Overlay: Active Status -->
+<div class="absolute top-4 left-4 z-10">
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-background-dark/80 backdrop-blur-md border border-[#28392e] pl-3 pr-4 shadow-lg">
+<span class="text-primary material-symbols-outlined text-[20px] animate-pulse">check_circle</span>
+<p class="text-white text-sm font-bold leading-normal">Status: Active</p>
+</div>
+</div>
+<!-- Map Markers: User Location -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0 flex items-center justify-center pointer-events-none">
+<!-- Radar scan effect -->
+<div class="absolute size-64 rounded-full border border-primary/20 opacity-0 animate-[ping_3s_linear_infinite]"></div>
+<div class="absolute size-48 rounded-full bg-primary/5 opacity-0 animate-[pulse_2s_ease-in-out_infinite]"></div>
+<!-- User Dot -->
+<div class="relative size-6 bg-primary rounded-full border-4 border-white shadow-[0_0_20px_#13ec5b] user-marker z-10"></div>
+</div>
+<!-- Map Markers: Jobs -->
+<!-- Job 1 -->
+<button class="absolute top-[30%] left-[25%] flex flex-col items-center group cursor-pointer transition-transform hover:scale-110 focus:outline-none z-10">
+<div class="size-10 bg-white text-background-dark rounded-full flex items-center justify-center shadow-xl border-2 border-transparent group-hover:border-primary">
+<span class="material-symbols-outlined text-[20px]">local_cafe</span>
+</div>
+<div class="mt-1 bg-background-dark px-2 py-0.5 rounded-md border border-[#28392e] shadow-lg">
+<span class="text-xs font-bold text-white">Cafe Shift</span>
+</div>
+</button>
+<!-- Job 2 -->
+<button class="absolute bottom-[40%] right-[20%] flex flex-col items-center group cursor-pointer transition-transform hover:scale-110 focus:outline-none z-10">
+<div class="size-10 bg-[#e0f2fe] text-[#0284c7] rounded-full flex items-center justify-center shadow-xl border-2 border-transparent group-hover:border-[#0284c7]">
+<span class="material-symbols-outlined text-[20px]">beach_access</span>
+</div>
+<div class="mt-1 bg-background-dark px-2 py-0.5 rounded-md border border-[#28392e] shadow-lg">
+<span class="text-xs font-bold text-white">Beach Club</span>
+</div>
+</button>
+<!-- Job 3 -->
+<button class="absolute top-[20%] right-[30%] flex flex-col items-center group cursor-pointer transition-transform hover:scale-110 focus:outline-none z-10">
+<div class="size-10 bg-[#fce7f3] text-[#db2777] rounded-full flex items-center justify-center shadow-xl border-2 border-transparent group-hover:border-[#db2777]">
+<span class="material-symbols-outlined text-[20px]">hotel</span>
+</div>
+<div class="mt-1 bg-background-dark px-2 py-0.5 rounded-md border border-[#28392e] shadow-lg">
+<span class="text-xs font-bold text-white">Hotel Valet</span>
+</div>
+</button>
+<!-- Map Controls -->
+<div class="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
+<div class="flex flex-col gap-0.5 shadow-lg rounded-xl overflow-hidden">
+<button class="flex size-10 items-center justify-center bg-background-dark/90 text-white hover:bg-[#28392e] transition-colors border-b border-[#28392e]">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+<button class="flex size-10 items-center justify-center bg-background-dark/90 text-white hover:bg-[#28392e] transition-colors">
+<span class="material-symbols-outlined text-[24px]">remove</span>
+</button>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full bg-background-dark/90 text-primary shadow-lg hover:bg-[#28392e] transition-colors">
+<span class="material-symbols-outlined text-[20px]">my_location</span>
+</button>
+</div>
+</main>
+<!-- Bottom Action Panel / Onboarding -->
+<div class="absolute bottom-0 w-full z-30 p-4 @container">
+<!-- Panel -->
+<div class="flex flex-col gap-4 rounded-xl border border-[#3b5443] bg-background-dark/95 backdrop-blur-xl p-5 shadow-[0_-4px_20px_rgba(0,0,0,0.4)]">
+<!-- Handle bar for visual cue -->
+<div class="w-12 h-1 bg-[#28392e] rounded-full self-center mb-1"></div>
+<div class="flex flex-col @[480px]:flex-row @[480px]:items-center justify-between gap-4">
+<div class="flex items-start gap-4">
+<div class="flex-shrink-0 size-10 rounded-full bg-[#28392e] flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">radar</span>
+</div>
+<div class="flex flex-col gap-1">
+<p class="text-white text-base font-bold leading-tight">Scanning for shifts...</p>
+<p class="text-[#9db9a6] text-sm font-normal leading-normal">Tap highlighted markers on the map to view job details and pay rates.</p>
+</div>
+</div>
+<button class="flex w-full @[480px]:w-auto min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary hover:bg-[#0fd650] transition-colors text-[#111813] text-sm font-bold leading-normal shadow-lg shadow-primary/20">
+<span class="truncate">Got it</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

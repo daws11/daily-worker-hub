@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#162b1d", 
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display antialiased text-[#111813] dark:text-white bg-background-light dark:bg-background-dark selection:bg-primary selection:text-black">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-20 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-100 dark:border-[#1F3325]">
+<button class="text-[#111813] dark:text-white flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Detail Bisnis</h2>
+</div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col pb-32">
+<!-- Operating Hours Section -->
+<div>
+<h2 class="text-[#111813] dark:text-white tracking-light text-[22px] font-bold leading-tight px-4 text-left pb-2 pt-6">Waktu Operasional</h2>
+<div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-[#111813] dark:text-gray-300 text-sm font-medium leading-normal pb-2">Jam Buka</p>
+<div class="relative">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111813] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark focus:border-primary h-14 placeholder:text-[#61896f] p-[15px] text-base font-normal leading-normal appearance-none" placeholder="09:00" type="time" value="09:00"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</div>
+</div>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-[#111813] dark:text-gray-300 text-sm font-medium leading-normal pb-2">Jam Tutup</p>
+<div class="relative">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111813] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark focus:border-primary h-14 placeholder:text-[#61896f] p-[15px] text-base font-normal leading-normal appearance-none" placeholder="17:00" type="time" value="22:00"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</div>
+</div>
+</label>
+</div>
+</div>
+<div class="h-px bg-gray-100 dark:bg-[#1F3325] mx-4 my-2"></div>
+<!-- Description Section -->
+<div>
+<h2 class="text-[#111813] dark:text-white tracking-light text-[22px] font-bold leading-tight px-4 text-left pb-2 pt-4">Tentang Bisnis</h2>
+<div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+<label class="flex flex-col min-w-40 flex-1 group">
+<p class="text-[#111813] dark:text-gray-300 text-sm font-medium leading-normal pb-2 group-focus-within:text-primary transition-colors">Deskripsi Lengkap</p>
+<textarea class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111813] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark focus:border-primary min-h-36 placeholder:text-[#61896f] dark:placeholder:text-[#4A6352] p-[15px] text-base font-normal leading-normal transition-all" placeholder="Ceritakan tentang restoran/hotel Anda, suasana, jenis masakan, dan apa yang diharapkan dari pekerja harian..."></textarea>
+<p class="text-right text-xs text-gray-400 mt-1">0/500 karakter</p>
+</label>
+</div>
+</div>
+<div class="h-px bg-gray-100 dark:bg-[#1F3325] mx-4 my-2"></div>
+<!-- Facilities Section -->
+<div>
+<h2 class="text-[#111813] dark:text-white tracking-light text-[22px] font-bold leading-tight px-4 text-left pb-2 pt-4">Fasilitas yang Tersedia</h2>
+<p class="text-gray-500 dark:text-gray-400 text-sm px-4 pb-4">Pilih fasilitas yang akan didapatkan pekerja.</p>
+<div class="flex flex-wrap gap-3 px-4">
+<!-- Selected Chip -->
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="flex items-center gap-2 rounded-full border border-primary bg-primary/10 dark:bg-primary/20 px-4 py-2 text-sm font-medium text-[#102216] dark:text-primary peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all duration-200 hover:bg-primary/20">
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+                        WiFi Gratis
+                    </div>
+</label>
+<!-- Selected Chip -->
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="flex items-center gap-2 rounded-full border border-primary bg-primary/10 dark:bg-primary/20 px-4 py-2 text-sm font-medium text-[#102216] dark:text-primary peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all duration-200 hover:bg-primary/20">
+<span class="material-symbols-outlined text-[18px]">restaurant</span>
+                        Makan Siang
+                    </div>
+</label>
+<!-- Unselected Chips -->
+<label class="cursor-pointer">
+<input class="peer sr-only" type="checkbox"/>
+<div class="flex items-center gap-2 rounded-full border border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark px-4 py-2 text-sm font-medium text-[#111813] dark:text-gray-300 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#1F3325]">
+<span class="material-symbols-outlined text-[18px]">local_parking</span>
+                        Parkir Staff
+                    </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" type="checkbox"/>
+<div class="flex items-center gap-2 rounded-full border border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark px-4 py-2 text-sm font-medium text-[#111813] dark:text-gray-300 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#1F3325]">
+<span class="material-symbols-outlined text-[18px]">ac_unit</span>
+                        Ruang AC
+                    </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" type="checkbox"/>
+<div class="flex items-center gap-2 rounded-full border border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark px-4 py-2 text-sm font-medium text-[#111813] dark:text-gray-300 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#1F3325]">
+<span class="material-symbols-outlined text-[18px]">checkroom</span>
+                        Seragam
+                    </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" type="checkbox"/>
+<div class="flex items-center gap-2 rounded-full border border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark px-4 py-2 text-sm font-medium text-[#111813] dark:text-gray-300 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#1F3325]">
+<span class="material-symbols-outlined text-[18px]">chair</span>
+                        Ruang Istirahat
+                    </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" type="checkbox"/>
+<div class="flex items-center gap-2 rounded-full border border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark px-4 py-2 text-sm font-medium text-[#111813] dark:text-gray-300 peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#1F3325]">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+                        Uang Tips
+                    </div>
+</label>
+</div>
+</div>
+<div class="h-px bg-gray-100 dark:bg-[#1F3325] mx-4 my-2 mt-6"></div>
+<!-- Photos Section -->
+<div>
+<div class="flex items-center justify-between px-4 pt-4 pb-2">
+<h2 class="text-[#111813] dark:text-white tracking-light text-[22px] font-bold leading-tight">Foto Lokasi</h2>
+<button class="text-primary text-sm font-semibold">Edit</button>
+</div>
+<div class="flex gap-3 overflow-x-auto px-4 py-2 scrollbar-hide pb-6">
+<!-- Add Photo Button -->
+<button class="flex-shrink-0 flex flex-col items-center justify-center w-28 h-28 rounded-xl border-2 border-dashed border-[#dbe6df] dark:border-[#2C4A3B] bg-white dark:bg-surface-dark text-primary hover:bg-gray-50 dark:hover:bg-[#1F3325] transition-colors">
+<span class="material-symbols-outlined text-3xl mb-1">add_a_photo</span>
+<span class="text-xs font-medium">Tambah</span>
+</button>
+<!-- Images -->
+<div class="relative flex-shrink-0 w-28 h-28 rounded-xl overflow-hidden group">
+<img alt="Interior of a modern restaurant in Bali with warm lighting and wooden furniture" class="w-full h-full object-cover" data-alt="Interior of a modern restaurant in Bali with warm lighting and wooden furniture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9w0BE6PSb72H57omFsn2hq1vUibOOOjkpwgs0Zeh9u55bSEZr4q5wSSIQQMgCrJ4BA7q94pcNMJ2E6vqofa_UaAIfD2mSTlGb4ZGtEQwZ7Ao-xnhBtKKtJPThQ-D1ZAzZVvQjDT29Rzu235ZHWwH7yGRBCVO9GV-6p1TkI9nFzeX2bRThPAusQUq7BNdjSvrm5L_8JvKTM_ShpdIg5Hh5kTPc4SXyPdxsrfKErDmK7WqT9sgkifAPX148bHPVMm-qVzKH1XM8ZOA"/>
+<div class="absolute inset-0 bg-black/20 hidden group-hover:flex items-center justify-center">
+<span class="material-symbols-outlined text-white">edit</span>
+</div>
+</div>
+<div class="relative flex-shrink-0 w-28 h-28 rounded-xl overflow-hidden group">
+<img alt="Bright open kitchen space with chefs working" class="w-full h-full object-cover" data-alt="Bright open kitchen space with chefs working" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-Uv0UPt-g3LjVAnwCkIyHQ1vHOpXlvfArcPfpei8Yk6DqI5BRDSLUxm-PCSYFYnuUWgqrtV01J-HbUdhXxgm8Kisj35sFzLNyuUOtV7NVklDLEHj4TzJXllxr62mS52iuUN4TcreEh8Umi8H_WZ0m601ISS1FJfI3jEbBeMRGbsS04Rk5H5yNIqXvRN7v9Z1pjiuc60DveqN5ZuzUKoI5DjLyiQe5sywCSFxOByqoEYrgnCI1AbI1JOrxkrdb9KRPbhIPrR5n1TI"/>
+</div>
+<div class="relative flex-shrink-0 w-28 h-28 rounded-xl overflow-hidden group">
+<img alt="Outdoor seating area with tropical plants" class="w-full h-full object-cover" data-alt="Outdoor seating area with tropical plants" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd9uWxuLRVydEmJFMv6L8qrJp6o6mIg8KYFMXcq0EPMUUd3mkbclSRc-hWLTdpKyCUtfajcC5InQJGtzsFRRm1jrN5ePetwP7WNEfRqHygiZ5bBagNTKzN_pjUHHv248RCCsFAqhUhTP1uAfgjft7TkZX2GDZHYoK2RsLFmYw2tgGLqBnfJcMwGqUbjRtkqfSqUN8G6cskNCldOgwm9C-6oJnRlxv6aZC6FATx1JmCGU45cNHgCkKoB6KpESRHWAfx3_b9fl2T59w"/>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Footer -->
+<div class="fixed bottom-0 left-0 right-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-t border-gray-200 dark:border-[#1F3325] p-4 pb-8 z-30 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<button class="flex w-full items-center justify-center overflow-hidden rounded-xl h-14 bg-primary text-[#102216] text-base font-bold leading-normal tracking-[0.015em] hover:bg-[#0fd650] active:scale-[0.98] transition-all shadow-lg shadow-primary/20">
+<span class="truncate">Simpan &amp; Lanjutkan</span>
+</button>
+</div>
+</div>
+</body></html>

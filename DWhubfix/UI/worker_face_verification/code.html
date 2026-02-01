@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Face Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c2e22", 
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Pulse animation for the active state */
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(19, 236, 91, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(19, 236, 91, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(19, 236, 91, 0); }
+        }
+        .scan-active {
+            animation: pulse-ring 2s infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#111813] dark:text-white font-display transition-colors duration-200">
+<div class="relative flex h-screen w-full flex-col overflow-hidden max-w-md mx-auto bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<div class="flex items-center p-4 pt-6 justify-between z-10">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[#111813] dark:text-white" style="font-size: 24px;">arrow_back</span>
+</button>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] text-center">Face Verification</h2>
+<div class="size-10"></div> <!-- Spacer for balance -->
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col items-center justify-center relative px-6 -mt-10">
+<!-- Context Badge -->
+<div class="mb-8 flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-light dark:bg-surface-dark border border-gray-200 dark:border-gray-700 shadow-sm z-20">
+<span class="material-symbols-outlined text-primary" style="font-size: 16px;">verified_user</span>
+<span class="text-xs font-medium text-gray-600 dark:text-gray-300">Matching KTP ID #8821...</span>
+</div>
+<!-- Camera Viewport Container -->
+<div class="relative size-[280px] flex items-center justify-center">
+<!-- Progress Ring SVG -->
+<!-- The stroke-dasharray calculates the percentage of the circle (2 * PI * R). R=136 approx. -->
+<svg class="absolute inset-0 w-full h-full -rotate-90 transform z-10" viewbox="0 0 280 280">
+<!-- Background Track -->
+<circle class="text-gray-200 dark:text-gray-700" cx="140" cy="140" fill="none" r="136" stroke="currentColor" stroke-width="4"></circle>
+<!-- Progress Fill (approx 33% filled) -->
+<circle cx="140" cy="140" fill="none" r="136" stroke="#13ec5b" stroke-dasharray="854" stroke-dashoffset="570" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<!-- Camera Feed Simulation -->
+<div class="scan-active relative size-[260px] rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 z-0 border-4 border-white dark:border-[#1c2e22]">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Portrait of a young asian man looking directly at the camera with a neutral expression, simulating a live camera feed" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBg79ajwmtFxgRR6-weMpckEPtIpSu2wMJBA44WxGdWqAZDNyHLNqJA4DjnHtbzmW-_MXjqugC-WlZBaloEiboLMI2ML6bcQeMWscPLN6KmMXZDBR5BkyP94vXRQPPSXKumfE3A4GvmZIneDuDkRJ73R7yul49tbZB4bKvRw5uGcgHm6_ejwJSMBTmotjkA0_7bxJWwUcQDWVYPb2BwmVa73HXTh_4q3qwtBBFyb4XGcWe1qdvEfth03i0Bz6T0kBwqn-6WEhtM-w4"); filter: brightness(1.1);'>
+</div>
+<!-- Face Outline Guide Overlay -->
+<div class="absolute inset-0 flex items-center justify-center opacity-60">
+<svg fill="none" height="220" viewbox="0 0 180 220" width="180" xmlns="http://www.w3.org/2000/svg">
+<path d="M90 10C50 10 20 40 20 80V120C20 160 50 190 90 190C130 190 160 160 160 120V80C160 40 130 10 90 10Z" stroke="white" stroke-dasharray="8 8" stroke-width="2"></path>
+<path d="M90 40V20" stroke="#13ec5b" stroke-linecap="round" stroke-width="3"></path>
+<path d="M90 180V200" stroke="#13ec5b" stroke-linecap="round" stroke-width="3"></path>
+<path d="M20 110H10" stroke="#13ec5b" stroke-linecap="round" stroke-width="3"></path>
+<path d="M170 110H160" stroke="#13ec5b" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+</div>
+<!-- Scanning Line Animation -->
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/20 to-transparent w-full h-[30%] animate-[scan_3s_ease-in-out_infinite] top-0 pointer-events-none"></div>
+</div>
+<!-- Step Badge -->
+<div class="absolute -bottom-3 bg-primary text-black font-bold text-xs px-3 py-1 rounded-full border-2 border-white dark:border-[#102216] z-20 shadow-md">
+                    Step 1 of 3
+                </div>
+</div>
+<style>
+                @keyframes scan {
+                    0% { top: -30%; opacity: 0; }
+                    20% { opacity: 1; }
+                    80% { opacity: 1; }
+                    100% { top: 100%; opacity: 0; }
+                }
+            </style>
+<!-- Dynamic Instructions -->
+<div class="mt-10 flex flex-col items-center text-center max-w-[85%]">
+<h1 class="text-[#111813] dark:text-white tracking-tight text-3xl font-bold leading-tight mb-3">
+                    Look straight at the camera
+                </h1>
+<p class="text-gray-500 dark:text-gray-400 text-base font-normal leading-relaxed">
+                    Please ensure good lighting so we can match your face with your KTP photo.
+                </p>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="w-full p-6 pb-8 bg-background-light dark:bg-background-dark z-10">
+<!-- Detection Feedback -->
+<div class="flex items-center justify-center gap-6 mb-8">
+<div class="flex flex-col items-center gap-1 opacity-100 transition-opacity">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-black shadow-[0_0_15px_rgba(19,236,91,0.5)]">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary">Position</span>
+</div>
+<div class="w-8 h-[2px] bg-gray-200 dark:bg-gray-700"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="size-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined" style="font-size: 20px;">sentiment_satisfied</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Smile</span>
+</div>
+<div class="w-8 h-[2px] bg-gray-200 dark:bg-gray-700"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="size-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined" style="font-size: 20px;">check</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Done</span>
+</div>
+</div>
+<button class="w-full text-gray-500 dark:text-gray-400 font-medium text-sm py-2 hover:text-gray-800 dark:hover:text-gray-200 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">help</span>
+<span>Having trouble? Get help</span>
+</button>
+</div>
+</div>
+</body></html>

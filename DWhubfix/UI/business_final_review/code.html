@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Final Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#13ec5b",
+              "background-light": "#f6f8f6",
+              "background-dark": "#102216",
+              "surface-light": "#ffffff",
+              "surface-dark": "#1c3024",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar hide for cleaner UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#111813] dark:text-white transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-24">
+<!-- TopAppBar -->
+<div class="sticky top-0 z-50 flex items-center bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm p-4 pb-2 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="text-[#111813] dark:text-white flex size-12 shrink-0 items-center justify-start cursor-pointer transition-opacity hover:opacity-70">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Review Profile</h2>
+</div>
+<!-- Main Content Area -->
+<div class="flex flex-col gap-6 p-4">
+<!-- Profile Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm overflow-hidden p-5">
+<!-- ProfileHeader Content -->
+<div class="flex flex-col gap-4">
+<div class="flex gap-4 items-start">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg h-24 w-24 shrink-0 shadow-inner" data-alt="Modern restaurant interior with warm lighting" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCu1eYDt_MVPxi2kRGAHTxHJAGb6wiOrZBPMsmUqy5QSs4OCHI5n0aKsLpw_yobvi0Mie3dIOlsts3AoVOFbykArjRbVL6R-PpFWqso98OgS80GHVPlO4ICxW5BOn_9ABv1EUhJNGqhHzCiVLpdZFHZGbd8GeZCjCemfXU5rPw7DML-SR4mbPmXD5sUnC1NeDMEBeo1acsStNY-rsQinKji21mkhPOSDrwbiqmKkxp1D0QQneaiR5G2iveCjFRzhFap2O70neOGYMI");'>
+</div>
+<div class="flex flex-col flex-1 justify-center h-24">
+<h3 class="text-[#111813] dark:text-white text-xl font-bold leading-tight tracking-tight">Sunset Bar &amp; Grill</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-normal mt-1">Jalan Pantai Batu Bolong No. 12, Canggu</p>
+<div class="flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-primary text-[16px]">verified</span>
+<span class="text-xs font-medium text-[#61896f] dark:text-gray-400">Verified Business</span>
+</div>
+</div>
+</div>
+<div class="h-px bg-gray-100 dark:bg-gray-700 w-full my-1"></div>
+<!-- BodyText Content -->
+<div class="flex flex-col gap-2">
+<span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">About</span>
+<p class="text-[#111813] dark:text-gray-200 text-sm font-normal leading-relaxed">
+                            Looking for experienced bartenders and waitstaff to join our vibrant team in the heart of Canggu. We value energy, dedication, and a great smile.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Business Details Section -->
+<div>
+<h3 class="text-[#111813] dark:text-white text-base font-bold leading-tight tracking-tight px-1 pb-3">Business Details</h3>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
+<!-- ListItem: Category -->
+<div class="flex items-center gap-4 px-4 py-4 justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4 overflow-hidden">
+<div class="text-[#111813] dark:text-white flex items-center justify-center rounded-lg bg-[#f0f4f2] dark:bg-gray-700 shrink-0 size-10">
+<span class="material-symbols-outlined text-[20px]">storefront</span>
+</div>
+<div class="flex flex-col justify-center overflow-hidden">
+<p class="text-[#111813] dark:text-white text-sm font-medium leading-normal line-clamp-1">Hospitality - Bar</p>
+<p class="text-[#61896f] dark:text-gray-400 text-xs font-normal leading-normal line-clamp-1">Industry Category</p>
+</div>
+</div>
+<div class="shrink-0 text-gray-400">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+</div>
+<!-- ListItem: Phone -->
+<div class="flex items-center gap-4 px-4 py-4 justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4 overflow-hidden">
+<div class="text-[#111813] dark:text-white flex items-center justify-center rounded-lg bg-[#f0f4f2] dark:bg-gray-700 shrink-0 size-10">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</div>
+<div class="flex flex-col justify-center overflow-hidden">
+<p class="text-[#111813] dark:text-white text-sm font-medium leading-normal line-clamp-1">+62 812-3456-7890</p>
+<p class="text-[#61896f] dark:text-gray-400 text-xs font-normal leading-normal line-clamp-1">Contact Phone</p>
+</div>
+</div>
+<div class="shrink-0 text-gray-400">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+</div>
+<!-- ListItem: Email -->
+<div class="flex items-center gap-4 px-4 py-4 justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4 overflow-hidden">
+<div class="text-[#111813] dark:text-white flex items-center justify-center rounded-lg bg-[#f0f4f2] dark:bg-gray-700 shrink-0 size-10">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<div class="flex flex-col justify-center overflow-hidden">
+<p class="text-[#111813] dark:text-white text-sm font-medium leading-normal line-clamp-1">manager@sunsetbar.bali</p>
+<p class="text-[#61896f] dark:text-gray-400 text-xs font-normal leading-normal line-clamp-1">Business Email</p>
+</div>
+</div>
+<div class="shrink-0 text-gray-400">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+</div>
+<!-- ListItem: Hours -->
+<div class="flex items-center gap-4 px-4 py-4 justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4 overflow-hidden">
+<div class="text-[#111813] dark:text-white flex items-center justify-center rounded-lg bg-[#f0f4f2] dark:bg-gray-700 shrink-0 size-10">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</div>
+<div class="flex flex-col justify-center overflow-hidden">
+<p class="text-[#111813] dark:text-white text-sm font-medium leading-normal line-clamp-1">10:00 AM - 11:00 PM</p>
+<p class="text-[#61896f] dark:text-gray-400 text-xs font-normal leading-normal line-clamp-1">Operating Hours</p>
+</div>
+</div>
+<div class="shrink-0 text-gray-400">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Legal Section -->
+<div class="px-2 pb-6">
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center pt-0.5">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 transition-all checked:border-primary checked:bg-primary hover:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-1 dark:focus:ring-offset-gray-900" type="checkbox"/>
+<span class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+<span class="material-symbols-outlined text-[16px] font-bold">check</span>
+</span>
+</div>
+<div class="text-sm text-gray-600 dark:text-gray-400 leading-snug">
+                        By creating an account, I agree to the <a class="text-primary hover:underline font-medium" href="#">Terms of Service</a> and acknowledge the <a class="text-primary hover:underline font-medium" href="#">Privacy Policy</a>.
+                    </div>
+</label>
+</div>
+</div>
+<!-- Sticky Footer -->
+<div class="fixed bottom-0 w-full bg-surface-light dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 p-4 pb-8 safe-area-pb z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<button class="flex w-full items-center justify-center rounded-xl bg-primary py-3.5 px-4 text-base font-bold text-[#0d3f1e] shadow-sm hover:brightness-105 active:scale-[0.98] transition-all">
+                Complete Registration
+            </button>
+</div>
+</div>
+</body></html>

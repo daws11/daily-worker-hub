@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Role Selection</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111813] dark:text-white transition-colors duration-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden selection:bg-primary/30">
+<!-- Top Bar -->
+<div class="flex items-center bg-transparent p-4 justify-between">
+<div class="flex items-center gap-2">
+<div class="flex items-center justify-center size-10 bg-primary/20 rounded-full text-primary">
+<span class="material-symbols-outlined text-[24px]">spa</span>
+</div>
+<span class="font-bold text-lg tracking-tight">BaliWork</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-white dark:bg-[#1a2e22] shadow-sm border border-gray-100 dark:border-[#2a4e35]">
+<span class="text-xs font-bold text-gray-700 dark:text-gray-300">EN</span>
+<span class="material-symbols-outlined text-[16px] text-gray-500">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Headline Section -->
+<div class="px-5 pt-4 pb-6">
+<h1 class="text-[#111813] dark:text-white tracking-tight text-[32px] font-extrabold leading-tight pb-2">
+                Halo! Who are you?
+            </h1>
+<p class="text-[#61896f] dark:text-gray-400 text-base font-normal leading-normal">
+                Select your profile to continue.
+            </p>
+</div>
+<!-- Cards Section -->
+<div class="flex flex-col gap-5 px-4 pb-8 flex-1">
+<!-- Worker Card -->
+<button class="group w-full text-left transition-all duration-300 hover:scale-[1.01] focus:outline-none">
+<div class="flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1a2e22] shadow-[0_4px_12px_rgba(0,0,0,0.05)] border-2 border-transparent group-hover:border-primary group-focus:border-primary transition-colors h-full">
+<div class="relative h-40 w-full bg-gray-200">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Professional chef or waiter working in a busy kitchen environment" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAzQSxHFEWoXgwhAfuMgIFX2MIAwTbZwQkOsZ_CTbOdVbqEWBuCunnH1cI53404uSBxKytcOZkwHxdvlZMDyyFC283cSgGr467rEDgiRqC1p-BkN1nFxtQwV4q_HRyj4aMdZRb58vDmtGEgk6AuHblUFktvfhrgJ5-J4M_IVcvFGj0lMikKG16vz3Celd1HbOZ23LQX_hO9qkegeihmQCOYK2v7TXgOJpb-2W9wIg8yyfnV_qxAOHfv4OUsWn4gbK_mfSxKoanoZmw");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="inline-flex items-center justify-center rounded-lg bg-primary text-[#111813] px-2 py-1 text-xs font-bold">
+                                Jobs
+                            </span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-5">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="text-[#111813] dark:text-white text-xl font-bold leading-tight tracking-tight mb-1">
+                                    Saya adalah Pekerja Harian
+                                </h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-medium leading-relaxed">
+                                    Find flexible jobs in hotels &amp; cafes
+                                </p>
+</div>
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-background-light dark:bg-[#233b2c] group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-300 group-hover:text-[#111813]">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</button>
+<!-- Business Owner Card -->
+<button class="group w-full text-left transition-all duration-300 hover:scale-[1.01] focus:outline-none">
+<div class="flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1a2e22] shadow-[0_4px_12px_rgba(0,0,0,0.05)] border-2 border-transparent group-hover:border-primary group-focus:border-primary transition-colors h-full">
+<div class="relative h-40 w-full bg-gray-200">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Modern cafe interior with business owner managing staff" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC6IL3eQtv3JyoWbH94Ox3KdfHfOEOYFpa70rJTdGbD4UbmW1uYPeVHXxTy12YoKQzD6hNobs7NlvhbxFRC1Xfdkuca7-LTn_6QyGpNnBlNTvNkVrUCrOZLIeSqdhdWEfdS2ENdYI3U4S_R2LCXymnp7kP01VR6W804wRwQEC4HW_Or55rXPMsxXB_J-hrBkyOGbI_eJ6m9qqcLaDublGMZI1YY63Qnwsz41jEAlWW2scCHVIsjzR6sBDLMVaBC43fmvFiJ6ExJXns");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="inline-flex items-center justify-center rounded-lg bg-white dark:bg-gray-800 text-[#111813] dark:text-white px-2 py-1 text-xs font-bold shadow-sm">
+                                Hire
+                            </span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-5">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="text-[#111813] dark:text-white text-xl font-bold leading-tight tracking-tight mb-1">
+                                    Saya adalah Pemilik Bisnis
+                                </h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-medium leading-relaxed">
+                                    Hire reliable staff instantly
+                                </p>
+</div>
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-background-light dark:bg-[#233b2c] group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-300 group-hover:text-[#111813]">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</button>
+</div>
+<!-- Footer -->
+<div class="w-full p-6 text-center mt-auto bg-white dark:bg-[#1a2e22] rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                Already have an account? 
+                <a class="text-primary hover:text-green-400 font-bold ml-1 transition-colors" href="#">Log in</a>
+</p>
+<div class="mt-4 flex justify-center gap-6">
+<a class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" href="#">Terms of Service</a>
+<a class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" href="#">Privacy Policy</a>
+</div>
+</div>
+</div>
+</body></html>

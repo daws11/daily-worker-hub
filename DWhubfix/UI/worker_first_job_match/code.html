@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker First Job Match</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2rem", "2xl": "2.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom pulse animation for the map pin */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.33); opacity: 0; }
+            50%, 100% { opacity: 0; }
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1); }
+            100% { transform: scale(0.8); }
+        }
+        .pin-pulse::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            border-radius: 50%;
+            background-color: #13ec5b;
+            opacity: 0.4;
+            transform: scale(1.5);
+            animation: pulse-dot 2s infinite ease-in-out;
+            z-index: -1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111813] dark:text-white overflow-hidden">
+<div class="relative flex h-screen w-full flex-col group/design-root overflow-hidden">
+<!-- Map Background -->
+<div class="absolute inset-0 z-0 bg-cover bg-center" data-alt="Map view of Canggu Bali with streets and landmarks" data-location="Canggu, Bali" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB-HkDjSGpkZasujseOYwHdMSSOtcstfCuDF6XRl1aaYouKEIiniC7QWrA_jWKgLV82LdGv4xB3baBP4zd2J6rg78d0CFFpJFFfv7hvGifDrafquSzcyG-QOboCU7BCu_LCd28a-br3GpPIdhudFGSm25xbiB7ZbZXq1rkk6G8s3DhzsGi2d2TnVbnOGeIUNqNx9XoERt6UXs5EGhzqeM9vQxH8hWDVz_UI5vx0YfY510ng2lfbSTF-NrHlkAWsuI1TAr_OJGah7dA'); filter: grayscale(20%) contrast(90%);">
+<!-- User Location Dot -->
+<div class="absolute top-[40%] left-[30%] flex flex-col items-center">
+<div class="h-4 w-4 rounded-full bg-blue-500 border-2 border-white shadow-md"></div>
+</div>
+<!-- Job Location Pin (Target) -->
+<div class="absolute top-[35%] left-[65%] flex flex-col items-center pin-pulse cursor-pointer transition-transform hover:scale-110">
+<div class="relative flex items-center justify-center size-10 rounded-full bg-primary shadow-lg border-2 border-white z-10">
+<span class="material-symbols-outlined text-[#102216] text-[20px]">local_cafe</span>
+</div>
+<div class="mt-1 px-2 py-1 bg-white dark:bg-[#102216] rounded-md shadow-md text-xs font-bold text-[#102216] dark:text-white whitespace-nowrap">
+                    IDR 120k
+                </div>
+</div>
+</div>
+<!-- Top Navigation Area -->
+<div class="relative z-10 flex items-center justify-between p-4 pt-12">
+<button class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-[#102216] shadow-md transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[#102216] dark:text-white">menu</span>
+</button>
+<div class="flex items-center gap-2 bg-white dark:bg-[#102216] px-3 py-1.5 rounded-full shadow-md">
+<div class="size-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-sm font-medium text-[#102216] dark:text-white">Online</span>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-[#102216] shadow-md transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[#102216] dark:text-white">my_location</span>
+</button>
+</div>
+<!-- Tutorial Overlay -->
+<!-- Placed specifically to point towards the card below -->
+<div class="absolute bottom-[380px] left-4 right-4 z-30 animate-bounce">
+<div class="bg-[#102216] text-white p-4 rounded-xl shadow-xl border border-white/10 relative">
+<div class="flex items-start gap-3">
+<span class="text-2xl">🎉</span>
+<div>
+<h3 class="font-bold text-lg mb-1">You found a match!</h3>
+<p class="text-sm text-gray-300 leading-relaxed">Here is your very first offer. Check the details and pay rate below. Tap "Accept" quickly to secure the shift!</p>
+</div>
+<button class="text-gray-400 hover:text-white">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<!-- Triangle pointing down -->
+<div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#102216] rotate-45 border-r border-b border-white/10"></div>
+</div>
+</div>
+<!-- Job Match Card (Slide Up Panel) -->
+<div class="absolute bottom-0 left-0 right-0 z-20 flex flex-col justify-end">
+<!-- Card Container -->
+<div class="w-full bg-white dark:bg-[#102216] rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.15)] pb-6 overflow-hidden">
+<!-- Timer / Progress Bar -->
+<div class="w-full h-1.5 bg-gray-100 dark:bg-gray-800">
+<div class="h-full bg-primary w-2/3 rounded-r-full"></div>
+</div>
+<!-- Handle -->
+<div class="flex justify-center pt-3 pb-1">
+<div class="h-1.5 w-12 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+</div>
+<!-- Header Content -->
+<div class="px-5 pt-2 pb-4 border-b border-gray-100 dark:border-gray-800">
+<div class="flex justify-between items-start mb-1">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/20 text-[#0d7a31] dark:text-primary text-xs font-bold uppercase tracking-wide">
+<span class="material-symbols-outlined text-sm">bolt</span>
+                            Instant Match
+                        </span>
+<span class="text-gray-500 dark:text-gray-400 text-sm font-medium">14:00 - 18:00</span>
+</div>
+<h2 class="text-2xl font-bold text-[#111813] dark:text-white leading-tight">Dishwasher Assistant</h2>
+</div>
+<!-- Details List -->
+<div class="px-5 py-4 flex flex-col gap-5">
+<!-- Location Item -->
+<div class="flex items-center gap-4">
+<div class="bg-cover bg-center rounded-xl h-14 w-14 shrink-0 shadow-sm border border-gray-100 dark:border-gray-800" data-alt="Logo of La Brisa Bali" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmP3eTZxFoKK_l6tPzmLCAJTKTvz7jCXQd_w9LDrIOH6r6brAhUKWGEYBSEE623SecHO8180oyP16OAfZY-DBgUai5bm1vSJPdu3aCUwxBYr7hgPaLDM6E3b4NqQ-EYjj_qkIoO1Aph72hxOwpsIa-ZM6R3x7MsPCFUUkrLDnj0ngFXN-AYn7jjtunjovZbMZEfr5Q_FxlsLJvkfS9GrsoVzEX26MhrcBZ67IZ0sRN53ATlXxYyKSj7KKKcCLsLy4ZDY67PvFAMEk');"></div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<p class="text-[#111813] dark:text-white text-base font-bold leading-tight truncate">La Brisa Bali</p>
+<span class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">2.5 km</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium truncate">Jl. Pantai Batu Mejan, Canggu</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-yellow-500 text-[14px] fill-current">star</span>
+<span class="text-xs font-bold text-[#111813] dark:text-white">4.8</span>
+<span class="text-xs text-gray-400">(120 reviews)</span>
+</div>
+</div>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col p-3 rounded-xl bg-background-light dark:bg-white/5 border border-transparent dark:border-white/10">
+<span class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase mb-1">Estimated Pay</span>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-[#111813] dark:text-primary">IDR 120,000</span>
+</div>
+<span class="text-xs text-gray-400 mt-0.5">~ IDR 30k/hr</span>
+</div>
+<div class="flex flex-col p-3 rounded-xl bg-background-light dark:bg-white/5 border border-transparent dark:border-white/10">
+<span class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase mb-1">Duration</span>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-[#111813] dark:text-white">4 Hours</span>
+</div>
+<span class="text-xs text-gray-400 mt-0.5">Starts in 30 mins</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="px-5 pt-2 flex gap-3">
+<button class="flex-1 h-14 rounded-full border border-gray-200 dark:border-gray-700 bg-transparent text-[#111813] dark:text-white font-bold text-base hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                        Decline
+                    </button>
+<button class="flex-[2] h-14 rounded-full bg-primary text-[#102216] font-bold text-lg shadow-[0_4px_14px_rgba(19,236,91,0.4)] hover:bg-[#0fd650] transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                        Accept Job
+                        <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

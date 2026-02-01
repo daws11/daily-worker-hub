@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Welcome Dashboard</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c3024",
+                        "text-main-light": "#111813",
+                        "text-main-dark": "#f0f4f2",
+                        "text-sub-light": "#61896f",
+                        "text-sub-dark": "#a3c2b0",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "1.5rem", 
+                        "xl": "2rem", 
+                        "2xl": "2.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark min-h-screen flex flex-col antialiased selection:bg-primary selection:text-black">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm px-4 pt-6 pb-2">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-text-sub-light dark:text-text-sub-dark text-sm font-medium">12 Oktober 2023</span>
+<h2 class="text-text-main-light dark:text-text-main-dark text-2xl font-bold leading-tight tracking-tight">Selamat Pagi, Budi!</h2>
+</div>
+<div class="flex items-center justify-end">
+<button class="flex items-center justify-center rounded-full h-12 w-12 bg-white dark:bg-surface-dark shadow-sm text-text-main-light dark:text-text-main-dark hover:bg-gray-50 dark:hover:bg-opacity-80 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-4 flex flex-col gap-6 pb-24">
+<!-- Hero Status Card -->
+<section class="mt-4">
+<div class="group relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark p-6 shadow-md border border-gray-100 dark:border-gray-800">
+<div class="flex flex-col items-center text-center gap-6">
+<div class="space-y-2">
+<h1 class="text-text-main-light dark:text-text-main-dark text-2xl font-extrabold leading-tight">Siap untuk bekerja?</h1>
+<p class="text-text-sub-light dark:text-text-sub-dark text-base font-normal">
+                            Geser tombol untuk status <span class="font-bold text-primary dark:text-primary">ONLINE</span> dan terima order.
+                        </p>
+</div>
+<!-- Giant Toggle Switch -->
+<label class="relative inline-flex items-center cursor-pointer touch-manipulation">
+<input class="sr-only peer" type="checkbox" value=""/>
+<!-- Track -->
+<div class="w-[200px] h-[80px] bg-gray-200 dark:bg-black/40 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-[120px] rtl:peer-checked:after:-translate-x-[120px] after:content-[''] after:absolute after:top-[6px] after:start-[6px] after:bg-white after:shadow-lg after:rounded-full after:h-[68px] after:w-[68px] after:transition-all after:duration-300 peer-checked:bg-primary transition-colors"></div>
+<!-- Icons inside toggle for extra flair -->
+<span class="absolute left-6 text-gray-400 font-bold tracking-wider text-sm pointer-events-none peer-checked:opacity-0 transition-opacity">OFF</span>
+<span class="absolute right-6 text-black/60 font-bold tracking-wider text-sm pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity">ON</span>
+</label>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10">
+<span class="material-symbols-outlined text-[18px] text-text-sub-light dark:text-text-sub-dark">info</span>
+<span class="text-xs font-medium text-text-sub-light dark:text-text-sub-dark">Pastikan baterai HP cukup</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Profile Snapshot -->
+<section>
+<div class="flex items-center gap-4 bg-surface-light dark:bg-surface-dark px-4 py-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 cursor-pointer active:scale-[0.98] transition-transform">
+<!-- Avatar -->
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-16 w-16 border-2 border-white dark:border-gray-700 shadow-sm" data-alt="Portrait of Budi Santoso, a smiling hospitality worker" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAfcG7ZiUZ0Fc49QAaGnJuRndZ1WTKPDwLmD3vJROBYHuxMDa4BNBvZlY7E57iyStu5yahrDY3H3NFAC5Cm7OvN0WenJS2dE40Dt7-dO-eYXXND7yRvIULhlGrCGAVqeKSjwcAaiztsFIScZCrLZVxLIVZXVfHyRLePZUXO8378H8QCOcvrPsM_ofCHI5cwVqoH5iZD8ijewHOU7G9PogAZDCuaR4cog0UTqqSiiOeXaJEA1lImFpWpL_pCTTxbM2F59wgvgO5Kp-4");'>
+</div>
+<!-- Rating Badge -->
+<div class="absolute -bottom-1 -right-1 bg-white dark:bg-surface-dark px-1.5 py-0.5 rounded-full shadow border border-gray-100 dark:border-gray-700 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px] text-yellow-500 fill-1">star</span>
+<span class="text-xs font-bold text-text-main-light dark:text-text-main-dark">4.9</span>
+</div>
+</div>
+<div class="flex flex-col justify-center flex-1 min-w-0">
+<p class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-normal truncate">Budi Santoso</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm font-medium leading-normal truncate">Bartender / Server</p>
+</div>
+<div class="shrink-0 bg-background-light dark:bg-black/20 h-10 w-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-text-main-light dark:text-text-main-dark">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Tutorial Card -->
+<section>
+<h3 class="text-text-main-light dark:text-text-main-dark text-lg font-bold mb-3 px-1">Tips Sukses</h3>
+<div class="flex flex-col @container rounded-2xl bg-surface-light dark:bg-surface-dark overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
+<!-- Video Thumbnail Area -->
+<div class="relative w-full h-40 bg-gray-200 dark:bg-gray-800 group cursor-pointer">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover opacity-90 transition-opacity group-hover:opacity-100" data-alt="Video thumbnail showing a busy restaurant service scene" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBS0dwQbNOB9RhKqk09hZnrdT9TggDHwri9EFktQMUhvkemB6SgSPMezYjB3HS6OxagqfhldGQ9eTSpM0FS1tAZYGd4mI5YnkgNrSHKychOzvrLLhEvjVwIItkJZhZyhRHaxcHxlgAKiCLhMwbTLJGjY--Z5aJIUavwbZMnFWoDtbUmDmmEFozPP6u2gSh9tDaoNIkOg_zU-jnA4rMG91-PPbVFzh-L0rj66_ETZcDNDIFOrJWj3xXnP0H36R8spNrT7Pimez73pOU");'>
+</div>
+<!-- Play Button Overlay -->
+<div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
+<div class="h-12 w-12 rounded-full bg-primary flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-black text-[32px] ml-1">play_arrow</span>
+</div>
+</div>
+<!-- Duration Badge -->
+<div class="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-white text-xs font-medium">
+                        02:45
+                    </div>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight">Cara Cepat Dapat Job</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm font-normal leading-normal">Tonton video tutorial singkat untuk meningkatkan performa profilmu.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 border-t border-gray-100 dark:border-gray-800 bg-surface-light dark:bg-surface-dark px-6 py-2 pb-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+<div class="flex items-center justify-between max-w-md mx-auto">
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="h-8 w-16 rounded-full flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[26px] text-text-main-light dark:text-text-main-dark">home</span>
+</div>
+<span class="text-text-main-light dark:text-text-main-dark text-xs font-semibold">Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="h-8 w-16 rounded-full flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[26px] text-text-sub-light dark:text-text-sub-dark">work</span>
+</div>
+<span class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">Job</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="h-8 w-16 rounded-full flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[26px] text-text-sub-light dark:text-text-sub-dark">account_balance_wallet</span>
+</div>
+<span class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">Dompet</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="h-8 w-16 rounded-full flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[26px] text-text-sub-light dark:text-text-sub-dark">person</span>
+</div>
+<span class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">Profil</span>
+</a>
+</div>
+</nav>
+</body></html>

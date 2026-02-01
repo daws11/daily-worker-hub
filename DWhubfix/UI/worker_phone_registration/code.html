@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Phone Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased">
+<!-- Main Container -->
+<div class="relative flex h-full min-h-screen w-full max-w-md mx-auto flex-col overflow-hidden bg-background-light dark:bg-background-dark shadow-xl">
+<!-- Header -->
+<div class="flex items-center px-4 pt-6 pb-2 justify-between">
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 text-[#111813] dark:text-white">
+<span class="material-symbols-outlined text-[24px]">arrow_back_ios_new</span>
+</button>
+<div class="text-[#111813] dark:text-white text-sm font-semibold opacity-0">Step 1 of 3</div> <!-- Placeholder for balance/nav -->
+</div>
+<!-- Content Wrapper -->
+<div class="flex-1 flex flex-col px-6 pt-6">
+<!-- Headline -->
+<h1 class="text-[#111813] dark:text-white tracking-tight text-[32px] font-bold leading-tight text-left pb-3">
+                Let's get you working
+            </h1>
+<!-- Body Text -->
+<p class="text-gray-600 dark:text-gray-400 text-base font-normal leading-normal pb-8">
+                Enter your mobile number. We'll send a confirmation code to verify your account.
+            </p>
+<!-- Phone Input Group -->
+<div class="flex flex-col gap-2">
+<label class="block text-sm font-medium text-[#111813] dark:text-white mb-1 ml-2">Phone Number</label>
+<div class="relative flex items-center w-full">
+<!-- Country Code -->
+<div class="absolute left-1 top-1 bottom-1 flex items-center pl-3 pr-2 bg-gray-100 dark:bg-gray-800 rounded-l-[14px] border-r border-transparent z-10 h-[calc(100%-8px)] my-auto">
+<span class="text-2xl mr-2">🇮🇩</span>
+<span class="text-[#111813] dark:text-white text-lg font-bold">+62</span>
+<span class="material-symbols-outlined text-gray-400 text-sm ml-1">expand_more</span>
+</div>
+<!-- Input Field -->
+<input autofocus="" class="form-input flex w-full pl-[110px] pr-4 py-4 rounded-2xl text-[#111813] dark:text-white text-2xl font-bold tracking-wide border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-gray-300 dark:placeholder:text-gray-600 h-16 shadow-sm transition-all" placeholder="812 3456 789" type="tel" value=""/>
+</div>
+<!-- Helper / Meta Text -->
+<div class="flex items-center gap-2 mt-3 pl-2 animate-pulse">
+<span class="material-symbols-outlined text-[#61896f] text-sm">signal_cellular_alt</span>
+<p class="text-[#61896f] text-sm font-medium">Auto-detecting operator...</p>
+</div>
+</div>
+<!-- Spacer to push content up and footer down -->
+<div class="flex-1"></div>
+<!-- Bottom Actions -->
+<div class="mb-6 w-full flex flex-col gap-4">
+<!-- Legal Text -->
+<p class="text-center text-xs text-gray-400 dark:text-gray-500 max-w-xs mx-auto">
+                    By continuing, you agree to our 
+                    <a class="underline hover:text-primary" href="#">Terms of Service</a> and 
+                    <a class="underline hover:text-primary" href="#">Privacy Policy</a>.
+                </p>
+<!-- Primary Button -->
+<button class="w-full bg-primary hover:bg-[#0fd650] active:scale-[0.98] transition-all text-[#102216] text-lg font-bold py-4 px-6 rounded-full shadow-lg shadow-primary/30 flex items-center justify-center gap-2 group">
+                    Continue
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+<!-- Keyboard spacing visualizer (simulating space taken by iOS keyboard) -->
+<!-- In a real app, the viewport height adjusts, but for this static view, we keep the button visible at the bottom of the "screen" -->
+<div class="h-2 w-full"></div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker OTP Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c20",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "1.5rem", 
+                        "xl": "2rem", 
+                        "2xl": "2.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px -5px rgba(19, 236, 91, 0.5)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom styles to remove spinner from number inputs */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen w-full flex flex-col font-display antialiased overflow-x-hidden transition-colors duration-200">
+<!-- Top Navigation -->
+<header class="flex items-center px-4 pt-12 pb-2 justify-between bg-background-light dark:bg-background-dark sticky top-0 z-10">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-200/50 dark:hover:bg-white/10 transition-colors group">
+<span class="material-symbols-outlined text-slate-900 dark:text-white group-hover:-translate-x-0.5 transition-transform" style="font-size: 24px;">arrow_back_ios_new</span>
+</button>
+<!-- Optional: Helper or Close action -->
+<button class="text-sm font-semibold text-slate-500 dark:text-slate-400">
+            Help
+        </button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col px-6">
+<!-- Hero / Header Section -->
+<div class="flex flex-col pt-6 pb-8">
+<h1 class="text-slate-900 dark:text-white text-[32px] font-bold leading-tight tracking-tight mb-3">
+                Verify your number
+            </h1>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-relaxed">
+                Enter the 6-digit code sent to <br/>
+<span class="text-slate-900 dark:text-white font-bold whitespace-nowrap text-lg">+62 812-3456-7890</span>
+</p>
+</div>
+<!-- OTP Input Fields -->
+<div class="w-full py-2">
+<form>
+<fieldset class="grid grid-cols-6 gap-2 sm:gap-4 justify-between">
+<!-- Input 1: Active State -->
+<input aria-label="Digit 1" autofocus="" class="flex w-full aspect-[4/5] text-center bg-white dark:bg-surface-dark rounded-2xl border-2 border-primary ring-4 ring-primary/20 outline-none text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white transition-all caret-primary shadow-sm" maxlength="1" type="tel" value="5"/>
+<!-- Input 2 -->
+<input aria-label="Digit 2" class="flex w-full aspect-[4/5] text-center bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white transition-all caret-primary shadow-sm" maxlength="1" type="tel" value=""/>
+<!-- Input 3 -->
+<input aria-label="Digit 3" class="flex w-full aspect-[4/5] text-center bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white transition-all caret-primary shadow-sm" maxlength="1" type="tel" value=""/>
+<!-- Input 4 -->
+<input aria-label="Digit 4" class="flex w-full aspect-[4/5] text-center bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white transition-all caret-primary shadow-sm" maxlength="1" type="tel" value=""/>
+<!-- Input 5 -->
+<input aria-label="Digit 5" class="flex w-full aspect-[4/5] text-center bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white transition-all caret-primary shadow-sm" maxlength="1" type="tel" value=""/>
+<!-- Input 6 -->
+<input aria-label="Digit 6" class="flex w-full aspect-[4/5] text-center bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white transition-all caret-primary shadow-sm" maxlength="1" type="tel" value=""/>
+</fieldset>
+</form>
+</div>
+<!-- Timer & Resend -->
+<div class="flex flex-col items-center justify-center pt-10 gap-3">
+<div class="flex items-center gap-2 bg-white dark:bg-surface-dark px-4 py-2 rounded-full shadow-sm border border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-slate-400 text-lg">timer</span>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                    Resend code in <span class="font-bold text-slate-900 dark:text-white tabular-nums">00:45</span>
+</p>
+</div>
+<button class="mt-2 text-slate-300 dark:text-slate-600 font-bold text-sm disabled:cursor-not-allowed hover:text-primary transition-colors uppercase tracking-wide" disabled="">
+                Resend Code
+            </button>
+</div>
+<!-- Spacer to push button to bottom or above keyboard -->
+<div class="flex-1 min-h-[40px]"></div>
+<!-- Action Buttons -->
+<div class="pb-8">
+<button class="w-full h-14 bg-primary hover:bg-[#0fd650] active:scale-[0.98] transition-all duration-200 text-slate-900 text-lg font-bold rounded-full flex items-center justify-center shadow-neon hover:shadow-[0_0_25px_-5px_rgba(19,236,91,0.6)] relative overflow-hidden group">
+<span class="relative z-10">Verify &amp; Continue</span>
+<!-- Subtle shine effect -->
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1s_infinite]"></div>
+</button>
+<div class="mt-6 text-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                    Didn't receive the SMS? 
+                    <a class="text-slate-900 dark:text-white font-bold hover:text-primary dark:hover:text-primary transition-colors ml-1" href="#">Contact Support</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Tailwind Config for Keyframes -->
+<script>
+        tailwind.config.theme.extend.keyframes = {
+            shimmer: {
+                '100%': { transform: 'translateX(100%)' }
+            }
+        }
+    </script>
+</body></html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Background Check</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c20",
+                        "text-main": "#111813",
+                        "text-muted": "#61896f",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "1.5rem", 
+                        "xl": "2rem", 
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Toggle Switch Style */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #13ec5b;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #13ec5b;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white antialiased selection:bg-primary selection:text-black">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
+<!-- Top Navigation / Indicators -->
+<div class="sticky top-0 z-20 flex w-full flex-col bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm pt-4 pb-2">
+<div class="flex items-center justify-between px-4 mb-2">
+<button class="p-2 -ml-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="text-sm font-semibold text-text-muted dark:text-gray-400">Step 3 of 5</div>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</div>
+<div class="flex w-full flex-row items-center justify-center gap-2 px-6">
+<div class="h-1.5 w-full flex-1 rounded-full bg-primary"></div>
+<div class="h-1.5 w-full flex-1 rounded-full bg-primary"></div>
+<div class="h-1.5 w-full flex-1 rounded-full bg-primary"></div>
+<div class="h-1.5 w-full flex-1 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+<div class="h-1.5 w-full flex-1 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+</div>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 px-4 pb-32 pt-2">
+<!-- Headline -->
+<div class="mb-6 mt-2">
+<h1 class="text-text-main dark:text-white tracking-tight text-3xl font-extrabold leading-tight mb-3">
+                    Let's get you <span class="text-green-600 dark:text-primary">verified</span>
+</h1>
+<p class="text-text-muted dark:text-gray-400 text-base font-normal leading-relaxed">
+                    Verified workers get hired 3x faster by top hotels in Bali. Select the checks you want to perform.
+                </p>
+</div>
+<!-- Section 1: Standard -->
+<div class="mb-6">
+<h3 class="text-text-main dark:text-white text-sm uppercase tracking-wider font-bold mb-3 px-1 opacity-70">Standard Verification</h3>
+<div class="flex flex-col gap-3">
+<!-- Identity Card -->
+<div class="flex items-center gap-4 bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm relative overflow-hidden">
+<!-- Decorative glow -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex items-center justify-center rounded-full bg-green-50 dark:bg-green-900/30 shrink-0 h-12 w-12 text-green-700 dark:text-green-400">
+<span class="material-symbols-outlined filled">badge</span>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<div class="flex items-center gap-2">
+<p class="text-text-main dark:text-white text-base font-bold leading-tight">Identity Verification</p>
+<span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-[10px] font-bold text-gray-500 uppercase">Required</span>
+</div>
+<p class="text-text-muted dark:text-gray-400 text-sm font-medium mt-1">KTP validation &amp; Facial matching</p>
+</div>
+<div class="shrink-0 text-primary">
+<span class="material-symbols-outlined filled">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 2: Optional -->
+<div class="mb-6">
+<div class="flex items-center justify-between mb-3 px-1">
+<h3 class="text-text-main dark:text-white text-sm uppercase tracking-wider font-bold opacity-70">Optional Add-ons</h3>
+<span class="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-lg">Recommended</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Criminal Record Card -->
+<label class="group relative flex flex-col gap-4 bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm cursor-pointer transition-all hover:border-primary/50">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20 shrink-0 h-12 w-12 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-text-main dark:text-white text-base font-bold leading-tight">Criminal Record (SKCK)</p>
+<p class="text-text-muted dark:text-gray-400 text-sm mt-1 max-w-[180px]">Official police check via our partner <span class="font-bold text-gray-800 dark:text-gray-300">CekAja</span>.</p>
+</div>
+</div>
+<!-- Custom Toggle -->
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 dark:border-gray-600 checked:border-primary transition-all duration-300" id="toggle" name="toggle" type="checkbox"/>
+<span class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-gray-700 cursor-pointer transition-colors duration-300"></span>
+</div>
+</div>
+<!-- Footer of Card -->
+<div class="mt-2 pt-3 border-t border-gray-100 dark:border-gray-700/50 flex items-center justify-between">
+<span class="text-xs text-gray-400 font-medium">Processing time: ~2 days</span>
+<div class="flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm text-gray-500">payments</span>
+<span class="text-sm font-bold text-gray-900 dark:text-white">Rp 50.000</span>
+</div>
+</div>
+</label>
+</div>
+</div>
+<!-- Section 3: Conditional -->
+<div class="mb-4">
+<h3 class="text-text-main dark:text-white text-sm uppercase tracking-wider font-bold mb-3 px-1 opacity-70">Role Specific</h3>
+<div class="flex flex-col gap-3">
+<!-- Health Cert Card -->
+<div class="flex flex-col bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center rounded-full bg-orange-50 dark:bg-orange-900/20 shrink-0 h-12 w-12 text-orange-500">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-text-main dark:text-white text-base font-bold leading-tight">Health Certificate</p>
+<p class="text-text-muted dark:text-gray-400 text-sm mt-1">Required for Kitchen &amp; F&amp;B roles</p>
+</div>
+</div>
+<button class="shrink-0 flex items-center justify-center h-10 w-10 rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<!-- Upload Area (Collapsed state implied or simple action) -->
+<div class="mt-4 flex gap-3">
+<button class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-lg">upload_file</span>
+                                Upload Document
+                            </button>
+</div>
+<div class="mt-2 text-center">
+<span class="text-xs text-gray-400">Or skip if not applying for F&amp;B</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Trust / Footer note -->
+<div class="flex items-center justify-center gap-2 py-4 opacity-60">
+<span class="material-symbols-outlined text-sm">lock</span>
+<p class="text-xs text-center font-medium">Your data is encrypted and 100% secure.</p>
+</div>
+</div>
+<!-- Sticky Bottom Action -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 max-w-md mx-auto">
+<div class="flex flex-col gap-3">
+<button class="w-full bg-primary hover:bg-green-400 active:scale-[0.98] transition-all text-[#102216] font-extrabold text-lg py-4 rounded-full shadow-lg shadow-green-500/20 flex items-center justify-center gap-2">
+                    Continue
+                    <span class="material-symbols-outlined font-bold">arrow_forward</span>
+</button>
+<!-- Skip link for optional flows -->
+<!-- <button class="text-sm font-semibold text-gray-500 dark:text-gray-400 py-1">Skip optional checks</button> -->
+</div>
+</div>
+</div>
+<!-- Toggle Logic Script (Visual only for prototype feel, no framework) -->
+<script>
+        const toggle = document.getElementById('toggle');
+        const priceBadge = toggle.closest('label').querySelector('.bg-gray-100');
+        const priceText = toggle.closest('label').querySelector('.text-gray-900');
+
+        toggle.addEventListener('change', function() {
+            if(this.checked) {
+                // Active state styling
+                priceBadge.classList.remove('bg-gray-100', 'dark:bg-gray-800');
+                priceBadge.classList.add('bg-primary/20');
+                priceText.classList.add('text-primary');
+            } else {
+                // Inactive state styling
+                priceBadge.classList.add('bg-gray-100', 'dark:bg-gray-800');
+                priceBadge.classList.remove('bg-primary/20');
+                priceText.classList.remove('text-primary');
+            }
+        });
+    </script>
+</body></html>

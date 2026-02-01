@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Online Toggle Tutorial</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#13ec5b",
+              "background-light": "#f6f8f6",
+              "background-dark": "#102216",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            animation: {
+                'float': 'float 3s ease-in-out infinite',
+            },
+            keyframes: {
+                float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-10px)' },
+                }
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display transition-colors duration-300">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden group/design-root">
+<!-- Header / Navigation -->
+<div class="flex items-center p-4 pt-6 pb-2 justify-between w-full max-w-md mx-auto">
+<button class="text-[#111813] dark:text-white flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<button class="flex w-16 items-center justify-end rounded-full py-2 hover:opacity-80 transition-opacity">
+<p class="text-[#61896f] dark:text-[#8ab098] text-base font-bold leading-normal tracking-[0.015em] shrink-0">Skip</p>
+</button>
+</div>
+<!-- Hero Visual Area: Toggle Simulation -->
+<div class="flex-1 flex flex-col items-center justify-center px-4 w-full max-w-md mx-auto relative min-h-[360px]">
+<!-- Ambient Glow Behind Toggle -->
+<div class="absolute w-64 h-64 bg-primary/20 dark:bg-primary/10 rounded-full blur-[60px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+<!-- Toggle Interaction Area -->
+<div class="relative z-10 flex flex-col items-center">
+<!-- Floating Notification Bubble (Visual Cue) -->
+<div class="absolute -top-16 right-0 animate-float" style="animation-delay: 0.5s;">
+<div class="bg-white dark:bg-[#1a3322] px-4 py-3 rounded-2xl shadow-xl border border-slate-100 dark:border-[#2a4533] flex items-center gap-3 transform rotate-6">
+<div class="bg-primary/20 p-1.5 rounded-full">
+<span class="material-symbols-outlined text-primary text-[20px]">notifications_active</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">New Match</span>
+<span class="text-sm font-bold text-[#111813] dark:text-white">Cafe Barista Needed</span>
+</div>
+</div>
+</div>
+<!-- The Toggle Switch Graphic -->
+<div class="relative group cursor-pointer">
+<!-- Toggle Track -->
+<div class="w-48 h-24 rounded-full bg-primary flex items-center p-2 shadow-[0_8px_32px_rgba(19,236,91,0.3)] transition-transform duration-300 hover:scale-105 border-4 border-white dark:border-[#1a3322]">
+<!-- Toggle Knob (Positioned Right for Online) -->
+<div class="h-18 w-18 aspect-square rounded-full bg-white shadow-lg flex items-center justify-center translate-x-[96px]">
+<span class="material-symbols-outlined text-primary text-[32px] font-bold">bolt</span>
+</div>
+</div>
+<!-- Helper Label -->
+<div class="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-max">
+<div class="flex items-center gap-2 bg-white/60 dark:bg-black/20 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 dark:border-white/5">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-xs font-semibold text-[#111813] dark:text-white">You are Online</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Instructional Text Content -->
+<div class="flex flex-col items-center px-6 pb-2 w-full max-w-md mx-auto">
+<h1 class="text-[#111813] dark:text-white tracking-tight text-[32px] font-bold leading-tight text-center mb-4">
+                Ready to Work?
+            </h1>
+<p class="text-[#111813] dark:text-gray-300 text-base font-normal leading-relaxed text-center">
+                Slide the toggle to go <span class="font-bold text-primary dark:text-primary">Online</span>. When it turns Green, you are visible to hotels and cafes and will start receiving job alerts immediately.
+            </p>
+<div class="w-full h-px bg-slate-100 dark:bg-white/5 my-4"></div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-relaxed text-center px-4">
+                Need a break? Just slide it back to go Offline.
+            </p>
+</div>
+<!-- Bottom Action Area -->
+<div class="w-full flex flex-col items-center gap-6 px-6 pb-8 pt-4 max-w-md mx-auto mt-auto">
+<!-- Progress Indicators -->
+<div aria-label="Progress" class="flex gap-2.5">
+<div class="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+<div class="w-8 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(19,236,91,0.5)]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<!-- Primary Action Button -->
+<button class="w-full bg-primary hover:bg-[#10d650] text-[#102216] font-display font-bold text-lg h-14 rounded-full shadow-lg shadow-primary/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                Got it, let's start!
+                <span class="material-symbols-outlined text-[20px] font-bold">arrow_forward</span>
+</button>
+</div>
+<!-- Spacer for safe area -->
+<div class="h-4"></div>
+</div>
+</body></html>

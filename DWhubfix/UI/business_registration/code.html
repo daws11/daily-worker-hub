@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Registration</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111813] dark:text-white antialiased transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full max-w-md mx-auto flex-col overflow-x-hidden bg-background-light dark:bg-background-dark group/design-root">
+<!-- Header -->
+<div class="flex items-center px-4 pt-6 pb-2 justify-between sticky top-0 z-20 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<button class="text-[#111813] dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back_ios_new</span>
+</button>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Daftar Bisnis</h2>
+</div>
+<!-- Progress Indicator -->
+<div class="flex w-full flex-row items-center justify-center gap-2 py-4">
+<div class="h-1.5 w-8 rounded-full bg-primary shadow-[0_0_10px_rgba(19,236,91,0.3)]"></div>
+<div class="h-1.5 w-2 rounded-full bg-[#dbe6df] dark:bg-[#2A4034]"></div>
+<div class="h-1.5 w-2 rounded-full bg-[#dbe6df] dark:bg-[#2A4034]"></div>
+</div>
+<div class="flex-1 overflow-y-auto pb-10">
+<!-- Headline & Body -->
+<div class="px-5 pt-2 pb-6">
+<h2 class="text-[#111813] dark:text-white tracking-tight text-[28px] font-bold leading-tight text-left mb-2">Mulai Rekrut Pekerja</h2>
+<p class="text-[#111813]/70 dark:text-white/70 text-base font-normal leading-relaxed">
+                    Lengkapi data usaha Anda untuk terhubung dengan staf harian terbaik di Bali.
+                </p>
+</div>
+<!-- Form Fields -->
+<form class="flex flex-col gap-5 px-5" onsubmit="event.preventDefault()">
+<!-- Nama Bisnis -->
+<label class="flex flex-col gap-2">
+<span class="text-[#111813] dark:text-gray-200 text-sm font-medium ml-1">Nama Bisnis</span>
+<input class="form-input w-full h-14 rounded border border-[#dbe6df] dark:border-[#2A4034] bg-white dark:bg-[#1C2E24] px-4 text-base text-[#111813] dark:text-white placeholder:text-[#61896f] dark:placeholder:text-[#4A6E58] focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all shadow-sm" placeholder="Contoh: Warung Made" type="text"/>
+</label>
+<!-- Alamat Usaha -->
+<label class="flex flex-col gap-2 group/location">
+<span class="text-[#111813] dark:text-gray-200 text-sm font-medium ml-1">Alamat Usaha</span>
+<div class="relative">
+<input class="form-input w-full h-14 rounded border border-[#dbe6df] dark:border-[#2A4034] bg-white dark:bg-[#1C2E24] pl-4 pr-12 text-base text-[#111813] dark:text-white placeholder:text-[#61896f] dark:placeholder:text-[#4A6E58] focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all shadow-sm" placeholder="Jalan Pantai Berawa No. 99" type="text"/>
+<button class="absolute right-0 top-0 h-full w-14 flex items-center justify-center text-[#61896f] dark:text-[#4A6E58] group-focus-within/location:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined">pin_drop</span>
+</button>
+</div>
+</label>
+<!-- Email -->
+<label class="flex flex-col gap-2">
+<span class="text-[#111813] dark:text-gray-200 text-sm font-medium ml-1">Email Bisnis</span>
+<input class="form-input w-full h-14 rounded border border-[#dbe6df] dark:border-[#2A4034] bg-white dark:bg-[#1C2E24] px-4 text-base text-[#111813] dark:text-white placeholder:text-[#61896f] dark:placeholder:text-[#4A6E58] focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all shadow-sm" placeholder="hello@bisnisanda.com" type="email"/>
+</label>
+<!-- Phone Number -->
+<div class="flex flex-col gap-2">
+<label class="text-[#111813] dark:text-gray-200 text-sm font-medium ml-1">Nomor HP (WhatsApp)</label>
+<div class="flex gap-3">
+<!-- Country Code -->
+<div class="h-14 w-[76px] shrink-0 flex items-center justify-center rounded border border-[#dbe6df] dark:border-[#2A4034] bg-white dark:bg-[#1C2E24] shadow-sm">
+<span class="text-base font-semibold text-[#111813] dark:text-white flex items-center gap-1">
+                                🇮🇩 +62
+                            </span>
+</div>
+<!-- Input & Action -->
+<div class="relative flex-1">
+<input class="form-input w-full h-14 rounded border border-[#dbe6df] dark:border-[#2A4034] bg-white dark:bg-[#1C2E24] pl-4 pr-24 text-base text-[#111813] dark:text-white placeholder:text-[#61896f] dark:placeholder:text-[#4A6E58] focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all shadow-sm" placeholder="812-3456-789" type="tel"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-primary hover:text-[#0ebd47] transition-colors py-1 px-2 -mr-2 rounded" type="button">
+                                Kirim OTP
+                            </button>
+</div>
+</div>
+<p class="text-xs text-[#61896f] dark:text-[#4A6E58] ml-1 mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+                        Verifikasi otomatis via WhatsApp
+                    </p>
+</div>
+<!-- Password -->
+<label class="flex flex-col gap-2 group/password">
+<span class="text-[#111813] dark:text-gray-200 text-sm font-medium ml-1">Kata Sandi</span>
+<div class="relative">
+<input class="form-input w-full h-14 rounded border border-[#dbe6df] dark:border-[#2A4034] bg-white dark:bg-[#1C2E24] pl-4 pr-12 text-base text-[#111813] dark:text-white placeholder:text-[#61896f] dark:placeholder:text-[#4A6E58] focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all shadow-sm" placeholder="••••••••" type="password"/>
+<button class="absolute right-0 top-0 h-full w-14 flex items-center justify-center text-[#61896f] dark:text-[#4A6E58] hover:text-[#111813] dark:hover:text-white transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</label>
+<!-- Spacer -->
+<div class="h-4"></div>
+<!-- Main Action -->
+<button class="w-full h-14 bg-primary hover:bg-[#0ebd47] active:scale-[0.98] transition-all rounded-full flex items-center justify-center shadow-[0_8px_20px_-4px_rgba(19,236,91,0.5)] dark:shadow-[0_8px_20px_-4px_rgba(19,236,91,0.2)]">
+<span class="text-[#102216] text-base font-bold tracking-wide">Verifikasi &amp; Lanjut</span>
+</button>
+<!-- Terms -->
+<p class="text-center text-xs text-[#61896f] dark:text-[#4A6E58] leading-relaxed px-4 pb-6">
+                    Dengan mendaftar, Anda menyetujui <a class="text-primary font-medium hover:underline" href="#">Syarat &amp; Ketentuan</a> serta <a class="text-primary font-medium hover:underline" href="#">Kebijakan Privasi</a>.
+                </p>
+</form>
+</div>
+</div>
+</body></html>

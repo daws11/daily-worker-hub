@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Experience Level</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b", // Vivid Green
+                        "primary-content": "#052e16", // Dark green text for contrast on primary
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#162e1f",
+                        "border-light": "#e2e8e4",
+                        "border-dark": "#23422f",
+                        "text-main": "#111813",
+                        "text-muted": "#64748b",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2rem", "2xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean horizontal scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-text-main dark:text-white overflow-x-hidden selection:bg-primary selection:text-primary-content">
+<div class="relative flex min-h-screen flex-col w-full max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-transparent transition-all duration-300">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full active:bg-gray-200 dark:active:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined text-2xl text-text-main dark:text-white">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Pengalaman Kerja</h1>
+</header>
+<!-- Progress Indicator -->
+<div class="w-full h-1 bg-gray-200 dark:bg-gray-800">
+<div class="h-full w-2/3 bg-primary rounded-r-full"></div>
+</div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col p-5 pb-32 gap-8">
+<!-- Description -->
+<div class="space-y-1">
+<h2 class="text-2xl font-extrabold text-text-main dark:text-white">Ceritakan keahlianmu</h2>
+<p class="text-text-muted dark:text-gray-400 text-base leading-relaxed">
+                    Bantu bisnis mengenal keahlian dan pengalaman kerja anda di industri hospitality.
+                </p>
+</div>
+<!-- Section 1: Years of Experience -->
+<div class="space-y-3">
+<label class="block text-sm font-semibold text-text-main dark:text-gray-200 uppercase tracking-wider ml-1">
+                    Tahun Pengalaman
+                </label>
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-1 -mx-5 px-5 snap-x">
+<!-- Option 1: Active State Example -->
+<label class="snap-start relative group cursor-pointer">
+<input class="peer sr-only" name="experience" type="radio" value="&lt;1"/>
+<div class="flex h-12 min-w-[100px] items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark px-6 transition-all duration-200 peer-checked:bg-primary peer-checked:border-primary peer-checked:shadow-lg peer-checked:shadow-primary/30">
+<span class="text-sm font-bold text-text-main dark:text-white peer-checked:text-primary-content whitespace-nowrap">&lt; 1 Tahun</span>
+</div>
+</label>
+<!-- Option 2: Inactive -->
+<label class="snap-start relative group cursor-pointer">
+<input checked="" class="peer sr-only" name="experience" type="radio" value="1-3"/>
+<div class="flex h-12 min-w-[100px] items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark px-6 transition-all duration-200 peer-checked:bg-primary peer-checked:border-primary peer-checked:shadow-lg peer-checked:shadow-primary/30">
+<span class="text-sm font-bold text-text-main dark:text-white peer-checked:text-primary-content whitespace-nowrap">1-3 Tahun</span>
+</div>
+</label>
+<!-- Option 3 -->
+<label class="snap-start relative group cursor-pointer">
+<input class="peer sr-only" name="experience" type="radio" value="3-5"/>
+<div class="flex h-12 min-w-[100px] items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark px-6 transition-all duration-200 peer-checked:bg-primary peer-checked:border-primary peer-checked:shadow-lg peer-checked:shadow-primary/30">
+<span class="text-sm font-bold text-text-main dark:text-white peer-checked:text-primary-content whitespace-nowrap">3-5 Tahun</span>
+</div>
+</label>
+<!-- Option 4 -->
+<label class="snap-start relative group cursor-pointer">
+<input class="peer sr-only" name="experience" type="radio" value="&gt;5"/>
+<div class="flex h-12 min-w-[100px] items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark px-6 transition-all duration-200 peer-checked:bg-primary peer-checked:border-primary peer-checked:shadow-lg peer-checked:shadow-primary/30">
+<span class="text-sm font-bold text-text-main dark:text-white peer-checked:text-primary-content whitespace-nowrap">&gt; 5 Tahun</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Section 2: Work History Text Area -->
+<div class="space-y-3">
+<label class="block text-sm font-semibold text-text-main dark:text-gray-200 uppercase tracking-wider ml-1" for="history">
+                    Riwayat Kerja Singkat
+                </label>
+<div class="relative group">
+<textarea class="w-full min-h-[160px] p-4 bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl text-base text-text-main dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none shadow-sm" id="history" placeholder="Contoh: Saya pernah bekerja sebagai bartender di Beach Club selama 2 tahun. Terbiasa dengan high-pace environment..."></textarea>
+<!-- Decorative corner icon -->
+<div class="absolute bottom-3 right-3 text-gray-300 dark:text-gray-600 pointer-events-none">
+<span class="material-symbols-outlined text-xl">edit_note</span>
+</div>
+</div>
+</div>
+<!-- Section 3: Upload (Optional) -->
+<div class="space-y-3">
+<div class="flex justify-between items-end px-1">
+<label class="block text-sm font-semibold text-text-main dark:text-gray-200 uppercase tracking-wider">
+                        Portfolio / Sertifikat
+                    </label>
+<span class="text-xs font-medium text-text-muted dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded text-right">Opsional</span>
+</div>
+<!-- Dashed Upload Area -->
+<div class="relative w-full group cursor-pointer">
+<input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" type="file"/>
+<div class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-surface-light dark:bg-surface-dark transition-colors group-hover:bg-primary/5 group-hover:border-primary group-active:bg-primary/10">
+<div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
+<div class="p-2 mb-2 rounded-full bg-gray-50 dark:bg-gray-800 group-hover:bg-white dark:group-hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-hover:text-primary text-2xl">cloud_upload</span>
+</div>
+<p class="mb-1 text-sm font-medium text-text-main dark:text-white">Upload Foto atau PDF</p>
+<p class="text-xs text-text-muted dark:text-gray-500">Maks. 5MB (JPG, PNG, PDF)</p>
+</div>
+</div>
+</div>
+<!-- Example of an uploaded file (Hidden by default, shown here for completeness logic) -->
+<!-- 
+                <div class="flex items-center justify-between p-3 bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-700 rounded-lg shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-red-500">picture_as_pdf</span>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium truncate max-w-[150px]">CV_Budi_Santoso.pdf</span>
+                            <span class="text-xs text-gray-500">2.4 MB</span>
+                        </div>
+                    </div>
+                    <button class="text-gray-400 hover:text-red-500">
+                        <span class="material-symbols-outlined text-xl">close</span>
+                    </button>
+                </div> 
+                -->
+</div>
+</main>
+<!-- Fixed Footer -->
+<footer class="fixed bottom-0 w-full max-w-md z-20 p-5 bg-gradient-to-t from-background-light via-background-light to-transparent dark:from-background-dark dark:via-background-dark pt-12">
+<button class="w-full flex items-center justify-center gap-2 bg-primary hover:bg-[#0fd651] active:scale-[0.98] transition-all py-4 px-6 rounded-full shadow-xl shadow-primary/20 group">
+<span class="text-primary-content font-bold text-lg">Simpan &amp; Lanjutkan</span>
+<span class="material-symbols-outlined text-primary-content group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</footer>
+</div>
+</body></html>

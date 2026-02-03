@@ -54,12 +54,23 @@ fun WorkerDashboardNavigation(
         NavHost(navController = navController, startDestination = "worker_home") {
             composable("worker_home") {
                 WorkerHomeScreen(
-                    onNavigateToDetail = { /* TODO */ }
+                    onNavigateToDetail = { jobId ->
+                        navController.navigate("worker_job_detail/$jobId")
+                    }
+                )
+            }
+            composable("worker_job_detail/{jobId}") { backStackEntry ->
+                val jobId = backStackEntry.arguments?.getString("jobId") ?: return@composable
+                com.example.dwhubfix.ui.dashboard.worker.WorkerJobDetailScreen(
+                    jobId = jobId,
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
             composable("worker_jobs") {
                 com.example.dwhubfix.ui.dashboard.worker.MyJobsScreen(
-                    onNavigateToDetail = { /* TODO: Navigate to Detail */ }
+                    onNavigateToDetail = { jobId ->
+                        navController.navigate("worker_job_detail/$jobId")
+                    }
                 )
             }
             composable("worker_wallet") {
@@ -67,7 +78,23 @@ fun WorkerDashboardNavigation(
             }
             composable("worker_profile") {
                 com.example.dwhubfix.ui.dashboard.worker.ProfileScreen(
-                    onLogout = onNavigateBack
+                    onLogout = onNavigateBack,
+                    onNavigateToEditProfile = {
+                        navController.navigate("edit_profile")
+                    },
+                    onNavigateToNotifications = {
+                        navController.navigate("notification_settings")
+                    }
+                )
+            }
+            composable("edit_profile") {
+                com.example.dwhubfix.ui.dashboard.worker.EditProfileScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable("notification_settings") {
+                com.example.dwhubfix.ui.dashboard.worker.NotificationSettingsScreen(
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
         }

@@ -32,7 +32,11 @@ import com.example.dwhubfix.model.UserProfile
 import com.example.dwhubfix.ui.theme.Primary
 
 @Composable
-fun ProfileScreen(onLogout: () -> Unit) {
+fun ProfileScreen(
+    onLogout: () -> Unit,
+    onNavigateToEditProfile: () -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {}
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var userProfile by remember { mutableStateOf<UserProfile?>(null) }
@@ -248,9 +252,9 @@ fun SettingsSection(onLogoutClick: () -> Unit) {
             shape = RoundedCornerShape(12.dp)
         ) {
             Column {
-                SettingsItem(icon = Icons.Default.Person, title = "Edit Profil", onClick = {})
+                SettingsItem(icon = Icons.Default.Person, title = "Edit Profil", onClick = onNavigateToEditProfile)
                 HorizontalDivider(color = Color(0xFFF3F4F6))
-                SettingsItem(icon = Icons.Default.Notifications, title = "Notifikasi", onClick = {})
+                SettingsItem(icon = Icons.Default.Notifications, title = "Notifikasi", onClick = onNavigateToNotifications)
                 HorizontalDivider(color = Color(0xFFF3F4F6))
                 SettingsItem(icon = Icons.Default.Language, title = "Bahasa", value = "Indonesia", onClick = {})
                 HorizontalDivider(color = Color(0xFFF3F4F6))

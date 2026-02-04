@@ -37,10 +37,12 @@ import com.example.dwhubfix.ui.BusinessVerificationPendingScreen
 import com.example.dwhubfix.ui.theme.DailyWorkerHubTheme
 import com.example.dwhubfix.data.SessionManager
 import com.example.dwhubfix.data.SupabaseRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

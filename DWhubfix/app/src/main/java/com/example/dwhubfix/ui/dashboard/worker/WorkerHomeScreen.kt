@@ -86,7 +86,6 @@ fun WorkerHomeScreen(
             // TODO: Get real GPS location
             
             val result = MatchingRepository.getJobsForWorker(
-                context = context,
                 workerLocation = USER_LOCATION
             )
             

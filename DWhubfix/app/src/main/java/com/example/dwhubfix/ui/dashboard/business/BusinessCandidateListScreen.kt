@@ -73,7 +73,6 @@ fun BusinessCandidateListScreen(
             
             // 2. Fetch Worker Candidates
             val result = BusinessMatchingRepository.getWorkersForJob(
-                context = context,
                 jobId = jobId
             )
 

@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kapt)
 }
 
 import java.util.Properties
@@ -122,6 +124,11 @@ dependencies {
     
     // Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // Hilt (Dependency Injection)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     // Core library desugaring for java.time API support on API < 26
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")

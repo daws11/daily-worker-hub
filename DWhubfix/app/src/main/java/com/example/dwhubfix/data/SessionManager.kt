@@ -3,6 +3,15 @@ package com.example.dwhubfix.data
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * Session Manager for user session data
+ *
+ * This class manages user session persistence using SharedPreferences.
+ * It stores authentication tokens, user ID, selected role, and UI state.
+ *
+ * Note: Uses commit() (synchronous) for critical auth data to prevent data loss.
+ * Uses apply() (asynchronous) for non-critical UI state.
+ */
 object SessionManager {
     private const val PREF_NAME = "user_session"
     private const val KEY_ACCESS_TOKEN = "access_token"
@@ -16,11 +25,17 @@ object SessionManager {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
+    /**
+     * Save user session (access token and user ID)
+     * Uses commit() for immediate persistence to prevent data loss
+     */
     fun saveSession(context: Context, accessToken: String, userId: String) {
-        val editor = getPrefs(context).edit()
-        editor.putString(KEY_ACCESS_TOKEN, accessToken)
-        editor.putString(KEY_USER_ID, userId)
-        editor.apply()
+        // Use commit() for critical auth data to ensure it's written immediately
+        // This prevents data loss if app is killed
+        getPrefs(context).edit()
+            .putString(KEY_ACCESS_TOKEN, accessToken)
+            .putString(KEY_USER_ID, userId)
+            .commit()
     }
 
     fun savePendingRole(context: Context, role: String) {
@@ -56,7 +71,8 @@ object SessionManager {
     }
 
     fun clearSession(context: Context) {
-        getPrefs(context).edit().clear().apply()
+        // Use commit() for critical auth operations
+        getPrefs(context).edit().clear().commit()
     }
 
     fun savePhoneNumber(context: Context, phoneNumber: String) {

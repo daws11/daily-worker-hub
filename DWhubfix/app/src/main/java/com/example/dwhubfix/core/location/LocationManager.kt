@@ -1,6 +1,7 @@
 package com.example.dwhubfix.core.location
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -47,6 +48,7 @@ class LocationManager @Inject constructor(
      *
      * @return Result containing Location on success, or Exception on failure
      */
+    @SuppressLint("MissingPermission")
     suspend fun getCurrentLocation(): Result<Location> = suspendCancellableCoroutine { cont ->
         try {
             // Check permissions first

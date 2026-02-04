@@ -3,6 +3,7 @@ package com.example.dwhubfix.domain.repository
 import com.example.dwhubfix.domain.model.Job
 import com.example.dwhubfix.domain.model.JobApplication
 import com.example.dwhubfix.domain.model.UserProfile
+import com.example.dwhubfix.domain.model.WorkerStats
 import org.osmdroid.util.GeoPoint
 
 /**
@@ -28,6 +29,13 @@ interface JobRepository {
      * @return List of past job applications
      */
     suspend fun getWorkerHistory(): Result<List<JobApplication>>
+
+    /**
+     * Get worker's statistics
+     *
+     * @return Worker's stats including earnings, shifts, ratings
+     */
+    suspend fun getWorkerStats(): Result<WorkerStats?>
 
     /**
      * Get all available jobs

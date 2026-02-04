@@ -6,6 +6,7 @@ import com.example.dwhubfix.data.SessionManager
 import com.example.dwhubfix.domain.model.Job
 import com.example.dwhubfix.domain.model.JobApplication
 import com.example.dwhubfix.domain.model.UserProfile
+import com.example.dwhubfix.domain.model.WorkerStats
 import com.example.dwhubfix.domain.repository.JobRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.jan.supabase.postgrest.from
@@ -87,6 +88,59 @@ class JobRepositoryImpl @Inject constructor(
                 }
 
                 Result.success(applications)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+    override suspend fun getWorkerStats(): Result<WorkerStats?> =
+        withContext(Dispatchers.IO) {
+            try {
+                getAccessTokenOrThrow()
+                val userId = getUserIdOrThrow()
+
+                // Fetch completed shifts
+                val completedShifts = client.from("job_applications")
+                    .select {
+                        filter {
+                            eq("worker_id", userId)
+                            eq("status", "completed")
+                        }
+                    }
+                    .decodeList<Map<String, Any?>>()
+
+                // Calculate stats from completed shifts
+                val totalShifts = completedShifts.size
+                val totalEarnings = completedShifts.sumOf {
+                    // Assuming wage info is in the related job
+                    // For now, return 0 until we implement proper aggregation
+                    0L
+                }
+
+                // Get ratings from completed shifts
+                val ratings = completedShifts.mapNotNull {
+                    it["worker_rating"] as? Int
+                }
+                val ratingAvg = if (ratings.isNotEmpty()) ratings.average() else 0.0
+                val ratingCount = ratings.size
+
+                val stats = WorkerStats(
+                    totalShiftsCompleted = totalShifts,
+                    totalEarnings = totalEarnings,
+                    walletBalance = 0L, // Would need to fetch from wallet table
+                    frozenAmount = 0L,
+                    ratingAvg = ratingAvg,
+                    ratingCount = ratingCount,
+                    reliabilityScore = 100.0, // Default, would calculate from cancellations
+                    tier = when {
+                        totalShifts >= 100 -> "platinum"
+                        totalShifts >= 50 -> "gold"
+                        totalShifts >= 20 -> "silver"
+                        else -> "bronze"
+                    }
+                )
+
+                Result.success(stats)
             } catch (e: Exception) {
                 Result.failure(e)
             }

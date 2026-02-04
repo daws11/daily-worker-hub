@@ -26,11 +26,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.example.dwhubfix.ui.theme.Primary
-import com.example.dwhubfix.model.Job
-import com.example.dwhubfix.model.JobMatchScore
-import com.example.dwhubfix.model.JobWithScore
+import com.example.dwhubfix.domain.model.Job
+import com.example.dwhubfix.domain.model.JobMatchScore
+import com.example.dwhubfix.domain.model.JobWithScore
 import com.example.dwhubfix.utils.calculateDistance
 import com.example.dwhubfix.utils.formatDistance
+import com.example.dwhubfix.model.formatCurrency
 import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -196,18 +197,18 @@ fun JobMapScreen(
                     // Add job markers with score
                     jobs.forEach { jobWithScore ->
                         val job = jobWithScore.job
-                        val score = jobWithScore.score.score
-                        
-                        val jobLat = job.businessInfo?.businessProfile?.latitude
-                        val jobLon = job.businessInfo?.businessProfile?.longitude
-                        
+                        val score = jobWithScore.score.totalScore
+
+                        val jobLat = job.businessLatitude
+                        val jobLon = job.businessLongitude
+
                         if (jobLat != null && jobLon != null) {
                             val jobMarker = Marker(view).apply {
                                 position = GeoPoint(jobLat, jobLon)
                                 setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                                title = job.title ?: "Job"
-                                snippet = "${job.businessInfo?.businessProfile?.businessName} - ${job.wage}"
-                                
+                                title = job.title
+                                snippet = "${job.businessName} - ${job.wage}"
+
                                 // Icon color based on score
                                 val iconColor = when {
                                     score >= 80 -> Color(0xFF059669) // Green
@@ -216,9 +217,9 @@ fun JobMapScreen(
                                     score >= 20 -> Color(0xFF6366F1) // Purple
                                     else -> Color(0xFF9CA3AF) // Gray
                                 }
-                                
+
                                 setIcon(createJobMarkerIcon(job.category, score.toInt(), iconColor))
-                                
+
                                 // Set click listener
                                 setOnMarkerClickListener { _, _ ->
                                     onJobSelected(job)
@@ -278,15 +279,14 @@ fun JobCardFromMap(
     onAccept: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val title = job.title ?: "Job Title"
-    val business = job.businessInfo?.businessProfile?.businessName ?: job.businessInfo?.fullName ?: "Business Name"
+    val title = job.title
+    val business = job.businessName ?: "Business Name"
     val wage = job.wage ?: 0.0
-    val isCompliant = job.isCompliant ?: true
-    val matchScore = score?.score ?: 0.0
-    
+    val matchScore = score?.totalScore ?: 0.0
+
     // Calculate distance
-    val jobLat = job.businessInfo?.businessProfile?.latitude
-    val jobLon = job.businessInfo?.businessProfile?.longitude
+    val jobLat = job.businessLatitude
+    val jobLon = job.businessLongitude
     val distance = if (jobLat != null && jobLon != null) {
         val distKm = calculateDistance(
             USER_LOCATION.latitude,
@@ -351,7 +351,7 @@ fun JobCardFromMap(
                         Spacer(modifier = Modifier.height(4.dp))
                     }
                     Text(
-                        "Rp ${com.example.dwhubfix.model.formatCurrency(wage.toInt())}",
+                        "Rp ${formatCurrency(wage.toInt())}",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, color = Primary)
                     )
                     Text(

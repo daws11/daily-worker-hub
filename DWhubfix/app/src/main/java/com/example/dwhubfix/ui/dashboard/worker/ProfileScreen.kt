@@ -25,42 +25,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import kotlinx.coroutines.launch
-import com.example.dwhubfix.data.SupabaseRepository
-import com.example.dwhubfix.model.UserProfile
+import com.example.dwhubfix.presentation.worker.stats.WorkerStatsUiEvent
+import com.example.dwhubfix.presentation.worker.stats.WorkerStatsViewModel
+import com.example.dwhubfix.presentation.auth.AuthViewModel
+import com.example.dwhubfix.domain.model.UserProfile
 import com.example.dwhubfix.ui.theme.Primary
+import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
     onLogout: () -> Unit,
     onNavigateToEditProfile: () -> Unit = {},
-    onNavigateToNotifications: () -> Unit = {}
+    onNavigateToNotifications: () -> Unit = {},
+    statsViewModel: WorkerStatsViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    var userProfile by remember { mutableStateOf<UserProfile?>(null) }
-    var isLoading by remember { mutableStateOf(true) }
-    var showLogoutDialog by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        // Fetch User Profile
-        // Assuming SupabaseRepository.getCurrentProfile() or similar exists
-        // For now using getProfile() pattern which likely checks session
-        scope.launch {
-            try {
-                // TODO: Verify repository method name. Using placehodoer fetch if needed.
-                val result = SupabaseRepository.getUserProfile(context)
-                if (result.isSuccess) {
-                    userProfile = result.getOrNull()
-                }
-            } catch (e: Exception) {
-                // Handle error
-            } finally {
-                isLoading = false
-            }
-        }
-    }
+    // Collect state from ViewModels
+    val statsUiState by statsViewModel.uiState.collectAsStateWithLifecycle()
+    val authUiState by authViewModel.uiState.collectAsStateWithLifecycle()
+
+    var showLogoutDialog by remember { mutableStateOf(false) }
 
     if (showLogoutDialog) {
         AlertDialog(
@@ -71,7 +61,7 @@ fun ProfileScreen(
                 Button(
                     onClick = {
                         scope.launch {
-                            SupabaseRepository.logout(context)
+                            authViewModel.logout()
                             onLogout()
                         }
                     },
@@ -94,34 +84,46 @@ fun ProfileScreen(
             .background(Color(0xFFF6F8F6))
             .verticalScroll(rememberScrollState())
     ) {
-        if (isLoading) {
+        if (statsUiState.isLoading) {
             Box(modifier = Modifier.fillMaxWidth().height(200.dp), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         } else {
-            ProfileHeader(userProfile)
-            
+            // Use auth state for user profile, or stats state for worker stats
+            ProfileHeader(
+                userProfile = UserProfile(
+                    id = authUiState.userId ?: "",
+                    fullName = null, // Would need to fetch from repository
+                    email = null,
+                    phoneNumber = null,
+                    avatarUrl = null,
+                    role = "worker",
+                    createdAt = null,
+                    updatedAt = null
+                )
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
-            
-            ProfileStats(userProfile)
-            
+
+            ProfileStats(statsUiState.stats)
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             SettingsSection(
                 onLogoutClick = { showLogoutDialog = true },
                 onNavigateToEditProfile = onNavigateToEditProfile,
                 onNavigateToNotifications = onNavigateToNotifications
             )
-            
+
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
 
 @Composable
-fun ProfileHeader(userProfile: UserProfile?) {
-    val name = userProfile?.fullName ?: "Pengguna"
-    val avatarUrl = userProfile?.avatarUrl
+fun ProfileHeader(userProfile: UserProfile) {
+    val name = userProfile.fullName ?: "Pengguna"
+    val avatarUrl = userProfile.avatarUrl
     val rating = 5.0 // Placeholder until implemented in backend
 
     Column(
@@ -154,16 +156,16 @@ fun ProfileHeader(userProfile: UserProfile?) {
                 )
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         Text(
             text = name,
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
         )
-        
+
         Spacer(modifier = Modifier.height(4.dp))
-        
+
         Surface(
             color = Color(0xFFFFF7ED),
             shape = RoundedCornerShape(16.dp)
@@ -184,12 +186,10 @@ fun ProfileHeader(userProfile: UserProfile?) {
 }
 
 @Composable
-fun ProfileStats(userProfile: UserProfile?) {
-   val jobsCompleted = 0 // Placeholder
-   // Placeholder data for other stats as schema might not have them yet
-   // Assuming we can calculate or fetch them
+fun ProfileStats(stats: com.example.dwhubfix.domain.model.WorkerStats?) {
+   val jobsCompleted = stats?.totalShiftsCompleted ?: 0
    val hoursWorked = jobsCompleted * 5 // Mock calculation
-   val reliability = "100%"
+   val reliability = "${stats?.reliabilityScore?.toInt() ?: 100}%"
 
    Row(
        modifier = Modifier
@@ -254,7 +254,7 @@ fun SettingsSection(
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier.padding(bottom = 12.dp)
         )
-        
+
         Card(
             colors = CardDefaults.cardColors(containerColor = Color.White),
             shape = RoundedCornerShape(12.dp)
@@ -269,8 +269,8 @@ fun SettingsSection(
                 SettingsItem(icon = Icons.Default.Help, title = "Bantuan & Dukungan", onClick = {})
                 HorizontalDivider(color = Color(0xFFF3F4F6))
                 SettingsItem(
-                    icon = Icons.AutoMirrored.Filled.ExitToApp, 
-                    title = "Keluar", 
+                    icon = Icons.AutoMirrored.Filled.ExitToApp,
+                    title = "Keluar",
                     textColor = Color.Red,
                     iconColor = Color.Red,
                     onClick = onLogoutClick
@@ -282,8 +282,8 @@ fun SettingsSection(
 
 @Composable
 fun SettingsItem(
-    icon: ImageVector, 
-    title: String, 
+    icon: ImageVector,
+    title: String,
     value: String? = null,
     textColor: Color = Color.Black,
     iconColor: Color = Color(0xFF6B7280),
@@ -299,12 +299,12 @@ fun SettingsItem(
         Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(24.dp))
         Spacer(modifier = Modifier.width(16.dp))
         Text(title, style = MaterialTheme.typography.bodyMedium, color = textColor, modifier = Modifier.weight(1f))
-        
+
         if (value != null) {
             Text(value, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
             Spacer(modifier = Modifier.width(8.dp))
         }
-        
+
         if (value == null && title != "Keluar") {
             Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = Color(0xFFD1D5DB), modifier = Modifier.size(20.dp))
         }

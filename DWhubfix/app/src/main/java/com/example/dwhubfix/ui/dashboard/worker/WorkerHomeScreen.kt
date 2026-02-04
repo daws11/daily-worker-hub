@@ -27,7 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import org.osmdroid.config.Configuration
 import com.example.dwhubfix.model.JobFilters
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -35,13 +37,13 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import com.example.dwhubfix.ui.theme.Primary
-import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
-import com.example.dwhubfix.data.SupabaseRepository
-import com.example.dwhubfix.data.MatchingRepository
-import com.example.dwhubfix.model.JobWithScore
+import com.example.dwhubfix.domain.model.JobWithScore
 import com.example.dwhubfix.model.formatCurrency
+import com.example.dwhubfix.presentation.worker.home.WorkerHomeUiEvent
+import com.example.dwhubfix.presentation.worker.home.WorkerHomeViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlin.math.*
 
 // Default user location (Bali center)
@@ -50,73 +52,56 @@ private val USER_LOCATION = GeoPoint(-8.5069, 115.2625)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkerHomeScreen(
-    onNavigateToDetail: (String) -> Unit
+    onNavigateToDetail: (String) -> Unit,
+    viewModel: WorkerHomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    
-    // Job State
-    var jobs by remember { mutableStateOf<List<JobWithScore>>(emptyList()) }
-    var displayedJobs by remember { mutableStateOf<List<JobWithScore>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    
-    // Filter & Search State
+
+    // Collect state from ViewModel
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Filter & Search State (local UI state not in ViewModel)
     var showFilterSheet by remember { mutableStateOf(false) }
     var showMap by remember { mutableStateOf(false) }
-    var searchQuery by remember { mutableStateOf("") }
 
     // UI State
     val snackbarHostState = remember { SnackbarHostState() }
     var showAcceptDialog by remember { mutableStateOf(false) }
-    var selectedJob by remember { mutableStateOf<com.example.dwhubfix.model.Job?>(null) }
-    var isAccepting by remember { mutableStateOf(false) }
-    
+
     // Map selected job (for map view)
-    var mapSelectedJob by remember { mutableStateOf<com.example.dwhubfix.model.Job?>(null) }
-    
+    var mapSelectedJob by remember { mutableStateOf<com.example.dwhubfix.domain.model.Job?>(null) }
+
     // Scroll State
     val scrollState = rememberScrollState()
 
-    // Fetch jobs function (Updated to use Smart Matching)
-    fun fetchJobs() {
-        scope.launch {
-            isLoading = true
-            
-            // Get worker location (for now use USER_LOCATION constant)
-            // TODO: Get real GPS location
-            
-            val result = MatchingRepository.getJobsForWorker(
-                workerLocation = USER_LOCATION
-            )
-            
-            result.onSuccess { jobList ->
-                jobs = jobList
-                displayedJobs = jobList // Smart matching already returns prioritized jobs
-                isLoading = false
-            }
-            result.onFailure { error ->
-                isLoading = false
-                snackbarHostState.showSnackbar("Gagal memuat jobs: ${error.message}")
-            }
+    // Handle snackbar messages
+    LaunchedEffect(uiState.snackbarMessage) {
+        uiState.snackbarMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.onEvent(WorkerHomeUiEvent.ClearSnackbar)
+        }
+    }
+
+    // Handle errors
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.onEvent(WorkerHomeUiEvent.ClearError)
         }
     }
     
-    // Initial fetch
-    LaunchedEffect(Unit) {
-        fetchJobs()
-    }
-    
     // Accept Job Dialog
-    if (showAcceptDialog && selectedJob != null) {
+    if (showAcceptDialog && uiState.selectedJob != null) {
         AlertDialog(
             onDismissRequest = { showAcceptDialog = false },
             title = { Text("Terima Pekerjaan?") },
-            text = { 
+            text = {
                 Column {
                     Text("Anda akan melamar untuk:")
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        selectedJob!!.title,
+                        uiState.selectedJob!!.title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -131,24 +116,12 @@ fun WorkerHomeScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        scope.launch {
-                            isAccepting = true
-                            showAcceptDialog = false
-                            val result = SupabaseRepository.acceptJob(context, selectedJob!!.id)
-                            result.onSuccess {
-                                isAccepting = false
-                                snackbarHostState.showSnackbar("Pekerjaan berhasil diterima!")
-                                fetchJobs() // Refresh list
-                            }
-                            result.onFailure { error ->
-                                isAccepting = false
-                                snackbarHostState.showSnackbar("Gagal menerima pekerjaan: ${error.message}")
-                            }
-                        }
+                        showAcceptDialog = false
+                        viewModel.onEvent(WorkerHomeUiEvent.AcceptJob(uiState.selectedJob!!.id))
                     },
-                    enabled = !isAccepting
+                    enabled = !uiState.isAcceptingJob
                 ) {
-                    if (isAccepting) {
+                    if (uiState.isAcceptingJob) {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color.White)
                     } else {
                         Text("Terima")
@@ -156,7 +129,7 @@ fun WorkerHomeScreen(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showAcceptDialog = false }, enabled = !isAccepting) {
+                TextButton(onClick = { showAcceptDialog = false }, enabled = !uiState.isAcceptingJob) {
                     Text("Batal")
                 }
             }
@@ -168,11 +141,11 @@ fun WorkerHomeScreen(
         JobFilterSheet(
             onDismiss = { showFilterSheet = false },
             onApplyFilters = { filters ->
-                // Note: Filtering is now handled by backend (MatchingRepository)
+                // Note: Filtering is now handled by backend (use case)
                 // This filter sheet is for UI preferences only (categories, distance, etc.)
-                // We re-fetch jobs when filters are applied
-                searchQuery = "" // Reset search
-                fetchJobs() // Re-fetch with new preferences
+                showFilterSheet = false
+                // Re-fetch jobs when filters are applied
+                viewModel.onEvent(WorkerHomeUiEvent.Refresh)
             },
             initialFilters = JobFilters()
         )
@@ -182,7 +155,7 @@ fun WorkerHomeScreen(
         if (showMap) {
             // Map View
             JobMapScreen(
-                jobs = displayedJobs,
+                jobs = uiState.displayedJobs,
                 selectedJob = mapSelectedJob,
                 onJobSelected = { job ->
                     mapSelectedJob = job
@@ -282,8 +255,8 @@ fun WorkerHomeScreen(
                         Icon(Icons.Default.Search, contentDescription = null, tint = Color.Gray)
                         Spacer(modifier = Modifier.width(8.dp))
                         TextField(
-                            value = searchQuery,
-                            onValueChange = { searchQuery = it },
+                            value = uiState.searchQuery,
+                            onValueChange = { viewModel.onEvent(WorkerHomeUiEvent.SearchQueryChanged(it)) },
                             modifier = Modifier.weight(1f),
                             textStyle = androidx.compose.ui.text.TextStyle(
                                 fontSize = 14.sp,
@@ -303,10 +276,10 @@ fun WorkerHomeScreen(
                                 )
                             }
                         )
-                        if (searchQuery.isNotBlank()) {
+                        if (uiState.searchQuery.isNotBlank()) {
                             Spacer(modifier = Modifier.width(8.dp))
                             IconButton(
-                                onClick = { searchQuery = "" },
+                                onClick = { viewModel.onEvent(WorkerHomeUiEvent.SearchQueryChanged("")) },
                                 modifier = Modifier.size(24.dp)
                             ) {
                                 Icon(
@@ -381,9 +354,9 @@ fun WorkerHomeScreen(
                     // Reset Button
                     FilterChip(
                         selected = false,
-                        onClick = { 
-                            searchQuery = ""
-                            fetchJobs()
+                        onClick = {
+                            viewModel.onEvent(WorkerHomeUiEvent.SearchQueryChanged(""))
+                            viewModel.onEvent(WorkerHomeUiEvent.Refresh)
                         },
                         label = { Text("Reset") }
                     )
@@ -397,19 +370,19 @@ fun WorkerHomeScreen(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                 if (displayedJobs.isNotEmpty()) {
+                 if (uiState.displayedJobs.isNotEmpty()) {
                      // Show first job for now as preview
-                     val jobWithScore = displayedJobs.first()
+                     val jobWithScore = uiState.displayedJobs.first()
                      JobCard(
                          job = jobWithScore.job,
                          score = jobWithScore.score,
-                         isCompliant = jobWithScore.job.isCompliant ?: true,
+                         isCompliant = jobWithScore.isCompliant,
                          onAcceptClick = {
-                             selectedJob = jobWithScore.job
+                             viewModel.onEvent(WorkerHomeUiEvent.JobSelected(jobWithScore.job))
                              showAcceptDialog = true
                          }
                      )
-                 } else if (isLoading) {
+                 } else if (uiState.isLoading) {
                      // Loading state
                      Card(
                          colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -426,7 +399,7 @@ fun WorkerHomeScreen(
                              Text("Memuat pekerjaan...", style = MaterialTheme.typography.bodySmall)
                          }
                      }
-                 } else if (jobs.isEmpty()) {
+                 } else if (uiState.jobs.isEmpty()) {
                      // Empty state - no jobs at all
                      JobCardPreview()
                  } else {
@@ -475,18 +448,18 @@ fun WorkerHomeScreen(
 
 @Composable
 fun JobCard(
-    job: com.example.dwhubfix.model.Job,
-    score: com.example.dwhubfix.model.JobMatchScore,
+    job: com.example.dwhubfix.domain.model.Job,
+    score: com.example.dwhubfix.domain.model.JobMatchScore,
     isCompliant: Boolean,
     onAcceptClick: () -> Unit
 ) {
-    val title = job.title ?: "Job Title"
-    val business = job.businessInfo?.businessProfile?.businessName ?: job.businessInfo?.fullName ?: "Business Name"
+    val title = job.title
+    val business = job.businessName ?: "Business Name"
     val wage = job.wage ?: 0.0
-    
+
     // Calculate distance
-    val jobLat = job.businessInfo?.businessProfile?.latitude
-    val jobLon = job.businessInfo?.businessProfile?.longitude
+    val jobLat = job.businessLatitude
+    val jobLon = job.businessLongitude
     val distance = if (jobLat != null && jobLon != null) {
         val distKm = com.example.dwhubfix.utils.calculateDistance(
             USER_LOCATION.latitude,
@@ -498,7 +471,7 @@ fun JobCard(
     } else {
         "0.0 km"
     }
-    
+
     val icon = "💼" // Default icon, could be dynamic based on job category
     
     Card(
@@ -582,13 +555,13 @@ fun JobCard(
                     )
                     // Match Score Badge
                     Surface(
-                        color = if (score.score >= 70) Color(0xFFD1FAE5) else Color(0xFFF3F4F6),
+                        color = if (score.totalScore >= 70) Color(0xFFD1FAE5) else Color(0xFFF3F4F6),
                         shape = RoundedCornerShape(4.dp)
                     ) {
                         Text(
-                            "${score.score.toInt()}% Match",
+                            "${score.totalScore.toInt()}% Match",
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = if (score.score >= 70) Color(0xFF059669) else Color(0xFF7F1D1D),
+                                color = if (score.totalScore >= 70) Color(0xFF059669) else Color(0xFF7F1D1D),
                                 fontWeight = FontWeight.Bold
                             ),
                             modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)

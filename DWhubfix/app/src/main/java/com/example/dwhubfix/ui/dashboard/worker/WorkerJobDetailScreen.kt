@@ -29,60 +29,52 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.example.dwhubfix.data.SupabaseRepository
-import com.example.dwhubfix.model.Job
+import com.example.dwhubfix.domain.model.Job
 import com.example.dwhubfix.model.formatCurrency
+import com.example.dwhubfix.presentation.worker.jobdetail.WorkerJobDetailUiEvent
+import com.example.dwhubfix.presentation.worker.jobdetail.WorkerJobDetailViewModel
 import com.example.dwhubfix.ui.theme.Primary
-import kotlinx.coroutines.launch
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkerJobDetailScreen(
     jobId: String,
     onNavigateBack: () -> Unit,
-    onNavigateToBusiness: (String) -> Unit = {}
+    onNavigateToBusiness: (String) -> Unit = {},
+    viewModel: WorkerJobDetailViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    
-    var job by remember { mutableStateOf<Job?>(null) }
-    var isLoading by remember { mutableStateOf(true) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    
-    var showAcceptDialog by remember { mutableStateOf(false) }
-    var isAccepting by remember { mutableStateOf(false) }
-    
+    // Collect state from ViewModel
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Fetch Job Detail
+    // Load job when screen is first created
     LaunchedEffect(jobId) {
-        scope.launch {
-            val result = SupabaseRepository.getAvailableJobs(context)
-            result.onSuccess { jobs ->
-                job = jobs.find { it.id == jobId }
-                if (job == null) {
-                    errorMessage = "Job not found"
-                }
-                isLoading = false
-            }.onFailure { error ->
-                errorMessage = error.message
-                isLoading = false
-            }
+        viewModel.onEvent(WorkerJobDetailUiEvent.LoadJob(jobId))
+    }
+
+    // Handle successful job acceptance
+    LaunchedEffect(uiState.job, uiState.isAccepting) {
+        if (uiState.job != null && !uiState.isAccepting && !uiState.isLoading) {
+            // Job was accepted, navigate back
+            onNavigateBack()
         }
     }
 
     // Accept Job Dialog
-    if (showAcceptDialog && job != null) {
+    if (uiState.showAcceptDialog && uiState.job != null) {
         AlertDialog(
-            onDismissRequest = { showAcceptDialog = false },
+            onDismissRequest = { viewModel.onEvent(WorkerJobDetailUiEvent.ShowAcceptDialog(false)) },
             title = { Text("Terima Pekerjaan?") },
             text = {
                 Column {
                     Text("Anda akan melamar untuk:")
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        job!!.title,
+                        uiState.job!!.title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -97,23 +89,11 @@ fun WorkerJobDetailScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        scope.launch {
-                            isAccepting = true
-                            showAcceptDialog = false
-                            val result = SupabaseRepository.acceptJob(context, job!!.id)
-                            result.onSuccess {
-                                isAccepting = false
-                                snackbarHostState.showSnackbar("Pekerjaan berhasil diterima!")
-                                onNavigateBack()
-                            }.onFailure { error ->
-                                isAccepting = false
-                                snackbarHostState.showSnackbar("Gagal menerima pekerjaan: ${error.message}")
-                            }
-                        }
+                        viewModel.onEvent(WorkerJobDetailUiEvent.AcceptJob(uiState.job!!.id))
                     },
-                    enabled = !isAccepting
+                    enabled = !uiState.isAccepting
                 ) {
-                    if (isAccepting) {
+                    if (uiState.isAccepting) {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color.White)
                     } else {
                         Text("Terima")
@@ -121,7 +101,10 @@ fun WorkerJobDetailScreen(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showAcceptDialog = false }, enabled = !isAccepting) {
+                TextButton(
+                    onClick = { viewModel.onEvent(WorkerJobDetailUiEvent.ShowAcceptDialog(false)) },
+                    enabled = !uiState.isAccepting
+                ) {
                     Text("Batal")
                 }
             }
@@ -132,7 +115,7 @@ fun WorkerJobDetailScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Text(
                         "Detail Pekerjaan",
                         modifier = Modifier.fillMaxWidth(),
@@ -160,7 +143,7 @@ fun WorkerJobDetailScreen(
             )
         },
         bottomBar = {
-            if (!isLoading && job != null) {
+            if (!uiState.isLoading && uiState.job != null) {
                 Surface(
                     shadowElevation = 8.dp,
                     modifier = Modifier.fillMaxWidth()
@@ -189,7 +172,7 @@ fun WorkerJobDetailScreen(
                             }
                         }
                         Button(
-                            onClick = { showAcceptDialog = true },
+                            onClick = { viewModel.onEvent(WorkerJobDetailUiEvent.ShowAcceptDialog(true)) },
                             modifier = Modifier
                                 .weight(2f)
                                 .height(56.dp),
@@ -208,7 +191,7 @@ fun WorkerJobDetailScreen(
         containerColor = Color(0xFFF6F8F6)
     ) { paddingValues ->
         when {
-            isLoading -> {
+            uiState.isLoading -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -218,7 +201,7 @@ fun WorkerJobDetailScreen(
                     CircularProgressIndicator()
                 }
             }
-            errorMessage != null -> {
+            uiState.error != null -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -233,13 +216,12 @@ fun WorkerJobDetailScreen(
                             modifier = Modifier.size(48.dp)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(errorMessage!!, color = MaterialTheme.colorScheme.error)
+                        Text(uiState.error!!, color = MaterialTheme.colorScheme.error)
                     }
                 }
             }
-            job != null -> {
-                // Create local variable for smart cast - use non-null assertion since we're inside job != null block
-                val currentJob: Job = job!!
+            uiState.job != null -> {
+                val currentJob: Job = uiState.job!!
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -254,12 +236,12 @@ fun WorkerJobDetailScreen(
                             .background(Primary)
                     ) {
                         AsyncImage(
-                            model = currentJob.businessInfo?.avatarUrl ?: "",
+                            model = "", // Would need business avatar URL
                             contentDescription = "Business Cover",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
-                        
+
                         // Gradient Overlay
                         Box(
                             modifier = Modifier
@@ -273,7 +255,7 @@ fun WorkerJobDetailScreen(
                                     )
                                 )
                         )
-                        
+
                         // Category Badge
                         Surface(
                             color = Color.White,
@@ -291,7 +273,7 @@ fun WorkerJobDetailScreen(
                                 )
                             )
                         }
-                        
+
                         // Status Badge
                         Surface(
                             color = Color(0xFF4CAF50),
@@ -310,9 +292,9 @@ fun WorkerJobDetailScreen(
                             )
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.height(16.dp))
-                    
+
                     // Title & Wage
                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                         Text(
@@ -370,16 +352,16 @@ fun WorkerJobDetailScreen(
                             }
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.height(24.dp))
-                    
+
                     // Business Card
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
                             .clickable {
-                                currentJob.businessId?.let { onNavigateToBusiness(it) }
+                                onNavigateToBusiness(currentJob.businessId)
                             },
                         shape = RoundedCornerShape(16.dp),
                         color = Color.White,
@@ -394,7 +376,7 @@ fun WorkerJobDetailScreen(
                         ) {
                             // Avatar
                             AsyncImage(
-                                model = currentJob.businessInfo?.avatarUrl,
+                                model = "", // Would need business avatar URL
                                 contentDescription = "Business Avatar",
                                 modifier = Modifier
                                     .size(56.dp)
@@ -404,9 +386,7 @@ fun WorkerJobDetailScreen(
                             Spacer(modifier = Modifier.width(16.dp))
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    currentJob.businessInfo?.businessProfile?.businessName 
-                                        ?: currentJob.businessInfo?.fullName 
-                                        ?: "Business Name",
+                                    currentJob.businessName ?: "Business Name",
                                     style = MaterialTheme.typography.titleMedium.copy(
                                         fontWeight = FontWeight.Bold
                                     )
@@ -421,9 +401,7 @@ fun WorkerJobDetailScreen(
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
                                     Text(
-                                        currentJob.businessInfo?.businessProfile?.address 
-                                            ?: currentJob.location 
-                                            ?: "Location",
+                                        currentJob.location ?: "Location",
                                         style = MaterialTheme.typography.bodySmall.copy(
                                             color = Color(0xFF6B7280)
                                         ),
@@ -441,9 +419,9 @@ fun WorkerJobDetailScreen(
                             )
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.height(24.dp))
-                    
+
                     // Description
                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                         Text(
@@ -461,9 +439,9 @@ fun WorkerJobDetailScreen(
                             )
                         )
                     }
-                    
+
                     Spacer(modifier = Modifier.height(24.dp))
-                    
+
                     // Requirements
                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                         Text(
@@ -486,9 +464,9 @@ fun WorkerJobDetailScreen(
                             text = "Dapat mulai bekerja segera"
                         )
                     }
-                    
+
                     Spacer(modifier = Modifier.height(24.dp))
-                    
+
                     // Location Map Preview
                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                         Text(
@@ -498,7 +476,7 @@ fun WorkerJobDetailScreen(
                             ),
                             modifier = Modifier.padding(bottom = 12.dp)
                         )
-                        
+
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -519,9 +497,7 @@ fun WorkerJobDetailScreen(
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        currentJob.businessInfo?.businessProfile?.address 
-                                            ?: currentJob.location 
-                                            ?: "Lokasi",
+                                        currentJob.location ?: "Lokasi",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = Color(0xFF6B7280)
                                     )
@@ -543,7 +519,7 @@ fun WorkerJobDetailScreen(
                             }
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.height(100.dp)) // Space for bottom bar
                 }
             }

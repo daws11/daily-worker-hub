@@ -22,68 +22,37 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.dwhubfix.ui.theme.DailyWorkerHubTheme
-import com.example.dwhubfix.data.SupabaseRepository
-import com.example.dwhubfix.model.BusinessStats
-import com.example.dwhubfix.model.RateBaliSuggestion
-import com.example.dwhubfix.model.Job
+import com.example.dwhubfix.domain.model.Job
 import com.example.dwhubfix.model.formatCurrency
-import kotlinx.coroutines.launch
+import com.example.dwhubfix.presentation.business.home.BusinessHomeUiEvent
+import com.example.dwhubfix.presentation.business.home.BusinessHomeViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BusinessHomeScreen(
     onNavigateToPostJob: () -> Unit,
     onNavigateToFindWorker: () -> Unit,
-    onNavigateToWallet: () -> Unit
+    onNavigateToWallet: () -> Unit,
+    viewModel: BusinessHomeViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    
-    // Dashboard Stats State
-    var businessStats by remember { mutableStateOf<BusinessStats?>(null) }
-    var isLoading by remember { mutableStateOf(true) }
-    var activeJobs by remember { mutableStateOf<List<Job>>(emptyList()) }
-    
-    // Fetch Dashboard Data
-    fun fetchDashboardData() {
-        scope.launch {
-            isLoading = true
-            
-            // 1. Fetch Business Stats
-            val statsResult = SupabaseRepository.getBusinessStats(context)
-            statsResult.onSuccess { stats ->
-                businessStats = stats
-            }
-            
-            // 2. Fetch Active Jobs (business's posted jobs)
-            val jobsResult = SupabaseRepository.getBusinessJobs(context)
-            jobsResult.onSuccess { jobs ->
-                activeJobs = jobs.filter { it.status == "open" }
-            }
-            
-            isLoading = false
-        }
-    }
-    
-    // Initial fetch
-    LaunchedEffect(Unit) {
-        fetchDashboardData()
-    }
-    
+    // Collect state from ViewModel
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Text(
                         "Dashboard Bisnis",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                    ) 
+                    )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
@@ -105,51 +74,39 @@ fun BusinessHomeScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             // 1. Stats Cards Row
-            if (businessStats != null && !isLoading) {
+            if (uiState.stats != null && !uiState.isLoading) {
                 item {
                     StatsCardsRow(
-                        activeShiftsToday = businessStats!!.activeShiftsToday,
-                        workersHiredThisWeek = businessStats!!.workersHiredThisWeek,
-                        totalSpendingThisMonth = businessStats!!.totalSpendingThisMonth,
-                        pendingPatches = businessStats!!.pendingPatches
+                        activeShiftsToday = uiState.stats!!.activeShiftsToday,
+                        workersHiredThisWeek = uiState.stats!!.workersHiredThisWeek,
+                        totalSpendingThisMonth = uiState.stats!!.totalSpendingThisMonth,
+                        pendingPatches = uiState.stats!!.pendingPatches
                     )
                 }
             }
-            
+
             // 2. Quick Actions
             item {
                 QuickActionsSection(onNavigateToPostJob, onNavigateToFindWorker)
             }
-            
-            // 3. Recent Activity (Active Jobs)
-            item {
-                if (isLoading) {
+
+            // 3. Loading State for Initial Load
+            if (uiState.isLoading) {
+                item {
                     LoadingStateCard()
-                } else if (activeJobs.isNotEmpty()) {
-                    RecentJobsSection(
-                        jobs = activeJobs.take(5), // Show top 5
-                        onViewAll = { /* Navigate to Jobs Screen */ }
-                    )
-                } else {
+                }
+            } else {
+                // 4. Recent Activity (placeholder - would need actual jobs)
+                item {
                     EmptyRecentActivityCard()
                 }
             }
-            
-            // 4. Rate Bali Suggestion
-            if (businessStats != null && businessStats!!.rateBaliSuggestion != null) {
-                item {
-                    RateBaliSuggestionCard(
-                        suggestion = businessStats!!.rateBaliSuggestion!!,
-                        onUse = { /* Apply suggestion */ }
-                    )
-                }
-            }
-            
+
             // 5. Wallet Quick View
-            if (businessStats != null) {
+            if (uiState.stats != null) {
                 item {
                     WalletQuickViewCard(
-                        balance = businessStats!!.walletBalance ?: 0.0,
+                        balance = uiState.stats!!.walletBalance,
                         onNavigateToWallet = onNavigateToWallet
                     )
                 }
@@ -177,7 +134,7 @@ fun StatsCardsRow(
             color = Color(0xFF13EC5B),
             modifier = Modifier.weight(1f)
         )
-        
+
         // Workers Hired This Week
         StatCard(
             icon = Icons.Default.Group,
@@ -186,7 +143,7 @@ fun StatsCardsRow(
             color = Color(0xFF10B981),
             modifier = Modifier.weight(1f)
         )
-        
+
         // Total Spending This Month
         StatCard(
             icon = Icons.Default.AttachMoney,
@@ -195,7 +152,7 @@ fun StatsCardsRow(
             color = Color(0xFFEF4444),
             modifier = Modifier.weight(1f)
         )
-        
+
         // Pending Patches
         StatCard(
             icon = Icons.Default.EditNote,
@@ -319,161 +276,6 @@ fun QuickActionCard(
 }
 
 @Composable
-fun RecentJobsSection(
-    jobs: List<Job>,
-    onViewAll: () -> Unit
-) {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                "Lowongan Aktif",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-            )
-            TextButton(onClick = onViewAll) {
-                Text("Lihat Semua", color = Color(0xFF13EC5B), fontWeight = FontWeight.Bold)
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        jobs.forEach { job ->
-            BusinessJobCard(job)
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-    }
-}
-
-@Composable
-fun BusinessJobCard(job: Job) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Job Icon
-            Surface(
-                color = Color(0xFFFFF7ED),
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.size(48.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text("💼", fontSize = 24.sp)
-                }
-            }
-            
-            Spacer(modifier = Modifier.width(12.dp))
-            
-            // Job Details
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    job.title,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold, color = Color(0xFF111813))
-                )
-                Text(
-                    "${job.businessInfo?.businessProfile?.businessName} • ${job.location}",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF6B7280))
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.CalendarMonth, contentDescription = null, tint = Color(0xFF6B7280), modifier = Modifier.size(14.dp))
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        "Hari Ini",
-                        style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF6B7280))
-                    )
-                }
-            }
-            
-            // Wage
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    "Rp ${formatCurrency(job.wage?.toInt() ?: 0)}rb",
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold, color = Color(0xFF13EC5B))
-                )
-                Text(
-                    "/ shift",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF9CA3AF))
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun RateBaliSuggestionCard(
-    suggestion: RateBaliSuggestion,
-    onUse: () -> Unit
-) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(2.dp, Color(0xFF13EC5B)),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Surface(
-                    color = Color(0xFF13EC5B).copy(alpha = 0.1f),
-                    shape = CircleShape,
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            Icons.Default.LocalOffer,
-                            contentDescription = null,
-                            tint = Color(0xFF13EC5B),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
-                
-                Column {
-                    Text(
-                        "Rekomendasi Gaji",
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold, color = Color(0xFF111813))
-                    )
-                    Text(
-                        "Berdasarkan lokasi (${suggestion.region})",
-                        style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF6B7280))
-                    )
-                    Text(
-                        "UMK: Rp ${formatCurrency(suggestion.umk.toInt())}",
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold, color = Color(0xFF111813))
-                    )
-                    Text(
-                        "Rp ${formatCurrency(suggestion.dailyWage.toInt())} / shift",
-                        style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF6B7280))
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Button(
-                onClick = onUse,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF13EC5B),
-                    contentColor = Color.White
-                )
-            ) {
-                Text("Gunakan Gaji Ini", fontWeight = FontWeight.Bold)
-            }
-        }
-    }
-}
-
-@Composable
 fun WalletQuickViewCard(
     balance: Double,
     onNavigateToWallet: () -> Unit
@@ -498,7 +300,7 @@ fun WalletQuickViewCard(
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, color = Color(0xFF111813))
                 )
             }
-            
+
             Icon(
                 Icons.Default.ChevronRight,
                 contentDescription = null,
@@ -545,8 +347,8 @@ fun EmptyRecentActivityCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                Icons.Default.Inbox, 
-                contentDescription = null, 
+                Icons.Default.Inbox,
+                contentDescription = null,
                 tint = Color(0xFF9CA3AF),
                 modifier = Modifier.size(48.dp).padding(bottom = 16.dp)
             )

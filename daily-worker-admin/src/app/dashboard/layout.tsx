@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LayoutDashboard, Users, Building2, LogOut } from 'lucide-react'
+import { LayoutDashboard, Users, Building2, Briefcase, BarChart3, LogOut } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
@@ -53,6 +53,20 @@ export default async function DashboardLayout({
                     >
                         <Building2 className="w-5 h-5 mr-3" />
                         Businesses
+                    </Link>
+                    <Link
+                        href="/dashboard/jobs"
+                        className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100 hover:text-indigo-600 transition-colors"
+                    >
+                        <Briefcase className="w-5 h-5 mr-3" />
+                        Jobs
+                    </Link>
+                    <Link
+                        href="/dashboard/analytics"
+                        className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100 hover:text-indigo-600 transition-colors"
+                    >
+                        <BarChart3 className="w-5 h-5 mr-3" />
+                        Analytics
                     </Link>
                 </nav>
                 <div className="absolute bottom-0 w-64 p-6 border-t border-gray-200">

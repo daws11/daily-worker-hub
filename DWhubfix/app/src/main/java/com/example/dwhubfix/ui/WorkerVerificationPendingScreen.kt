@@ -50,7 +50,7 @@ fun WorkerVerificationPendingScreen(
             kotlinx.coroutines.delay(5000) // Check every 5 seconds
             val result = com.example.dwhubfix.data.SupabaseRepository.getProfileJson(context)
             result.onSuccess { profile ->
-                val status = profile.optString("verification_status")
+                val status = profile["verification_status"] as? String
                 if (status == "approved" || status == "verified") {
                     onNavigateHome()
                 }

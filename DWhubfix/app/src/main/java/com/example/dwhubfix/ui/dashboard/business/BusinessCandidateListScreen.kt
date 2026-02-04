@@ -1,10 +1,17 @@
 package com.example.dwhubfix.ui.dashboard.business
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
@@ -12,11 +19,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.dwhubfix.ui.theme.DailyWorkerHubTheme
 import com.example.dwhubfix.data.SupabaseRepository
 import com.example.dwhubfix.data.BusinessMatchingRepository
@@ -32,7 +45,7 @@ fun BusinessCandidateListScreen(
     onNavigateBack: () -> Unit,
     onWorkerSelected: (String) -> Unit
 ) {
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     
     // State
@@ -63,10 +76,10 @@ fun BusinessCandidateListScreen(
                 context = context,
                 jobId = jobId
             )
-            
+
             result.onSuccess { matchingResult ->
                 candidates = matchingResult.candidates
-                applyFilters()
+                displayedCandidates = matchingResult.candidates
                 isLoading = false
             }
             
@@ -133,27 +146,30 @@ fun BusinessCandidateListScreen(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
         },
-        containerColor = Color(0xFFF9FAFB)
+        containerColor = Color(0xFFF9FAFB),
+        contentWindowInsets = WindowInsets(0.dp)
     ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Job Summary Card
             if (job != null) {
                 JobSummaryCard(job = job!!)
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             // Search Bar
             SearchBar(
                 query = searchQuery,
                 onQueryChange = { searchQuery = it }
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             // Filter Chips
             FilterChipsRow(
                 minRating = minRating,
@@ -163,12 +179,12 @@ fun BusinessCandidateListScreen(
                 availableOnly = availableOnly,
                 onAvailableOnlyToggle = { availableOnly = !availableOnly }
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             // Candidates List
             if (isLoading) {
-                LoadingState()
+                LoadingCandidatesState()
             } else if (displayedCandidates.isEmpty()) {
                 EmptyCandidatesState()
             } else {
@@ -258,7 +274,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
             .height(48.dp),
         color = Color.White,
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        shadowElevation = 2.dp
     ) {
         Row(
             modifier = Modifier
@@ -268,13 +284,16 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(Icons.Default.Search, contentDescription = null, tint = Color(0xFF6B7280), modifier = Modifier.size(20.dp))
-            androidx.compose.foundation.text.BasicTextField(
+            BasicTextField(
                 value = query,
                 onValueChange = onQueryChange,
                 modifier = Modifier.weight(1f),
                 textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp, color = Color.Black),
-                placeholder = { 
-                    androidx.compose.foundation.text.Text("Cari nama worker...", color = Color.Gray)
+                decorationBox = { innerTextField ->
+                    if (query.isEmpty()) {
+                        Text("Cari nama worker...", color = Color.Gray, fontSize = 14.sp)
+                    }
+                    innerTextField()
                 }
             )
             if (query.isNotBlank()) {
@@ -612,38 +631,46 @@ fun BusinessCandidateCard(
 
 @Composable
 fun ProgressBarRow(label: String, score: Double, maxScore: Double) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
-            label,
-            style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF6B7280))
-        )
-        Text(
-            "$score / $maxScore",
-            style = MaterialTheme.typography.labelSmall.copy(color = Color(0xFF6B7280))
-        )
-    }
-    
-    // Progress Bar
-    Surface(
-        modifier = Modifier.fillMaxWidth().height(6.dp),
-        color = Color(0xFFE5E7EB),
-        shape = RoundedCornerShape(3.dp)
-    ) {
-        Box(
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                label,
+                style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF6B7280))
+            )
+            Text(
+                "$score / $maxScore",
+                style = MaterialTheme.typography.labelSmall.copy(color = Color(0xFF6B7280))
+            )
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        // Progress Bar
+        Surface(
             modifier = Modifier
-                .width(((score / maxScore) * 100).toInt().dp)
-                .fillMaxHeight()
-                .background(Color(0xFF13EC5B), RoundedCornerShape(3.dp))
-        )
+                .fillMaxWidth()
+                .height(6.dp),
+            color = Color(0xFFE5E7EB),
+            shape = RoundedCornerShape(3.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(((score / maxScore) * 100).toInt().dp)
+                    .fillMaxHeight()
+                    .background(Color(0xFF13EC5B), RoundedCornerShape(3.dp))
+            )
+        }
     }
 }
 
 @Composable
-fun LoadingState() {
+fun LoadingCandidatesState() {
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

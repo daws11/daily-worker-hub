@@ -109,9 +109,9 @@ fun WorkerExperienceLevelScreen(
                              }
                         
                              val result = SupabaseRepository.updateWorkerExperience(
-                                 context, 
-                                 experienceYears!!,
-                                 workHistory,
+                                 context,
+                                 experienceYears!!.toIntOrNull() ?: 0,
+                                 workHistory.split(",").map { it.trim() },
                                  documentUrl,
                                  currentStep = "worker_portfolio_upload"
                              )

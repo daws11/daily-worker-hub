@@ -1,9 +1,11 @@
 package com.example.dwhubfix.ui.dashboard.worker
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
@@ -16,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.dwhubfix.data.SupabaseRepository
+import com.example.dwhubfix.data.SupabaseRepository.NotificationPreferences
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,16 +57,14 @@ fun NotificationSettingsScreen(
     // Load Notification Preferences from Supabase
     LaunchedEffect(Unit) {
         isLoading = true
-        val result = SupabaseRepository.getProfile(context)
-        result.onSuccess { profile ->
-            profile.notificationPreferences?.let { prefs ->
-                pushEnabled = prefs.pushEnabled
-                jobAlertsEnabled = prefs.jobAlertsEnabled
-                applicationUpdatesEnabled = prefs.applicationUpdatesEnabled
-                promotionalEnabled = prefs.promotionalEnabled
-                alertDistance = prefs.alertDistance
-                alertCategories = prefs.alertCategories.toSet()
-            }
+        val result = SupabaseRepository.getNotificationPreferences(context)
+        result.onSuccess { prefs ->
+            pushEnabled = prefs.pushEnabled
+            jobAlertsEnabled = prefs.jobAlertsEnabled
+            applicationUpdatesEnabled = prefs.applicationUpdatesEnabled
+            promotionalEnabled = prefs.promotionalEnabled
+            alertDistance = prefs.alertDistance
+            alertCategories = prefs.alertCategories.toSet()
             isLoading = false
         }.onFailure {
             isLoading = false

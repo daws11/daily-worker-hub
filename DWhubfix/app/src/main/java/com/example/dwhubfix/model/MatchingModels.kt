@@ -1,11 +1,6 @@
 package com.example.dwhubfix.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.osmdroid.util.GeoPoint
-
-// Existing models...
-// Assuming Job and WorkerProfile exist in other files
 
 @Serializable
 data class JobMatchScore(

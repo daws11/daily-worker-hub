@@ -2,18 +2,18 @@ package com.example.dwhubfix.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.osmdroid.util.GeoPoint
+import kotlinx.serialization.Contextual
 
 /**
  * BUSINESS WORKER MATCHING MODELS
- * 
+ *
  * Based on matching-algorithm.md (Business Side):
  * - Distance Score (25%)
  * - Skill Score (30%) - Exact match with required skills
  * - Rating Score (20%) - Worker's overall rating
  * - Reliability Score (15%) - Worker's no-show rate
  * - Availability Score (10%) - Worker's availability status
- * 
+ *
  * Based on business-model.md (Rate Bali):
  * - Business can see workers with calculated scores
  * - Workers hired based on scores (highest first)
@@ -54,24 +54,12 @@ data class WorkerScoreBreakdown(
 data class BusinessMatchingParams(
     val jobId: String,
     val businessId: String,
-    val businessLocation: GeoPoint,
+    val businessLatitude: Double,
+    val businessLongitude: Double,
     val workerSkillsRequired: List<String>,
     val workerMinRating: Double = 0.0,
     val workerMinExperience: String? = null,
     val maxDistance: Double = 20.0 // km
-)
-
-/**
- * Worker Availability Status
- * Used for sorting and filtering candidates
- */
-@Serializable
-data class WorkerAvailability(
-    val isAvailable: Boolean,
-    val preferredCategories: List<String>,
-    val maxShiftsPerMonth: Int,
-    val rating: Double,
-    val noShowRate: Double
 )
 
 /**

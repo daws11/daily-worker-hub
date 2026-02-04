@@ -6,7 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Map
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -91,7 +92,7 @@ fun JobMapScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.Map, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
@@ -157,9 +158,14 @@ fun JobMapScreen(
                 }
             }
         },
-        containerColor = Color(0xFFF6F8F6)
+        containerColor = Color(0xFFF6F8F6),
+        contentWindowInsets = WindowInsets(0.dp)
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             // Map View
             AndroidView(
                 factory = { ctx ->
@@ -448,31 +454,31 @@ fun createJobMarkerIcon(
     category: String?,
     score: Int = 0,
     color: Color = Color(0xFF13ec5b) // Default Primary color
-): android.graphics.Bitmap {
+): android.graphics.drawable.BitmapDrawable {
     val size = 64
     val bitmap = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888)
     val canvas = android.graphics.Canvas(bitmap)
-    
+
     // Draw circle background
     val paint = android.graphics.Paint().apply {
-        this.color = color.toArgb()
+        this.color = android.graphics.Color.parseColor(color.toString().replace("Color(", "").replace(")", "").trim())
         isAntiAlias = true
     }
     canvas.drawCircle(size / 2f, size / 2f, size / 2f, paint)
-    
+
     // Draw white border
     val borderPaint = android.graphics.Paint().apply {
-        this.color = android.graphics.Color.WHITE.toArgb()
+        this.color = android.graphics.Color.WHITE
         isAntiAlias = true
         strokeWidth = 4f
         style = android.graphics.Paint.Style.STROKE
     }
     canvas.drawCircle(size / 2f, size / 2f, size / 2f - 4f, borderPaint)
-    
+
     // Draw score text in center (if score > 0)
     if (score > 0) {
         val textPaint = android.graphics.Paint().apply {
-            this.color = android.graphics.Color.WHITE.toArgb()
+            this.color = android.graphics.Color.WHITE
             isAntiAlias = true
             textSize = 24f
             textAlign = android.graphics.Paint.Align.CENTER
@@ -484,6 +490,9 @@ fun createJobMarkerIcon(
             textPaint
         )
     }
-    
-    bitmap
+
+    return android.graphics.drawable.BitmapDrawable(
+        android.content.res.Resources.getSystem(),
+        bitmap
+    )
 }

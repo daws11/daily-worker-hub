@@ -3,6 +3,7 @@ package com.example.dwhubfix.ui.dashboard.business
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
@@ -11,8 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dwhubfix.ui.theme.DailyWorkerHubTheme
@@ -51,7 +54,7 @@ fun BusinessJobDetailScreen(
     onNavigateToCandidateList: (String) -> Unit, // Navigate to candidate list
     onWorkerHired: (String) -> Unit // Callback when worker is hired
 ) {
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     
     // State
@@ -157,11 +160,13 @@ fun BusinessJobDetailScreen(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
         },
-        containerColor = Color(0xFFF9FAFB)
+        containerColor = Color(0xFFF9FAFB),
+        contentWindowInsets = WindowInsets(0.dp)
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
             if (isLoading) {
@@ -321,7 +326,7 @@ fun JobTitleWageCard(job: Job) {
                     value = job.shiftDate?.substring(0, 10) ?: "Hari Ini"
                 )
                 StatItem(
-                    icon = Icons.Default.Clock,
+                    icon = Icons.Default.Schedule,
                     label = "Jam",
                     value = "${job.startTime ?: "08:00"} - ${job.endTime ?: "17:00"}"
                 )
@@ -625,7 +630,7 @@ fun WorkerHiredCard(job: Job) {
 
 @Composable
 fun StatItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     label: String,
     value: String
 ) {
@@ -641,6 +646,29 @@ fun StatItem(
         )
         Text(
             value,
+            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium, color = Color(0xFF111813))
+        )
+    }
+}
+
+@Composable
+fun StatItem(
+    icon: ImageVector,
+    label: String,
+    value: Int
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = Color(0xFF6B7280),
+            modifier = Modifier.size(20.dp)
+        )
+        Text(
+            value.toString(),
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium, color = Color(0xFF111813))
         )
     }

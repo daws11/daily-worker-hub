@@ -1,6 +1,7 @@
 package com.example.dwhubfix.ui.dashboard.worker
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import org.osmdroid.config.Configuration
+import com.example.dwhubfix.model.JobFilters
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -181,7 +183,7 @@ fun WorkerHomeScreen(
         if (showMap) {
             // Map View
             JobMapScreen(
-                jobs = displayedJobs.map { it.job },
+                jobs = displayedJobs,
                 selectedJob = mapSelectedJob,
                 onJobSelected = { job ->
                     mapSelectedJob = job
@@ -280,7 +282,7 @@ fun WorkerHomeScreen(
                     ) {
                         Icon(Icons.Default.Search, contentDescription = null, tint = Color.Gray)
                         Spacer(modifier = Modifier.width(8.dp))
-                        androidx.compose.foundation.text.BasicTextField(
+                        TextField(
                             value = searchQuery,
                             onValueChange = { searchQuery = it },
                             modifier = Modifier.weight(1f),
@@ -288,9 +290,14 @@ fun WorkerHomeScreen(
                                 fontSize = 14.sp,
                                 color = Color.Black
                             ),
-                            cursorBrush = androidx.compose.ui.graphics.SolidColor(androidx.compose.material3.MaterialTheme.colorScheme.primary),
-                            placeholder = { 
-                                androidx.compose.foundation.text.Text(
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
+                            ),
+                            placeholder = {
+                                Text(
                                     "Cari posisi atau area...",
                                     color = Color.Gray,
                                     style = MaterialTheme.typography.bodyMedium
@@ -397,7 +404,7 @@ fun WorkerHomeScreen(
                      JobCard(
                          job = jobWithScore.job,
                          score = jobWithScore.score,
-                         isCompliant = jobWithScore.job.isCompliant,
+                         isCompliant = jobWithScore.job.isCompliant ?: true,
                          onAcceptClick = {
                              selectedJob = jobWithScore.job
                              showAcceptDialog = true

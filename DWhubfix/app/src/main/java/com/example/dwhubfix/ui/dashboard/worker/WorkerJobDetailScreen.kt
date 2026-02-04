@@ -1,5 +1,6 @@
 package com.example.dwhubfix.ui.dashboard.worker
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -236,6 +238,8 @@ fun WorkerJobDetailScreen(
                 }
             }
             job != null -> {
+                // Create local variable for smart cast - use non-null assertion since we're inside job != null block
+                val currentJob: Job = job!!
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -250,7 +254,7 @@ fun WorkerJobDetailScreen(
                             .background(Primary)
                     ) {
                         AsyncImage(
-                            model = job.businessInfo?.avatarUrl ?: "",
+                            model = currentJob.businessInfo?.avatarUrl ?: "",
                             contentDescription = "Business Cover",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
@@ -279,7 +283,7 @@ fun WorkerJobDetailScreen(
                                 .padding(16.dp)
                         ) {
                             Text(
-                                job.category ?: "General",
+                                currentJob.category ?: "General",
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 style = MaterialTheme.typography.labelSmall.copy(
                                     fontWeight = FontWeight.Bold,
@@ -297,7 +301,7 @@ fun WorkerJobDetailScreen(
                                 .padding(16.dp)
                         ) {
                             Text(
-                                job.status.uppercase(),
+                                currentJob.status.uppercase(),
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 style = MaterialTheme.typography.labelSmall.copy(
                                     fontWeight = FontWeight.Bold,
@@ -312,7 +316,7 @@ fun WorkerJobDetailScreen(
                     // Title & Wage
                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                         Text(
-                            job.title,
+                            currentJob.title,
                             style = MaterialTheme.typography.headlineMedium.copy(
                                 fontSize = 28.sp,
                                 fontWeight = FontWeight.Bold
@@ -332,14 +336,14 @@ fun WorkerJobDetailScreen(
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
-                                    "Rp ${formatCurrency(job.wage?.toInt() ?: 0)}",
+                                    "Rp ${formatCurrency(currentJob.wage?.toInt() ?: 0)}",
                                     style = MaterialTheme.typography.titleLarge.copy(
                                         fontWeight = FontWeight.Bold,
                                         color = Primary
                                     )
                                 )
                                 Text(
-                                    "/ ${job.wageType ?: "shift"}",
+                                    "/ ${currentJob.wageType ?: "shift"}",
                                     style = MaterialTheme.typography.bodyMedium.copy(
                                         color = Color(0xFF9CA3AF)
                                     )
@@ -375,12 +379,12 @@ fun WorkerJobDetailScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
                             .clickable {
-                                job.businessId?.let { onNavigateToBusiness(it) }
+                                currentJob.businessId?.let { onNavigateToBusiness(it) }
                             },
                         shape = RoundedCornerShape(16.dp),
                         color = Color.White,
                         border = BorderStroke(1.dp, Color(0xFFE5E7EB)),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                        shadowElevation = 2.dp
                     ) {
                         Row(
                             modifier = Modifier
@@ -390,7 +394,7 @@ fun WorkerJobDetailScreen(
                         ) {
                             // Avatar
                             AsyncImage(
-                                model = job.businessInfo?.avatarUrl,
+                                model = currentJob.businessInfo?.avatarUrl,
                                 contentDescription = "Business Avatar",
                                 modifier = Modifier
                                     .size(56.dp)
@@ -400,8 +404,8 @@ fun WorkerJobDetailScreen(
                             Spacer(modifier = Modifier.width(16.dp))
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    job.businessInfo?.businessProfile?.businessName 
-                                        ?: job.businessInfo?.fullName 
+                                    currentJob.businessInfo?.businessProfile?.businessName 
+                                        ?: currentJob.businessInfo?.fullName 
                                         ?: "Business Name",
                                     style = MaterialTheme.typography.titleMedium.copy(
                                         fontWeight = FontWeight.Bold
@@ -417,8 +421,8 @@ fun WorkerJobDetailScreen(
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
                                     Text(
-                                        job.businessInfo?.businessProfile?.address 
-                                            ?: job.location 
+                                        currentJob.businessInfo?.businessProfile?.address 
+                                            ?: currentJob.location 
                                             ?: "Location",
                                         style = MaterialTheme.typography.bodySmall.copy(
                                             color = Color(0xFF6B7280)
@@ -450,7 +454,7 @@ fun WorkerJobDetailScreen(
                             modifier = Modifier.padding(bottom = 12.dp)
                         )
                         Text(
-                            job.description ?: "Tidak ada deskripsi",
+                            currentJob.description ?: "Tidak ada deskripsi",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 color = Color(0xFF4B5563),
                                 lineHeight = 20.sp
@@ -471,7 +475,7 @@ fun WorkerJobDetailScreen(
                         )
                         RequirementItem(
                             icon = Icons.Default.Work,
-                            text = "Pengalaman minimal 1 tahun di bidang ${job.category ?: "hospitality"}"
+                            text = "Pengalaman minimal 1 tahun di bidang ${currentJob.category ?: "hospitality"}"
                         )
                         RequirementItem(
                             icon = Icons.Default.Shield,
@@ -515,8 +519,8 @@ fun WorkerJobDetailScreen(
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        job.businessInfo?.businessProfile?.address 
-                                            ?: job.location 
+                                        currentJob.businessInfo?.businessProfile?.address 
+                                            ?: currentJob.location 
                                             ?: "Lokasi",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = Color(0xFF6B7280)
@@ -549,7 +553,7 @@ fun WorkerJobDetailScreen(
 
 @Composable
 fun RequirementItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     text: String
 ) {
     Row(

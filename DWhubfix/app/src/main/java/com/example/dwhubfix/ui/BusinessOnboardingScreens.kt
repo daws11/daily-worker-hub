@@ -2623,7 +2623,7 @@ fun BusinessFinalReviewScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(true) }
-    var profileData by remember { mutableStateOf<JSONObject?>(null) }
+    var profileData by remember { mutableStateOf<Map<String, Any?>?>(null) }
 
     // Fetch Profile Data
     LaunchedEffect(Unit) {
@@ -2636,14 +2636,14 @@ fun BusinessFinalReviewScreen(
         isLoading = false
     }
 
-    val businessName = profileData?.optString("business_name") ?: "Nama Bisnis"
-    val businessAddress = profileData?.optString("address") ?: "Alamat belum diatur"
-    val businessDescription = profileData?.optString("business_description") ?: "Deskripsi belum diatur"
-    val businessCategory = profileData?.optString("job_category") ?: "-"
-    val businessPhone = SessionManager.getPhoneNumber(context) ?: "-" 
-    val openTime = profileData?.optString("operating_hours_open") ?: "09:00"
-    val closeTime = profileData?.optString("operating_hours_close") ?: "22:00"
-    val coverUrl = profileData?.optString("location_photo_front_url")
+    val businessName = profileData?.get("business_name") as? String ?: "Nama Bisnis"
+    val businessAddress = profileData?.get("address") as? String ?: "Alamat belum diatur"
+    val businessDescription = profileData?.get("business_description") as? String ?: "Deskripsi belum diatur"
+    val businessCategory = profileData?.get("job_category") as? String ?: "-"
+    val businessPhone = SessionManager.getPhoneNumber(context) ?: "-"
+    val openTime = profileData?.get("operating_hours_open") as? String ?: "09:00"
+    val closeTime = profileData?.get("operating_hours_close") as? String ?: "22:00"
+    val coverUrl = profileData?.get("location_photo_front_url") as? String
 
     Scaffold(
         topBar = {
@@ -2954,7 +2954,7 @@ fun BusinessVerificationPendingScreen(
             kotlinx.coroutines.delay(5000) // Check every 5 seconds
             val result = com.example.dwhubfix.data.SupabaseRepository.getProfileJson(context)
             result.onSuccess { profile ->
-                val status = profile.optString("verification_status")
+                val status = profile["verification_status"] as? String
                 if (status == "approved" || status == "verified") {
                     onNavigateHome()
                 }

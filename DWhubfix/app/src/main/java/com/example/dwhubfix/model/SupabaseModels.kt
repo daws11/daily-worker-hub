@@ -19,42 +19,24 @@ data class Job(
     val status: String = "open",
     val created_at: String? = null,
     val updated_at: String? = null,
-    
+
     // Time fields
     @SerialName("start_time") val startTime: String? = null,
     @SerialName("end_time") val endTime: String? = null,
     @SerialName("shift_date") val shiftDate: String? = null,
-    
+
     // Urgency flag
     val isUrgent: Boolean = false,
-    
+
     // Compliance flag (21 Days Rule - PP 35/2021)
     // This is calculated by backend, can be null if not checked yet
     val isCompliant: Boolean? = null,
-    
+
+    // Worker count (number of workers needed)
+    @SerialName("worker_count") val workerCount: Int? = null,
+
     // We might want to join business info
     @SerialName("profiles") val businessInfo: UserProfile? = null
-)
-
-@Serializable
-data class JobWithScore(
-    val job: Job,
-    val score: JobMatchScore
-)
-
-@Serializable
-data class JobMatchScore(
-    val score: Double, // 0.0 - 100.0
-    val breakdown: ScoreBreakdown
-)
-
-@Serializable
-data class ScoreBreakdown(
-    val distanceScore: Double,
-    val skillScore: Double,
-    val ratingScore: Double,
-    val reliabilityScore: Double,
-    val urgencyScore: Double
 )
 
 // Keep old compatibility aliases

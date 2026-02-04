@@ -51,7 +51,8 @@ fun BusinessDashboardNavigation(
             composable("business_home") {
                 BusinessHomeScreen(
                     onNavigateToPostJob = { navController.navigate("business_post_job") },
-                    onNavigateToFindWorker = { navController.navigate("business_workers") }
+                    onNavigateToFindWorker = { navController.navigate("business_workers") },
+                    onNavigateToWallet = { /* TODO: Navigate to wallet */ }
                 )
             }
             composable("business_post_job") {

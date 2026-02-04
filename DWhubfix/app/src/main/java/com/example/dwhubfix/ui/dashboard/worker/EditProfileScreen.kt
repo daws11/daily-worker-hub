@@ -1,14 +1,23 @@
 package com.example.dwhubfix.ui.dashboard.worker
 
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -20,12 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -40,12 +51,11 @@ import kotlinx.coroutines.launch
 fun EditProfileScreen(
     onNavigateBack: () -> Unit
 ) {
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    
-    var userProfile by remember { mutableStateOf<com.example.dwhubfix.model.UserProfile?>(null) }
+
     var isLoadingProfile by remember { mutableStateOf(true) }
-    
+
     // Form State
     var fullName by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
@@ -82,14 +92,13 @@ fun EditProfileScreen(
     // Load Profile
     LaunchedEffect(Unit) {
         val result = SupabaseRepository.getProfile(context)
-        result.onSuccess { profile ->
-            userProfile = profile
-            fullName = profile.fullName ?: ""
-            phoneNumber = profile.phoneNumber ?: ""
-            selectedCategory = profile.workerProfile?.jobCategory ?: ""
-            selectedSkill = profile.workerProfile?.jobRole ?: ""
-            experienceLevel = profile.workerProfile?.yearsExperience ?: ""
-            isAvailable = profile.onboardingStatus != "inactive"
+        result.onSuccess { profileMap ->
+            fullName = profileMap["full_name"] as? String ?: ""
+            phoneNumber = profileMap["phone_number"] as? String ?: ""
+            selectedCategory = (profileMap["job_category"] as? String) ?: ""
+            selectedSkill = (profileMap["job_role"] as? String) ?: ""
+            experienceLevel = (profileMap["experience_level"] as? String) ?: ""
+            isAvailable = (profileMap["onboarding_status"] as? String) != "inactive"
             isLoadingProfile = false
         }.onFailure {
             isLoadingProfile = false
@@ -155,10 +164,9 @@ fun EditProfileScreen(
                                     
                                     if (result.isSuccess) {
                                         // Update phone if changed
-                                        if (phoneNumber != userProfile?.phoneNumber) {
-                                            SessionManager.savePhoneNumber(context, phoneNumber)
-                                        }
-                                        
+                                        // Phone number update handled by updateProfile above
+                                        SessionManager.savePhoneNumber(context, phoneNumber)
+
                                         // Update worker profile
                                         if (selectedSkill.isNotEmpty()) {
                                             // Find category from WorkerCategories
@@ -181,10 +189,13 @@ fun EditProfileScreen(
                                         }
                                         
                                         // Update experience if changed
-                                        if (experienceLevel.isNotEmpty() && experienceLevel != userProfile?.workerProfile?.yearsExperience) {
+                                        if (experienceLevel.isNotEmpty()) {
                                             val expResult = SupabaseRepository.updateWorkerExperience(
                                                 context = context,
                                                 experienceLevel = experienceLevel,
+                                                experienceYears = 0,
+                                                workHistory = emptyList(),
+                                                documentUrl = null,
                                                 currentStep = null
                                             )
                                             
@@ -261,20 +272,15 @@ fun EditProfileScreen(
                             .border(4.dp, Color.White, CircleShape)
                             .clickable { 
                                 photoPickerLauncher.launch(
-                                    androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    androidx.activity.result.PickVisualMediaRequest(
+                                        androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
                                 )
                             }
                     ) {
                         if (avatarUri != null) {
                             AsyncImage(
                                 model = avatarUri,
-                                contentDescription = "Avatar",
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                        } else if (userProfile?.avatarUrl != null) {
-                            AsyncImage(
-                                model = userProfile!!.avatarUrl,
                                 contentDescription = "Avatar",
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
@@ -302,9 +308,11 @@ fun EditProfileScreen(
                             fontWeight = FontWeight.Bold,
                             color = Primary
                         ),
-                        modifier = Modifier.clickable { 
+                        modifier = Modifier.clickable {
                             photoPickerLauncher.launch(
-                                androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
+                                PickVisualMediaRequest(
+                                    androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
+                                )
                             )
                         }
                     )
@@ -459,7 +467,7 @@ fun EditProfileScreen(
                         
                         // Category Sheet
                         if (showCategorySheet) {
-                            androidx.compose.material3.ModalBottomSheet(
+ModalBottomSheet(
                                 onDismissRequest = { showCategorySheet = false },
                                 containerColor = Color.White
                             ) {
@@ -475,7 +483,7 @@ fun EditProfileScreen(
                                         modifier = Modifier.padding(bottom = 16.dp)
                                     )
                                     
-                                    androidx.compose.foundation.lazy.LazyColumn {
+                                    LazyColumn {
                                         WorkerCategories.categories.forEach { (category, roles) ->
                                             item {
                                                 Text(
@@ -488,7 +496,7 @@ fun EditProfileScreen(
                                                 )
                                             }
                                             items(roles) { role ->
-                                                androidx.compose.material3.ListItem(
+                    ListItem(
                                                     headlineContent = { Text(role) },
                                                     trailingContent = {
                                                         if (selectedSkill == role) {
@@ -499,7 +507,7 @@ fun EditProfileScreen(
                                                             )
                                                         }
                                                     },
-                                                    colors = androidx.compose.material3.ListItemDefaults.colors(
+                                                    colors = ListItemDefaults.colors(
                                                         containerColor = if (selectedSkill == role) 
                                                             Primary.copy(alpha = 0.1f) 
                                                         else Color.Transparent
@@ -535,7 +543,7 @@ fun EditProfileScreen(
                         ) {
                             listOf("< 1 Tahun", "1-3 Tahun", "3-5 Tahun", "> 5 Tahun").forEach { level ->
                                 val isSelected = experienceLevel == level
-                                androidx.compose.material3.FilterChip(
+    FilterChip(
                                     selected = isSelected,
                                     onClick = { experienceLevel = level },
                                     label = { Text(level, style = MaterialTheme.typography.labelSmall) },
@@ -587,10 +595,10 @@ fun EditProfileScreen(
                             }
                         }
                         
-                        androidx.compose.animation.AnimatedVisibility(
+AnimatedVisibility(
                             visible = showPasswordFields,
-                            enter = androidx.compose.animation.expandVertically(),
-                            exit = androidx.compose.animation.shrinkVertically()
+                            enter = expandVertically(),
+                            exit = shrinkVertically()
                         ) {
                             Column {
                                 Spacer(modifier = Modifier.height(16.dp))

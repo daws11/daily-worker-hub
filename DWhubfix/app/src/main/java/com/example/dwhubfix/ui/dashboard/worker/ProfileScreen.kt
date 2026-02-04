@@ -50,7 +50,7 @@ fun ProfileScreen(
         scope.launch {
             try {
                 // TODO: Verify repository method name. Using placehodoer fetch if needed.
-                val result = SupabaseRepository.getProfile(context)
+                val result = SupabaseRepository.getUserProfile(context)
                 if (result.isSuccess) {
                     userProfile = result.getOrNull()
                 }
@@ -71,7 +71,7 @@ fun ProfileScreen(
                 Button(
                     onClick = {
                         scope.launch {
-                            SupabaseRepository.signOut(context)
+                            SupabaseRepository.logout(context)
                             onLogout()
                         }
                     },
@@ -107,7 +107,11 @@ fun ProfileScreen(
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            SettingsSection(onLogoutClick = { showLogoutDialog = true })
+            SettingsSection(
+                onLogoutClick = { showLogoutDialog = true },
+                onNavigateToEditProfile = onNavigateToEditProfile,
+                onNavigateToNotifications = onNavigateToNotifications
+            )
             
             Spacer(modifier = Modifier.height(32.dp))
         }
@@ -235,7 +239,11 @@ fun StatCard(label: String, value: String, icon: ImageVector, modifier: Modifier
 }
 
 @Composable
-fun SettingsSection(onLogoutClick: () -> Unit) {
+fun SettingsSection(
+    onLogoutClick: () -> Unit,
+    onNavigateToEditProfile: () -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

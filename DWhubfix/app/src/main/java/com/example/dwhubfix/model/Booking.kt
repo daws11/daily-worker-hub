@@ -26,7 +26,6 @@ data class Booking(
 ) {
     val formattedEarnings: String
         get() = "Rp ${String.format("%,d", totalEarnings)}"
-    }
 }
 
 /**
@@ -89,3 +88,21 @@ data class ClockOutResult(
     val bonusPoints: Int,
     val totalEarnings: Long
 )
+
+/**
+ * Wallet model for worker dashboard
+ */
+data class Wallet(
+    val balance: Long = 0L,
+    val frozenAmount: Long = 0L,
+    val currency: String = "IDR"
+) {
+    val availableBalance: Long
+        get() = balance - frozenAmount
+
+    val formattedBalance: String
+        get() = "Rp ${String.format("%,d", balance)}"
+
+    val formattedAvailableBalance: String
+        get() = "Rp ${String.format("%,d", availableBalance)}"
+}

@@ -1,8 +1,10 @@
 package com.example.dwhubfix.ui.dashboard.worker
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dwhubfix.ui.theme.Primary
 import com.example.dwhubfix.data.WorkerCategories
+import com.example.dwhubfix.model.JobFilters
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,8 +63,7 @@ fun JobFilterSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = Color.White,
-        windowInsets = WindowInsets(0) // Full height
+        containerColor = Color.White
     ) {
         Column(
             modifier = Modifier
@@ -134,10 +136,7 @@ fun JobFilterSheet(
                                         // Keep at least one
                                         selectedCategories += category
                                     }
-                                } else {
-                                    selectedCategories += category
-                                }
-                            },
+                                },
                                 label = { Text(category) },
                                 modifier = Modifier.fillMaxWidth()
                             )

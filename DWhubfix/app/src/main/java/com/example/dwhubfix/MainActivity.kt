@@ -162,29 +162,10 @@ class MainActivity : ComponentActivity() {
                                         val savedStep = SessionManager.getCurrentStep(context)
                                         val savedRole = SessionManager.getSelectedRole(context)
 
+                                        // Use local saved values for navigation
                                         if (token != null) {
-                                            val result = SupabaseRepository.getProfileJson(context)
-                                            if (result.isSuccess) {
-                                                val profile = result.getOrNull()
-                                                val role = profile?.optString("role")
-                                                val currentStep = profile?.optString("current_step")
-                                                
-                                                val destination = if (role == "worker" && !currentStep.isNullOrEmpty()) {
-                                                     currentStep
-                                                } else if (role == "business" && !currentStep.isNullOrEmpty()) {
-                                                     currentStep
-                                                } else {
-                                                     null
-                                                }
-                                                
-                                                navController.navigate(destination ?: savedStep ?: "role_selection") {
-                                                    popUpTo("splash") { inclusive = true }
-                                                }
-                                            } else {
-                                                // Fallback to local state if Supabase fetch failed but we have token
-                                                navController.navigate(savedStep ?: "role_selection") {
-                                                    popUpTo("splash") { inclusive = true }
-                                                }
+                                            navController.navigate(savedStep ?: "role_selection") {
+                                                popUpTo("splash") { inclusive = true }
                                             }
                                         } else {
                                             // No token: user might be in pre-login onboarding

@@ -17,4 +17,3 @@ data class WorkerStats(
     val formattedBalance: String
         get() = "Rp ${String.format("%,d", walletBalance)}"
 }
-}

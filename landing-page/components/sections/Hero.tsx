@@ -1,13 +1,14 @@
 "use client";
 
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
-import { Download, Users, Building, Star, ArrowRight, Smartphone, Sparkles, CheckCircle, Wallet } from "lucide-react";
+import { Download, Building, Star, ArrowRight, Sparkles, CheckCircle, Wallet } from "lucide-react";
 import { APP_STORES } from "@/lib/constants";
 import { useLanguage } from "@/lib/language-context";
+import { useState, useEffect } from "react";
 
 export function Hero() {
   const { scrollY } = useScroll();
@@ -15,6 +16,15 @@ export function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const { t } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
+
+  const [currentScreen, setCurrentScreen] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentScreen((prev) => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   const features = [
     t('hero.feature.smartMatching'),
@@ -31,10 +41,10 @@ export function Hero() {
       aria-labelledby="hero-heading"
     >
       <HeroHighlight className="min-h-[90vh] md:min-h-screen">
-        <motion.div style={{ y, opacity }} className="w-full max-w-[1800px] mx-auto px-6 sm:px-10 lg:px-20 xl:px-28 py-16 md:py-24 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 xl:gap-28 items-center">
+        <motion.div style={{ y, opacity }} className="w-full max-w-[1920px] mx-auto px-6 sm:px-10 lg:px-20 xl:px-32 py-16 md:py-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
             {/* Left Content */}
-            <div className="lg:col-span-7 xl:col-span-7 max-w-4xl">
+            <div className="max-w-3xl">
               {/* Badge */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -48,7 +58,7 @@ export function Hero() {
                 </Badge>
               </motion.div>
 
-              {/* Headline - Short & Punchy with TextGenerateEffect */}
+              {/* Headline */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -67,7 +77,7 @@ export function Hero() {
                 </h1>
               </motion.div>
 
-              {/* Subheadline - Bullet points instead of paragraph */}
+              {/* Features */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -90,7 +100,7 @@ export function Hero() {
                 </div>
               </motion.div>
 
-              {/* Action-Oriented CTAs */}
+              {/* CTAs */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -106,7 +116,7 @@ export function Hero() {
                     href={APP_STORES.googlePlay}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Download app from Google Play Store to find jobs"
+                    aria-label="Download app from Google Play Store"
                   >
                     <Download className="mr-3 h-5 w-5" aria-hidden="true" />
                     {t('hero.cta.findJob')}
@@ -119,22 +129,19 @@ export function Hero() {
                   variant="outline"
                   className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white text-base md:text-lg px-6 md:px-8 py-6 rounded-full transition-all duration-300 hover:scale-105"
                 >
-                  <a
-                    href="#business"
-                    aria-label="Learn how to post jobs for businesses"
-                  >
+                  <a href="#business" aria-label="Learn how to post jobs">
                     <Building className="mr-3 h-5 w-5" aria-hidden="true" />
                     {t('hero.cta.postJob')}
                   </a>
                 </Button>
               </motion.div>
 
-              {/* Quick Stats - With Counter Animation */}
+              {/* Stats */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
-                className="flex flex-wrap gap-10 md:gap-12"
+                className="flex flex-wrap gap-10 md:gap-16"
               >
                 {[
                   { value: 500, label: t('hero.stat.workers'), color: 'text-green-600', suffix: '+' },
@@ -158,193 +165,189 @@ export function Hero() {
               </motion.div>
             </div>
 
-            {/* Right - Phone Mockup with App Demo */}
+            {/* Right - Phone Mockup */}
             <motion.div
               initial={{ opacity: 0, x: 100, rotate: 5 }}
               animate={{ opacity: 1, x: 0, rotate: 0 }}
               transition={{ duration: 1, delay: 0.3 }}
-              className="relative hidden md:flex lg:col-span-5 xl:col-span-5 justify-center lg:justify-end"
+              className="relative hidden md:flex justify-center lg:justify-end"
               aria-hidden="true"
             >
-              {/* Floating Animation */}
+              {/* Floating Animation Wrapper */}
               <motion.div
-                animate={{
-                  y: [0, -10, 0],
-                }}
+                animate={{ y: [0, -15, 0] }}
                 transition={{
-                  duration: 5,
+                  duration: 6,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="relative max-w-[280px] md:max-w-xs lg:max-w-[360px] xl:max-w-md"
+                className="relative w-full max-w-[320px] lg:max-w-[380px] xl:max-w-[420px]"
               >
-                {/* Phone Mockup */}
-                <div className="relative bg-gradient-to-b from-gray-900 to-gray-800 rounded-[2.5rem] p-2.5 shadow-2xl">
+                {/* Phone Body */}
+                <div className="relative bg-gray-900 rounded-[3rem] p-3 shadow-2xl border-[6px] border-gray-900">
                   {/* Notch */}
-                  <div className="absolute top-5 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full" />
-
-                  {/* Screen with Animated App Screens */}
-                  <div className="relative bg-white rounded-[2rem] overflow-hidden aspect-[9/19.5]">
-                    {/* Animated App Screens - Job Posting Flow */}
-                    <div className="absolute inset-0 flex">
-                      {[1, 2, 3].map((screen) => (
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-gray-900 rounded-b-2xl z-20" />
+                  
+                  {/* Screen Container */}
+                  <div className="relative bg-white rounded-[2.5rem] overflow-hidden aspect-[9/19.5]">
+                    
+                    {/* Animated Screens */}
+                    <AnimatePresence mode="wait">
+                      {currentScreen === 0 && (
                         <motion.div
-                          key={screen}
-                          initial={{ x: "0%" }}
-                          animate={{
-                            x: screen === 1 ? "-100%" : screen === 2 ? "-200%" : "-300%",
-                          }}
-                          transition={{
-                            duration: 6,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: screen * 2,
-                          }}
-                          className="w-full h-full flex-shrink-0"
+                          key="screen-1"
+                          initial={{ opacity: 0, x: 50 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -50 }}
+                          transition={{ duration: 0.5 }}
+                          className="absolute inset-0 bg-gray-50 flex flex-col"
                         >
-                          {/* Screen 1: Job List */}
-                          {screen === 1 && (
-                            <div className="w-full h-full bg-gradient-to-br from-gray-50 to-white p-3">
-                              {/* App Header */}
-                              <div className="bg-gradient-to-r from-green-600 to-blue-600 p-4 pb-6 rounded-xl mb-3">
-                                <div className="flex items-center justify-between mb-2">
-                                  <div className="w-6 h-6 bg-white/20 rounded-full" />
-                                  <div className="text-white text-xs font-semibold">Jobs</div>
-                                  <div className="w-6 h-6 bg-white/20 rounded-full" />
-                                </div>
-                                <div className="h-4 bg-white/30 rounded-lg w-2/3" />
-                              </div>
-
-                              {/* Job Cards */}
-                              <div className="space-y-2">
-                                {[
-                                  { title: "Housekeeping", loc: "Ubud", rate: "Rp 150k", urgent: true },
-                                  { title: "Driver", loc: "Seminyak", rate: "Rp 200k", urgent: false },
-                                  { title: "Cook", loc: "Canggu", rate: "Rp 180k", urgent: true },
-                                ].map((job, i) => (
-                                  <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    className="bg-white p-2 rounded-lg shadow-sm border border-gray-100"
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-500 rounded-md" />
-                                      <div className="flex-1">
-                                        <div className="h-3 bg-gray-800 rounded w-3/4 mb-1" />
-                                        <div className="h-2 bg-gray-200 rounded w-1/2" />
-                                      </div>
-                                      <div className="text-right">
-                                        <div className="h-3 bg-blue-600 rounded w-12 mb-1" />
-                                        {job.urgent && <div className="h-1.5 bg-red-400 rounded-full w-8" />}
-                                      </div>
+                          {/* Header */}
+                          <div className="bg-gradient-to-r from-green-600 to-blue-600 p-6 pt-12 pb-8 rounded-b-3xl shadow-md">
+                            <div className="flex justify-between items-center mb-4">
+                              <div className="w-8 h-8 bg-white/20 rounded-full" />
+                              <div className="text-white font-semibold">Find Jobs</div>
+                              <div className="w-8 h-8 bg-white/20 rounded-full" />
+                            </div>
+                            <div className="h-2 bg-white/30 rounded-full w-1/3 mb-2" />
+                            <div className="h-2 bg-white/30 rounded-full w-2/3" />
+                          </div>
+                          
+                          {/* Job List */}
+                          <div className="p-4 space-y-3 overflow-hidden">
+                             {[
+                                { title: "Housekeeping", loc: "Ubud", rate: "150k", tag: "Urgent" },
+                                { title: "Driver", loc: "Kuta", rate: "200k", tag: "New" },
+                                { title: "Chef Assistant", loc: "Canggu", rate: "180k", tag: "Hot" },
+                                { title: "Gardener", loc: "Sanur", rate: "120k", tag: "" },
+                              ].map((job, i) => (
+                                <motion.div
+                                  key={i}
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.2 + i * 0.1 }}
+                                  className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3"
+                                >
+                                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-100 to-blue-100 flex-shrink-0" />
+                                  <div className="flex-1">
+                                    <div className="h-3 bg-gray-800 rounded w-3/4 mb-1.5" />
+                                    <div className="h-2 bg-gray-300 rounded w-1/2" />
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-medium">
+                                      {job.rate}
                                     </div>
-                                  </motion.div>
-                                ))}
-                              </div>
-
-                              {/* Bottom Nav */}
-                              <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-2">
-                                <div className="flex justify-around">
-                                  {[1, 2, 3, 4].map((i) => (
-                                    <div key={i} className={`w-6 h-6 rounded-md ${i === 1 ? 'bg-[#E07A5F]' : 'bg-gray-100'}`} />
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Screen 2: Apply Success */}
-                          {screen === 2 && (
-                            <div className="w-full h-full bg-gradient-to-br from-gray-50 to-white p-3 flex flex-col items-center justify-center">
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ type: "spring", delay: 0.2 }}
-                                className="w-14 h-14 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center mb-4"
-                              >
-                                <CheckCircle className="w-7 h-7 text-white" />
-                              </motion.div>
-                              <div className="h-4 bg-gray-800 rounded-lg w-32 mb-2" />
-                              <div className="h-3 bg-gray-300 rounded w-40 mb-3" />
-                              <div className="h-8 bg-[#E07A5F] rounded-full w-28" />
-                            </div>
-                          )}
-
-                          {/* Screen 3: Payment Success */}
-                          {screen === 3 && (
-                            <div className="w-full h-full bg-gradient-to-br from-gray-50 to-white p-3 flex flex-col items-center justify-center">
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ type: "spring", delay: 0.2 }}
-                                className="w-14 h-14 bg-gradient-to-br from-green-500 to-yellow-500 rounded-full flex items-center justify-center mb-4"
-                              >
-                                <Wallet className="w-7 h-7 text-white" />
-                              </motion.div>
-                              <div className="h-4 bg-gray-800 rounded-lg w-36 mb-2" />
-                              <div className="h-6 bg-green-600 rounded-lg w-24 mb-2" />
-                              <div className="h-3 bg-gray-300 rounded w-40" />
-                            </div>
-                          )}
+                                  </div>
+                                </motion.div>
+                              ))}
+                          </div>
                         </motion.div>
+                      )}
+
+                      {currentScreen === 1 && (
+                        <motion.div
+                          key="screen-2"
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 1.1 }}
+                          transition={{ duration: 0.5 }}
+                          className="absolute inset-0 bg-white flex flex-col items-center justify-center p-6 text-center"
+                        >
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
+                            className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6"
+                          >
+                            <CheckCircle className="w-10 h-10 text-green-600" />
+                          </motion.div>
+                          <h3 className="text-xl font-bold text-gray-900 mb-2">Application Sent!</h3>
+                          <p className="text-gray-500 text-sm mb-8">Good luck! The employer will review your profile shortly.</p>
+                          <div className="w-full bg-gray-100 h-12 rounded-xl" />
+                        </motion.div>
+                      )}
+
+                      {currentScreen === 2 && (
+                        <motion.div
+                          key="screen-3"
+                          initial={{ opacity: 0, y: 50 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -50 }}
+                          transition={{ duration: 0.5 }}
+                          className="absolute inset-0 bg-gradient-to-br from-green-50 to-blue-50 flex flex-col items-center justify-center p-6"
+                        >
+                          <div className="w-full bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                             <div className="flex items-center gap-3 mb-6">
+                               <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                 <Wallet className="w-5 h-5 text-blue-600" />
+                               </div>
+                               <div>
+                                 <div className="text-xs text-gray-500">Total Balance</div>
+                                 <div className="font-bold text-lg">Rp 2.500.000</div>
+                               </div>
+                             </div>
+                             <div className="space-y-3">
+                               <div className="h-10 bg-gray-50 rounded-lg w-full" />
+                               <div className="h-10 bg-gray-50 rounded-lg w-full" />
+                             </div>
+                          </div>
+                          <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                            className="mt-6 bg-green-600 text-white px-6 py-2 rounded-full text-sm font-medium shadow-lg shadow-green-200"
+                          >
+                            Payment Received 💸
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Bottom Navigation Indicator */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                      {[0, 1, 2].map((i) => (
+                        <div 
+                          key={i} 
+                          className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                            i === currentScreen ? 'bg-green-500' : 'bg-gray-300'
+                          }`} 
+                        />
                       ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Glow Effect */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-green-500/20 to-blue-500/20 blur-3xl rounded-full -z-10" />
-              </motion.div>
-
-              {/* Floating Elements - Updated (Smaller) */}
-              <motion.div
-                animate={{
-                  y: [0, 10, 0],
-                  rotate: [0, -3, 3, 0]
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 0.5
-                }}
-                className="absolute -top-6 -right-6 bg-white p-3 rounded-xl shadow-lg border border-gray-100"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shrink-0">
-                    <CheckCircle className="w-4 h-4 text-white" />
+                {/* Floating Elements */}
+                <motion.div
+                  animate={{ y: [0, 10, 0], rotate: [0, -3, 3, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                  className="absolute top-10 -right-8 bg-white p-3 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 z-20"
+                >
+                  <div className="bg-green-100 p-2 rounded-full">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-xs font-semibold">Job Matched!</p>
+                    <p className="text-xs font-bold text-gray-900">Job Matched!</p>
                     <p className="text-[10px] text-gray-500">Just now</p>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
 
-              <motion.div
-                animate={{
-                  y: [0, -10, 0],
-                  rotate: [0, 3, -3, 0]
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1
-                }}
-                className="absolute -bottom-6 -left-6 bg-white p-3 rounded-xl shadow-lg border border-gray-100"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shrink-0">
-                    <Star className="w-4 h-4 text-white" />
+                <motion.div
+                  animate={{ y: [0, -10, 0], rotate: [0, 3, -3, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute bottom-20 -left-8 bg-white p-3 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 z-20"
+                >
+                   <div className="bg-yellow-100 p-2 rounded-full">
+                    <Star className="w-5 h-5 text-yellow-600" />
                   </div>
                   <div>
-                    <p className="text-xs font-semibold">5.0★ Rating</p>
+                    <p className="text-xs font-bold text-gray-900">5.0 Rating</p>
                     <p className="text-[10px] text-gray-500">New review</p>
                   </div>
-                </div>
+                </motion.div>
+
+                {/* Glow Behind Phone */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-green-400/30 to-blue-400/30 blur-[80px] -z-10 rounded-full" />
               </motion.div>
             </motion.div>
           </div>

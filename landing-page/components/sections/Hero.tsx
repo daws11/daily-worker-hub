@@ -181,7 +181,7 @@ export function Hero() {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="relative w-full max-w-[320px] lg:max-w-[380px] xl:max-w-[420px]"
+                className="relative w-full max-w-[280px] lg:max-w-[320px] xl:max-w-[360px]"
               >
                 {/* Phone Body */}
                 <div className="relative bg-gray-900 rounded-[3rem] p-3 shadow-2xl border-[6px] border-gray-900">

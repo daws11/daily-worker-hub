@@ -1,0 +1,176 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-community: var(--community);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* Daily Worker Hub Brand Colors - Matching Mobile App */
+  --primary: #13EC5B; /* Vibrant Green - semangat & pertumbuhan */
+  --primary-foreground: #FFFFFF; /* White */
+  --secondary: #F6F8F6; /* Light green tint */
+  --secondary-foreground: #111813; /* Dark green text */
+  --accent: #FF6B35; /* Warm Orange - untuk CTAs & highlights */
+  --accent-foreground: #FFFFFF; /* White */
+  --community: #3B82F6; /* Community Blue */
+  --community-foreground: #FFFFFF; /* White */
+
+  /* Backgrounds */
+  --background: #F6F8F6; /* Soft Greenish White */
+  --foreground: #111813; /* Dark Green/Black */
+
+  /* Card & Popover */
+  --card: #FFFFFF; /* White */
+  --card-foreground: #111813; /* Dark text */
+  --popover: #FFFFFF; /* White */
+  --popover-foreground: #111813; /* Dark text */
+
+  /* Muted */
+  --muted: #F0F4F0; /* Light gray-green */
+  --muted-foreground: #61896F; /* #61896F - Muted Green */
+
+  /* Borders & Inputs */
+  --border: #E5E7EB; /* Light border */
+  --input: #E5E7EB; /* Light input */
+  --ring: #13EC5B; /* Primary green */
+
+  /* Destructive */
+  --destructive: #EF4444; /* Red */
+  --destructive-foreground: #FFFFFF;
+
+  /* Chart Colors */
+  --chart-1: #13EC5B; /* Primary Green */
+  --chart-2: #FF6B35; /* Accent Orange */
+  --chart-3: #3B82F6; /* Community Blue */
+  --chart-4: #2A9D8F; /* Teal */
+  --chart-5: #E9C46A; /* Warm Yellow */
+
+  /* Sidebar */
+  --sidebar: #FFFFFF; /* White */
+  --sidebar-foreground: #111813; /* Dark */
+  --sidebar-primary: #13EC5B; /* Primary Green */
+  --sidebar-primary-foreground: #FFFFFF; /* White */
+  --sidebar-accent: #F0F4F0; /* Light */
+  --sidebar-accent-foreground: #111813; /* Dark */
+  --sidebar-border: #E5E7EB; /* Border */
+  --sidebar-ring: #13EC5B; /* Primary Green */
+}
+
+.dark {
+  /* Daily Worker Hub Dark Mode - Matching Mobile App */
+  --primary: #13EC5B; /* Vibrant Green */
+  --primary-foreground: #111813; /* Dark green */
+  --secondary: #102216; /* Deep green */
+  --secondary-foreground: #FFFFFF; /* Light */
+  --accent: #FF6B35; /* #FF6B35 - Warm Orange */
+  --accent-foreground: #FFFFFF; /* White */
+  --community: #3B82F6; /* Community Blue */
+  --community-foreground: #FFFFFF; /* White */
+
+  /* Backgrounds */
+  --background: #102216; /* #102216 - Deep Green */
+  --foreground: #FFFFFF; /* White */
+
+  /* Card & Popover */
+  --card: #1A2A1E; /* Dark green card */
+  --card-foreground: #FFFFFF; /* White text */
+  --popover: #1A2A1E; /* Dark green */
+  --popover-foreground: #FFFFFF; /* White */
+
+  /* Muted */
+  --muted: #1A2A1E; /* Dark muted */
+  --muted-foreground: #9CA3AF; /* Light green text */
+  --text-secondary: #9CA3AF; /* Secondary text */
+
+  /* Borders & Inputs */
+  --border: #2A3A2E; /* Dark border */
+  --input: #2A3A2E; /* Dark input */
+  --ring: #13EC5B; /* Primary green */
+
+  /* Destructive */
+  --destructive: #EF4444; /* Red */
+  --destructive-foreground: #FFFFFF;
+
+  /* Chart Colors */
+  --chart-1: #13EC5B; /* Primary Green */
+  --chart-2: #FF6B35; /* Accent Orange */
+  --chart-3: #3B82F6; /* Community Blue */
+  --chart-4: #2A9D8F; /* Teal */
+  --chart-5: #E9C46A; /* Warm Yellow */
+
+  /* Sidebar */
+  --sidebar: #102216; /* Deep Green */
+  --sidebar-foreground: #FFFFFF; /* White */
+  --sidebar-primary: #13EC5B; /* Primary Green */
+  --sidebar-primary-foreground: #111813; /* Dark */
+  --sidebar-accent: #1A2A1E; /* Dark */
+  --sidebar-accent-foreground: #FFFFFF; /* White */
+  --sidebar-border: #2A3A2E; /* Border */
+  --sidebar-ring: #13EC5B; /* Primary Green */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

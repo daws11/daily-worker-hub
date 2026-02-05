@@ -41,8 +41,8 @@ export function Hero() {
       aria-labelledby="hero-heading"
     >
       <HeroHighlight className="min-h-[90vh] md:min-h-screen">
-        <motion.div style={{ y, opacity }} className="w-full max-w-[1920px] mx-auto px-6 sm:px-10 lg:px-20 xl:px-32 py-16 md:py-24 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+        <motion.div style={{ y, opacity }} className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 xl:px-24 py-16 md:py-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 items-center">
             {/* Left Content */}
             <div className="max-w-3xl">
               {/* Badge */}

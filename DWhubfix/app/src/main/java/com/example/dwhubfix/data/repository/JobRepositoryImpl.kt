@@ -196,6 +196,141 @@ class JobRepositoryImpl @Inject constructor(
             }
         }
 
+    override suspend fun getApplicationById(applicationId: String): Result<JobApplication> =
+        withContext(Dispatchers.IO) {
+            try {
+                getAccessTokenOrThrow()
+
+                val response = client.from("job_applications").select() {
+                    filter { eq("id", applicationId) }
+                }.decodeSingle<Map<String, Any?>>()
+
+                val application = JobApplication(
+                    id = response["id"] as? String ?: "",
+                    jobId = response["job_id"] as? String ?: "",
+                    workerId = response["worker_id"] as? String ?: "",
+                    status = response["status"] as? String ?: "pending",
+                    message = response["message"] as? String,
+                    appliedAt = response["applied_at"] as? String,
+                    acceptedAt = response["accepted_at"] as? String,
+                    startedAt = response["started_at"] as? String,
+                    completedAt = response["completed_at"] as? String,
+                    workerRating = response["worker_rating"] as? Int,
+                    businessRating = response["business_rating"] as? Int,
+                    workerReview = response["worker_review"] as? String,
+                    businessReview = response["business_review"] as? String,
+                    cancellationReason = response["cancellation_reason"] as? String,
+                    createdAt = response["created_at"] as? String,
+                    updatedAt = response["updated_at"] as? String,
+                    job = null
+                )
+
+                Result.success(application)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+    override suspend fun createJob(request: com.example.dwhubfix.domain.model.CreateJobRequest): Result<Job> =
+        withContext(Dispatchers.IO) {
+            try {
+                getAccessTokenOrThrow()
+                val userId = getUserIdOrThrow()
+
+                val jobData = mapOf(
+                    "business_id" to userId,
+                    "title" to request.title,
+                    "description" to request.description,
+                    "wage" to request.wage,
+                    "wage_type" to request.wageType,
+                    "location" to request.location,
+                    "category" to request.category,
+                    "start_time" to request.startTime,
+                    "end_time" to request.endTime,
+                    "shift_date" to request.shiftDate,
+                    "is_urgent" to request.isUrgent,
+                    "worker_count" to request.workerCount,
+                    "status" to "open"
+                )
+
+                val response = client.from("jobs").insert(jobData)
+                    .decodeSingle<Map<String, Any?>>()
+
+                Result.success(response.toJob())
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+    override suspend fun applyForJob(request: com.example.dwhubfix.domain.model.ApplyForJobRequest): Result<JobApplication> =
+        withContext(Dispatchers.IO) {
+            try {
+                getAccessTokenOrThrow()
+                val userId = getUserIdOrThrow()
+
+                val applicationData = mapOf(
+                    "job_id" to request.jobId,
+                    "worker_id" to userId,
+                    "status" to "pending",
+                    "message" to request.coverLetter
+                )
+
+                val response = client.from("job_applications").insert(applicationData)
+                    .decodeSingle<Map<String, Any?>>()
+
+                val application = JobApplication(
+                    id = response["id"] as? String ?: "",
+                    jobId = response["job_id"] as? String ?: "",
+                    workerId = response["worker_id"] as? String ?: "",
+                    status = response["status"] as? String ?: "pending",
+                    message = response["message"] as? String,
+                    appliedAt = response["applied_at"] as? String,
+                    acceptedAt = response["accepted_at"] as? String,
+                    startedAt = response["started_at"] as? String,
+                    completedAt = response["completed_at"] as? String,
+                    workerRating = response["worker_rating"] as? Int,
+                    businessRating = response["business_rating"] as? Int,
+                    workerReview = response["worker_review"] as? String,
+                    businessReview = response["business_review"] as? String,
+                    cancellationReason = response["cancellation_reason"] as? String,
+                    createdAt = response["created_at"] as? String,
+                    updatedAt = response["updated_at"] as? String,
+                    job = null
+                )
+
+                Result.success(application)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+    override suspend fun completeJob(
+        applicationId: String,
+        completedAt: String,
+        hoursWorked: Double,
+        grossAmount: Int,
+        platformCommission: Int,
+        netWorkerAmount: Int
+    ): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            try {
+                getAccessTokenOrThrow()
+
+                client.from("job_applications").update(
+                    mapOf(
+                        "status" to "completed",
+                        "completed_at" to completedAt
+                    )
+                ) {
+                    filter { eq("id", applicationId) }
+                }
+
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
     override suspend fun deleteJob(jobId: String): Result<Unit> =
         withContext(Dispatchers.IO) {
             try {
@@ -206,6 +341,58 @@ class JobRepositoryImpl @Inject constructor(
                 }
 
                 Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+    override suspend fun getJobDetails(jobId: String): Result<com.example.dwhubfix.domain.model.JobWithDetails> =
+        withContext(Dispatchers.IO) {
+            try {
+                getAccessTokenOrThrow()
+                val userId = getUserIdOrThrow()
+
+                val job = getJobById(jobId).getOrElse { throw it }
+
+                // Check if worker has applied
+                val applications = client.from("job_applications").select() {
+                    filter {
+                        eq("job_id", jobId)
+                        eq("worker_id", userId)
+                    }
+                }.decodeList<Map<String, Any?>>()
+
+                val application = applications.firstOrNull()
+
+                val jobWithDetails = if (application != null) {
+                    com.example.dwhubfix.domain.model.JobWithDetails.fromJobWithApplication(
+                        job = job,
+                        application = JobApplication(
+                            id = application["id"] as? String ?: "",
+                            jobId = application["job_id"] as? String ?: "",
+                            workerId = application["worker_id"] as? String ?: "",
+                            status = application["status"] as? String ?: "pending",
+                            message = application["message"] as? String,
+                            appliedAt = application["applied_at"] as? String,
+                            acceptedAt = application["accepted_at"] as? String,
+                            startedAt = application["started_at"] as? String,
+                            completedAt = application["completed_at"] as? String,
+                            workerRating = application["worker_rating"] as? Int,
+                            businessRating = application["business_rating"] as? Int,
+                            workerReview = application["worker_review"] as? String,
+                            businessReview = application["business_review"] as? String,
+                            cancellationReason = application["cancellation_reason"] as? String,
+                            createdAt = application["created_at"] as? String,
+                            updatedAt = application["updated_at"] as? String,
+                            job = null
+                        ),
+                        workerId = userId
+                    )
+                } else {
+                    com.example.dwhubfix.domain.model.JobWithDetails.fromJob(job)
+                }
+
+                Result.success(jobWithDetails)
             } catch (e: Exception) {
                 Result.failure(e)
             }

@@ -258,7 +258,14 @@ object SupabaseRepository {
             val token = SessionManager.getAccessToken(context) ?: throw Exception("Not authenticated")
 
             // Convert Map to JsonObject for proper serialization
-            val jsonObject = mapToJsonObject(jobData)
+            val jsonObject = JsonObject(jobData.mapValues { (_, value) ->
+                when (value) {
+                    is String -> JsonPrimitive(value)
+                    is Number -> JsonPrimitive(value)
+                    is Boolean -> JsonPrimitive(value)
+                    else -> JsonPrimitive(value.toString())
+                }
+            })
 
             val response = client.from("jobs").insert(jsonObject) {
                 select()
@@ -290,15 +297,15 @@ object SupabaseRepository {
             val token = SessionManager.getAccessToken(context) ?: throw Exception("Not authenticated")
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
 
-            val applicationData = mapOf(
-                "job_id" to jobId,
-                "worker_id" to userId,
-                "status" to "accepted"
+            val applicationData = JsonObject(
+                mapOf(
+                    "job_id" to JsonPrimitive(jobId),
+                    "worker_id" to JsonPrimitive(userId),
+                    "status" to JsonPrimitive("accepted")
+                )
             )
 
-            client.from("job_applications").insert(
-                mapToJsonObject(applicationData)
-            )
+            client.from("job_applications").insert(applicationData)
 
             Result.success(Unit)
         } catch (e: Exception) {
@@ -331,14 +338,14 @@ object SupabaseRepository {
             val jobResult = getJobById(context, jobId)
             if (jobResult.isFailure) throw Exception("Job not found")
 
-            val applicationData = mapOf(
-                "job_id" to jobId,
-                "status" to "pending"
+            val applicationData = JsonObject(
+                mapOf(
+                    "job_id" to JsonPrimitive(jobId),
+                    "status" to JsonPrimitive("pending")
+                )
             )
 
-            val response = client.from("job_applications").insert(
-                mapToJsonObject(applicationData)
-            ) {
+            val response = client.from("job_applications").insert(applicationData) {
                 select()
             }.decodeSingle<Map<String, Any?>>()
 
@@ -746,23 +753,19 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mutableMapOf<String, Any?>()
 
-            fullAddress?.let { profileData["full_address"] = it }
-            province?.let { profileData["province"] = it }
-            city?.let { profileData["city"] = it }
-            district?.let { profileData["district"] = it }
-            postalCode?.let { profileData["postal_code"] = it }
-            latitude?.let { profileData["latitude"] = it }
-            longitude?.let { profileData["longitude"] = it }
-            address?.let { profileData["address"] = it }
-            photoUrl?.let { profileData["address_photo_url"] = it }
-            documentUrl?.let { profileData["address_document_url"] = it }
-            currentStep?.let { profileData["current_step"] = it }
-
-            client.from("worker_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("worker_profiles").update {
+                fullAddress?.let { set("full_address", it) }
+                province?.let { set("province", it) }
+                city?.let { set("city", it) }
+                district?.let { set("district", it) }
+                postalCode?.let { set("postal_code", it) }
+                latitude?.let { set("latitude", it) }
+                longitude?.let { set("longitude", it) }
+                address?.let { set("address", it) }
+                photoUrl?.let { set("address_photo_url", it) }
+                documentUrl?.let { set("address_document_url", it) }
+                currentStep?.let { set("current_step", it) }
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -781,10 +784,8 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mapOf(documentType to documentUrl)
-            client.from("worker_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("worker_profiles").update {
+                set(documentType, documentUrl)
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -806,17 +807,13 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mutableMapOf<String, Any?>(
-                "experience_years" to experienceYears,
-                "work_history" to workHistory
-            )
-            documentUrl?.let { profileData["experience_document_url"] = it }
-            currentStep?.let { profileData["current_step"] = it }
-            experienceLevel?.let { profileData["experience_level"] = it }
 
-            client.from("worker_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("worker_profiles").update {
+                set("experience_years", experienceYears)
+                set("work_history", workHistory)
+                documentUrl?.let { set("experience_document_url", it) }
+                currentStep?.let { set("current_step", it) }
+                experienceLevel?.let { set("experience_level", it) }
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -836,13 +833,10 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mutableMapOf<String, Any?>(
-                "skills" to skills
-            )
-            currentStep?.let { profileData["current_step"] = it }
-            client.from("worker_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+
+            client.from("worker_profiles").update {
+                set("skills", skills)
+                currentStep?.let { set("current_step", it) }
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -860,10 +854,8 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mapOf("portfolio_urls" to portfolioUrls)
-            client.from("worker_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("worker_profiles").update {
+                set("portfolio_urls", portfolioUrls)
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -904,18 +896,14 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mutableMapOf<String, Any?>(
-                "business_name" to businessName
-            )
-            category?.let { profileData["category"] = it }
-            logoUrl?.let { profileData["logo_url"] = it }
-            currentStep?.let { profileData["current_step"] = it }
-            businessType?.let { profileData["business_type"] = it }
-            contactPerson?.let { profileData["contact_person"] = it }
 
-            client.from("business_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("business_profiles").update {
+                set("business_name", businessName)
+                category?.let { set("category", it) }
+                logoUrl?.let { set("logo_url", it) }
+                currentStep?.let { set("current_step", it) }
+                businessType?.let { set("business_type", it) }
+                contactPerson?.let { set("contact_person", it) }
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -939,18 +927,18 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mutableMapOf<String, Any?>()
 
-            documentType?.let { if (documentUrl != null) profileData[documentType] = documentUrl }
-            documentsList?.let { profileData["documents"] = it }
-            nibUrl?.let { profileData["nib_url"] = it }
-            locationFrontUrl?.let { profileData["location_front_url"] = it }
-            locationInsideUrl?.let { profileData["location_inside_url"] = it }
-            currentStep?.let { profileData["current_step"] = it }
-
-            client.from("business_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("business_profiles").update {
+                documentType?.let {
+                    if (documentUrl != null) {
+                        set(it, documentUrl)
+                    }
+                }
+                documentsList?.let { set("documents", it) }
+                nibUrl?.let { set("nib_url", it) }
+                locationFrontUrl?.let { set("location_front_url", it) }
+                locationInsideUrl?.let { set("location_inside_url", it) }
+                currentStep?.let { set("current_step", it) }
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -976,21 +964,17 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mutableMapOf<String, Any?>(
-                "address" to address
-            )
-            latitude?.let { profileData["latitude"] = it }
-            longitude?.let { profileData["longitude"] = it }
-            photoUrl?.let { profileData["location_photo_url"] = it }
-            currentStep?.let { profileData["current_step"] = it }
-            province?.let { profileData["province"] = it }
-            city?.let { profileData["city"] = it }
-            district?.let { profileData["district"] = it }
-            postalCode?.let { profileData["postal_code"] = it }
 
-            client.from("business_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("business_profiles").update {
+                set("address", address)
+                latitude?.let { set("latitude", it) }
+                longitude?.let { set("longitude", it) }
+                photoUrl?.let { set("location_photo_url", it) }
+                currentStep?.let { set("current_step", it) }
+                province?.let { set("province", it) }
+                city?.let { set("city", it) }
+                district?.let { set("district", it) }
+                postalCode?.let { set("postal_code", it) }
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -1014,19 +998,15 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mutableMapOf<String, Any?>()
 
-            openTime?.let { profileData["open_time"] = it }
-            closeTime?.let { profileData["close_time"] = it }
-            description?.let { profileData["description"] = it }
-            facilities?.let { profileData["facilities"] = it }
-            currentStep?.let { profileData["current_step"] = it }
-            operatingHours?.let { profileData["operating_hours"] = it }
-            website?.let { profileData["website"] = it }
-
-            client.from("business_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("business_profiles").update {
+                openTime?.let { set("open_time", it) }
+                closeTime?.let { set("close_time", it) }
+                description?.let { set("description", it) }
+                facilities?.let { set("facilities", it) }
+                currentStep?.let { set("current_step", it) }
+                operatingHours?.let { set("operating_hours", it) }
+                website?.let { set("website", it) }
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -1051,20 +1031,16 @@ object SupabaseRepository {
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mutableMapOf<String, Any?>()
 
-            preferredWorkerCategories?.let { profileData["preferred_worker_categories"] = it }
-            minimumRating?.let { profileData["minimum_rating"] = it }
-            autoAcceptEnabled?.let { profileData["auto_accept_enabled"] = it }
-            selectedSkills?.let { profileData["selected_skills"] = it }
-            experienceLevel?.let { profileData["experience_level"] = it }
-            languages?.let { profileData["languages"] = it }
-            priorityHiring?.let { profileData["priority_hiring"] = it }
-            currentStep?.let { profileData["current_step"] = it }
-
-            client.from("business_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("business_profiles").update {
+                preferredWorkerCategories?.let { set("preferred_worker_categories", it) }
+                minimumRating?.let { set("minimum_rating", it) }
+                autoAcceptEnabled?.let { set("auto_accept_enabled", it) }
+                selectedSkills?.let { set("selected_skills", it) }
+                experienceLevel?.let { set("experience_level", it) }
+                languages?.let { set("languages", it) }
+                priorityHiring?.let { set("priority_hiring", it) }
+                currentStep?.let { set("current_step", it) }
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -1079,10 +1055,9 @@ object SupabaseRepository {
     suspend fun completeBusinessRegistration(context: Context): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val userId = SessionManager.getUserId(context) ?: throw Exception("No user ID")
-            val profileData = mapOf("registration_complete" to true, "status" to "active")
-            client.from("business_profiles").update(
-                mapToJsonObject(profileData)
-            ) {
+            client.from("business_profiles").update {
+                set("registration_complete", true)
+                set("status", "active")
                 filter { eq("user_id", userId) }
             }
             Result.success(Unit)
@@ -1125,26 +1100,22 @@ object SupabaseRepository {
             val role = SessionManager.getSelectedRole(context) ?: "worker"
 
             val prefsData = mapOf(
-                "notification_preferences" to mapOf(
-                    "push_enabled" to pushEnabled,
-                    "job_alerts_enabled" to jobAlertsEnabled,
-                    "application_updates_enabled" to applicationUpdatesEnabled,
-                    "promotional_enabled" to promotionalEnabled,
-                    "alert_distance" to alertDistance,
-                    "alert_categories" to alertCategories
-                )
+                "push_enabled" to pushEnabled,
+                "job_alerts_enabled" to jobAlertsEnabled,
+                "application_updates_enabled" to applicationUpdatesEnabled,
+                "promotional_enabled" to promotionalEnabled,
+                "alert_distance" to alertDistance,
+                "alert_categories" to alertCategories
             )
 
             if (role == "worker") {
-                client.from("worker_profiles").update(
-                    mapToJsonObject(prefsData)
-                ) {
+                client.from("worker_profiles").update {
+                    set("notification_preferences", prefsData)
                     filter { eq("user_id", userId) }
                 }
             } else {
-                client.from("business_profiles").update(
-                    mapToJsonObject(prefsData)
-                ) {
+                client.from("business_profiles").update {
+                    set("notification_preferences", prefsData)
                     filter { eq("user_id", userId) }
                 }
             }

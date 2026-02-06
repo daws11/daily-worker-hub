@@ -81,7 +81,7 @@ export function HowItWorks() {
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/20 to-background" />
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container max-w-[1440px] mx-auto px-4 relative z-10">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -229,12 +229,12 @@ export function HowItWorks() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-20"
         >
-          <div className="relative bg-gradient-to-br from-card via-card to-primary/5 backdrop-blur-md rounded-3xl p-12 border border-border/50 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-card via-card to-primary/5 backdrop-blur-md rounded-3xl p-6 md:p-12 border border-border/40 overflow-hidden">
             {/* Animated gradient overlay */}
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-community/5"
               animate={{
-                opacity: [0.3, 0.6, 0.3],
+                opacity: [0.2, 0.4, 0.2],
               }}
               transition={{
                 duration: 4,

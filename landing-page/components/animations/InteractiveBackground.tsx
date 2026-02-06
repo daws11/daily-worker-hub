@@ -2,17 +2,22 @@
  * InteractiveBackground Component
  * Animated gradient background with subtle movement
  * Creates a modern, living design
+ * Accessibility: Respects prefers-reduced-motion
  */
 
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 export function InteractiveBackground() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    // Skip mouse tracking if user prefers reduced motion
+    if (prefersReducedMotion) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
@@ -22,7 +27,17 @@ export function InteractiveBackground() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [prefersReducedMotion]);
+
+  // Don't render animation if reduced motion is preferred
+  if (prefersReducedMotion) {
+    return (
+      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        {/* Static gradient background for reduced motion */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-community/5" />
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">

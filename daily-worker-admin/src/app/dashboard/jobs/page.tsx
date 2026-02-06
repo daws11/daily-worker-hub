@@ -30,17 +30,20 @@ interface Job {
   location: string
   start_time: string
   end_time: string
+  shift_date: string | null
   status: string
   is_urgent: boolean
   is_compliant: boolean
   created_at: string
-  business_profiles: {
-    business_name: string
+  profiles: {
+    business_profiles: {
+      business_name: string
+    } | null
   } | null
-  job_assignments: Array<{
+  job_applications: Array<{
     id: string
     status: string
-    worker_profiles: {
+    profiles: {
       full_name: string
       avatar_url: string | null
     } | null
@@ -59,23 +62,30 @@ export default async function JobsPage({
   const categoryFilter = searchParams.category || 'all'
 
   // Fetch jobs with filters
+  // Note: jobs.business_id references profiles.id, need to join through profiles to get business_profiles
+  // Note: job_applications.worker_id references profiles.id
+  // Note: full_name, avatar_url are in profiles table, not worker_profiles
   let query = supabase
     .from('jobs')
     .select(`
       *,
-      business_profiles (
-        business_name
+      profiles!jobs_business_id_fkey (
+        id,
+        business_profiles (
+          business_name
+        )
       ),
-      job_assignments (
+      job_applications (
         id,
         status,
-        worker_profiles (
+        profiles!job_applications_worker_id_fkey (
+          id,
           full_name,
           avatar_url
         )
       )
     `)
-    .order('created_at', { ascending: false })
+    .order('shift_date', { ascending: false, nullsFirst: false })
 
   if (statusFilter !== 'all') {
     query = query.eq('status', statusFilter)
@@ -275,8 +285,8 @@ export default async function JobsPage({
                   </tr>
                 ) : (
                   jobs?.map((job: Job) => {
-                    const assignment = job.job_assignments?.[0]
-                    const worker = assignment?.worker_profiles
+                    const assignment = job.job_applications?.[0]
+                    const worker = assignment?.profiles
 
                     return (
                       <tr key={job.id} className="hover:bg-gray-50">
@@ -305,7 +315,7 @@ export default async function JobsPage({
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-900 flex items-center">
                             <Building2 className="w-3 h-3 mr-1 text-gray-400" />
-                            {job.business_profiles?.business_name || 'Unknown'}
+                            {job.profiles?.business_profiles?.business_name || 'Unknown'}
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -321,11 +331,11 @@ export default async function JobsPage({
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-900 flex items-center">
                             <Calendar className="w-3 h-3 mr-1 text-gray-400" />
-                            {format(new Date(job.start_time), 'MMM dd')}
+                            {job.shift_date ? format(new Date(job.shift_date), 'MMM dd') : '-'}
                           </div>
                           <div className="text-xs text-gray-500 flex items-center mt-1">
                             <Clock className="w-3 h-3 mr-1" />
-                            {format(new Date(job.start_time), 'HH:mm')} - {format(new Date(job.end_time), 'HH:mm')}
+                            {job.start_time?.substring(0, 5) || '-'} - {job.end_time?.substring(0, 5) || '-'}
                           </div>
                         </td>
                         <td className="px-6 py-4">

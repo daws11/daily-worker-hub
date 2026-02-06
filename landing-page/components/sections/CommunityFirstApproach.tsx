@@ -5,8 +5,10 @@
 
 'use client';
 
-import { motion } from 'framer-motion';
-import { Shield, BookOpen, Network, Sparkles, ArrowRight, Users } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Shield, BookOpen, Network, Sparkles, ArrowRight, Users, Zap } from 'lucide-react';
+import { BackgroundBeams } from '@/components/ui/background-beams';
+import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid';
 
 export function CommunityFirstApproach() {
   const pillars = [
@@ -104,7 +106,7 @@ export function CommunityFirstApproach() {
           ))}
         </div>
 
-        {/* Interactive Network Diagram */}
+        {/* Interactive Network Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -112,156 +114,322 @@ export function CommunityFirstApproach() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <div className="relative bg-gradient-to-br from-card via-card to-primary/5 backdrop-blur-md rounded-3xl p-12 border border-border/50 overflow-hidden">
-            {/* Animated gradient overlay */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-community/5"
-              animate={{
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-            />
+            {/* BackgroundBeams Effect */}
+            <BackgroundBeams className="opacity-30" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-6 mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                  <Network className="h-8 w-8 text-primary" />
+              {/* Section Header */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="flex items-center gap-6 mb-12"
+              >
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shadow-lg">
+                  <Network className="h-10 w-10 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-3xl font-bold mb-2">Interactive Community Network</h3>
+                  <motion.h3
+                    className="text-4xl font-bold mb-2 bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent"
+                  >
+                    Interactive Community Network
+                  </motion.h3>
                   <p className="text-lg text-muted-foreground">
-                    Hover over nodes untuk lihat koneksi aktif
+                    Hover over nodes untuk lihat koneksi aktif & statistik real-time
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Network visualization */}
-              <div className="relative h-[400px] w-full">
-                {/* Center hub */}
+              {/* Bento Grid for Network Stats */}
+              <BentoGrid className="mb-12 max-w-5xl mx-auto">
+                <BentoGridItem
+                  header={
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+                      >
+                        5K+
+                      </motion.div>
+                      <div className="text-sm text-muted-foreground mt-2">Active Workers</div>
+                    </div>
+                  }
+                  icon={<Users className="h-6 w-6 text-primary" />}
+                  title="Talent Pool"
+                  description="Skilled professionals ready to collaborate"
+                />
+                <BentoGridItem
+                  header={
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+                        className="text-5xl font-bold bg-gradient-to-r from-accent to-community bg-clip-text text-transparent"
+                      >
+                        2K+
+                      </motion.div>
+                      <div className="text-sm text-muted-foreground mt-2">Business Partners</div>
+                    </div>
+                  }
+                  icon={<BookOpen className="h-6 w-6 text-accent" />}
+                  title="Business Network"
+                  description="Growing businesses seeking talent"
+                />
+                <BentoGridItem
+                  header={
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
+                        className="text-5xl font-bold bg-gradient-to-r from-community to-primary bg-clip-text text-transparent"
+                      >
+                        15K+
+                      </motion.div>
+                      <div className="text-sm text-muted-foreground mt-2">Connections Made</div>
+                    </div>
+                  }
+                  icon={<Zap className="h-6 w-6 text-community" />}
+                  title="Active Connections"
+                  description="Successful matches & collaborations"
+                />
+              </BentoGrid>
+
+              {/* Interactive Network Visualization */}
+              <div className="relative h-[500px] w-full bg-gradient-to-br from-primary/[0.02] to-accent/[0.02] rounded-2xl overflow-hidden">
+                {/* Animated grid background */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute inset-0" style={{
+                    backgroundImage: `
+                      linear-gradient(rgba(19,236,91,0.1) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(19,236,91,0.1) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '40px 40px'
+                  }} />
+                </div>
+
+                {/* Center hub with pulse effect */}
                 <motion.div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center z-10 shadow-2xl"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
                   animate={{
-                    scale: [1, 1.1, 1],
-                    boxShadow: ['0 0 0 0 rgba(19,236,91,0.5)', '0 0 0 20px rgba(19,236,91,0)', '0 0 0 0 rgba(19,236,91,0.5)'],
+                    scale: [1, 1.05, 1],
                   }}
                   transition={{
-                    duration: 2,
+                    duration: 3,
                     repeat: Infinity,
                     ease: 'easeInOut',
                   }}
                 >
-                  <Users className="h-10 w-10 text-white" />
+                  <motion.div
+                    className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-2xl relative"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-accent"
+                      animate={{
+                        scale: [1, 1.5, 2],
+                        opacity: [0.5, 0.2, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: 'easeOut',
+                      }}
+                    />
+                    <Users className="h-12 w-12 text-white relative z-10" />
+                  </motion.div>
+
+                  {/* Tooltip on hover */}
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-4 bg-black/80 backdrop-blur-md rounded-lg px-4 py-2 text-white text-sm whitespace-nowrap"
+                    >
+                      DailyWorkerHub
+                      <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black/80 rotate-45" />
+                    </motion.div>
+                  </AnimatePresence>
                 </motion.div>
 
-                {/* Worker nodes */}
+                {/* Worker nodes with enhanced interactivity */}
                 {[
-                  { top: '15%', left: '20%', delay: 0 },
-                  { top: '15%', right: '20%', delay: 0.2 },
-                  { top: '45%', left: '10%', delay: 0.4 },
-                  { top: '45%', right: '10%', delay: 0.6 },
-                  { top: '75%', left: '25%', delay: 0.8 },
-                  { top: '75%', right: '25%', delay: 1 },
+                  { top: '15%', left: '20%', name: 'Designer', connections: 12, delay: 0 },
+                  { top: '15%', right: '20%', name: 'Developer', connections: 18, delay: 0.15 },
+                  { top: '45%', left: '8%', name: 'Writer', connections: 8, delay: 0.3 },
+                  { top: '45%', right: '8%', name: 'Marketer', connections: 15, delay: 0.45 },
+                  { top: '75%', left: '22%', name: 'VA', connections: 20, delay: 0.6 },
+                  { top: '75%', right: '22%', name: ' Analyst', connections: 10, delay: 0.75 },
                 ].map((node, index) => (
                   <motion.div
                     key={index}
-                    className={`absolute w-12 h-12 rounded-full bg-gradient-to-br from-primary/80 to-accent/80 flex items-center justify-center z-5`}
+                    className="absolute group cursor-pointer"
                     style={{ top: node.top, [node.left ? 'left' : 'right']: node.left || node.right }}
                     initial={{ scale: 0, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: node.delay + 0.5 }}
-                    whileHover={{ scale: 1.2, y: -5 }}
+                    transition={{ duration: 0.5, delay: node.delay + 0.3 }}
                   >
-                    <Users className="h-6 w-6 text-white" />
+                    {/* Connection line to center */}
+                    <motion.div
+                      className="absolute top-1/2 left-1/2 h-0.5 bg-gradient-to-r from-primary to-accent origin-center"
+                      style={{
+                        width: '100px',
+                        transform: `translateX(${node.left ? '-50%' : '50%'}) rotate(${node.left ? -45 : 45}deg)`,
+                        opacity: 0.2,
+                      }}
+                    />
+
+                    {/* Node */}
+                    <motion.div
+                      className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/90 to-accent/90 flex items-center justify-center shadow-lg relative z-10"
+                      whileHover={{ scale: 1.2, y: -8 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Users className="h-7 w-7 text-white" />
+                      <motion.div
+                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full"
+                        initial={{ scaleX: 0 }}
+                        whileHover={{ scaleX: 1 }}
+                      />
+                    </motion.div>
+
+                    {/* Tooltip */}
+                    <AnimatePresence>
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                        animate={{ opacity: 0, y: 10, scale: 0.9 }}
+                        whileHover={{ opacity: 1, y: 0, scale: 1 }}
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-black/90 backdrop-blur-md rounded-lg px-3 py-2 text-white text-xs whitespace-nowrap pointer-events-none"
+                      >
+                        <div className="font-semibold">{node.name}</div>
+                        <div className="text-gray-300">{node.connections} connections</div>
+                        <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black/90 rotate-45" />
+                      </motion.div>
+                    </AnimatePresence>
                   </motion.div>
                 ))}
 
                 {/* Business nodes */}
                 {[
-                  { top: '20%', left: '40%', delay: 0.1 },
-                  { top: '20%', right: '40%', delay: 0.3 },
-                  { top: '50%', left: '30%', delay: 0.5 },
-                  { top: '50%', right: '30%', delay: 0.7 },
-                  { top: '80%', left: '45%', delay: 0.9 },
-                  { top: '80%', right: '45%', delay: 1.1 },
+                  { top: '22%', left: '38%', name: 'Startup A', jobs: 5, delay: 0.1 },
+                  { top: '22%', right: '38%', name: 'Agency B', jobs: 12, delay: 0.25 },
+                  { top: '52%', left: '28%', name: 'Company C', jobs: 8, delay: 0.4 },
+                  { top: '52%', right: '28%', name: 'Brand D', jobs: 15, delay: 0.55 },
+                  { top: '82%', left: '42%', name: 'Enterprise E', jobs: 20, delay: 0.7 },
+                  { top: '82%', right: '42%', name: 'Firm F', jobs: 6, delay: 0.85 },
                 ].map((node, index) => (
                   <motion.div
                     key={`business-${index}`}
-                    className="absolute w-12 h-12 rounded-full bg-gradient-to-br from-community/80 to-primary/80 flex items-center justify-center z-5"
+                    className="absolute group cursor-pointer"
                     style={{ top: node.top, [node.left ? 'left' : 'right']: node.left || node.right }}
                     initial={{ scale: 0, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: node.delay + 0.5 }}
-                    whileHover={{ scale: 1.2, y: -5 }}
+                    transition={{ duration: 0.5, delay: node.delay + 0.3 }}
                   >
-                    <BookOpen className="h-6 w-6 text-white" />
+                    {/* Connection line */}
+                    <motion.div
+                      className="absolute top-1/2 left-1/2 h-0.5 bg-gradient-to-r from-community to-primary origin-center"
+                      style={{
+                        width: '80px',
+                        transform: `translateX(${node.left ? '-50%' : '50%'}) rotate(${node.left ? -30 : 30}deg)`,
+                        opacity: 0.15,
+                      }}
+                    />
+
+                    {/* Node */}
+                    <motion.div
+                      className="w-12 h-12 rounded-full bg-gradient-to-br from-community/90 to-primary/90 flex items-center justify-center shadow-lg relative z-10"
+                      whileHover={{ scale: 1.2, y: -8 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <BookOpen className="h-6 w-6 text-white" />
+                    </motion.div>
+
+                    {/* Tooltip */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                      whileHover={{ opacity: 1, y: 0, scale: 1 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-black/90 backdrop-blur-md rounded-lg px-3 py-2 text-white text-xs whitespace-nowrap pointer-events-none"
+                    >
+                      <div className="font-semibold">{node.name}</div>
+                      <div className="text-gray-300">{node.jobs} active jobs</div>
+                      <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black/90 rotate-45" />
+                    </motion.div>
                   </motion.div>
                 ))}
 
-                {/* Connection lines (simulated with SVG) */}
-                <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 800 400">
-                  <defs>
-                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#13EC5B" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.3" />
-                    </linearGradient>
-                  </defs>
-                  {/* Lines from center to workers */}
-                  {[{ x1: 400, y1: 200, x2: 160, y2: 60 }, { x1: 400, y1: 200, x2: 640, y2: 60 }, { x1: 400, y1: 200, x2: 80, y2: 180 }, { x1: 400, y1: 200, x2: 720, y2: 180 }].map((line, i) => (
-                    <motion.line
-                      key={`worker-line-${i}`}
-                      x1={line.x1}
-                      y1={line.y1}
-                      x2={line.x2}
-                      y2={line.y2}
-                      stroke="url(#lineGradient)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      whileInView={{ pathLength: 1, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, delay: 0.5 + i * 0.1 }}
-                    />
-                  ))}
-                  {/* Lines from center to businesses */}
-                  {[{ x1: 400, y1: 200, x2: 320, y2: 80 }, { x1: 400, y1: 200, x2: 480, y2: 80 }, { x1: 400, y1: 200, x2: 240, y2: 200 }, { x1: 400, y1: 200, x2: 560, y2: 200 }].map((line, i) => (
-                    <motion.line
-                      key={`business-line-${i}`}
-                      x1={line.x1}
-                      y1={line.y1}
-                      x2={line.x2}
-                      y2={line.y2}
-                      stroke="url(#lineGradient)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      whileInView={{ pathLength: 1, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, delay: 1 + i * 0.1 }}
-                    />
-                  ))}
-                </svg>
+                {/* Animated particles */}
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-2 h-2 rounded-full bg-primary/40"
+                    initial={{
+                      x: '50%',
+                      y: '50%',
+                      opacity: 0,
+                    }}
+                    animate={{
+                      x: `${30 + Math.random() * 40}%`,
+                      y: `${20 + Math.random() * 60}%`,
+                      opacity: [0, 1, 0],
+                    }}
+                    transition={{
+                      duration: 3 + Math.random() * 2,
+                      repeat: Infinity,
+                      delay: i * 0.5,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                ))}
               </div>
 
-              {/* Legend */}
-              <div className="flex items-center gap-6 mt-8">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-gradient-to-br from-primary to-accent" />
-                  <span className="text-sm font-medium">Workers</span>
+              {/* Enhanced Legend */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 1.5 }}
+                className="flex items-center justify-center gap-8 mt-10"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-primary to-accent shadow-lg" />
+                  <span className="text-sm font-medium">Talented Workers</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-gradient-to-br from-community to-primary" />
-                  <span className="text-sm font-medium">Businesses</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-community to-primary shadow-lg" />
+                  <span className="text-sm font-medium">Growing Businesses</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-1 bg-gradient-to-r from-primary to-community" />
-                  <span className="text-sm font-medium">Connections</span>
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    className="h-0.5 w-12 bg-gradient-to-r from-primary via-accent to-community"
+                    animate={{ scaleX: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  <span className="text-sm font-medium">Active Connections</span>
                 </div>
-              </div>
+              </motion.div>
+
+              {/* Call to Action */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 1.7 }}
+                className="text-center mt-10"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-primary to-accent text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-shadow flex items-center gap-2 mx-auto"
+                >
+                  Join the Network
+                  <ArrowRight className="h-5 w-5" />
+                </motion.button>
+              </motion.div>
             </div>
           </div>
         </motion.div>

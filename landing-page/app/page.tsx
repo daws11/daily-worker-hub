@@ -16,7 +16,7 @@ import { InteractiveBackground, RealTimeActivityFeed } from '@/components/animat
 
 export default function Home() {
   return (
-    <main className="min-h-screen relative">
+    <main id="main-content" className="min-h-screen relative" tabIndex={-1}>
       <InteractiveBackground />
       <Navbar />
       <RealTimeActivityFeed />

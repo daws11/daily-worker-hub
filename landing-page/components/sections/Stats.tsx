@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { Users, Building, Star, CheckCircle, TrendingUp, Award } from "lucide-react";
 import { STATS } from "@/lib/constants";
 
@@ -83,9 +84,11 @@ export function Stats() {
           
           <h2 className="text-4xl md:text-6xl font-bold mb-4">
             Numbers That{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">
-              Matter
-            </span>
+            <TextGenerateEffect
+              words="Matter"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600"
+              duration={0.3}
+            />
           </h2>
 
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">

@@ -194,20 +194,21 @@ export async function getGeographicData(): Promise<GeographicData[]> {
   const data: GeographicData[] = []
 
   for (const area of areas) {
-    // Get jobs with this location area (assuming location is stored in businesses table)
-    const { data: businesses } = await supabase
-      .from('business_profiles')
-      .select('id')
-      .ilike('address', `%${area}%`)
+    // Get profiles with business role and matching address in their business_profiles
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, business_profiles!inner (address)')
+      .eq('role', 'business')
+      .filter('business_profiles.address', 'ilike', `%${area}%`)
 
-    const businessIds = businesses?.map((b) => b.id) || []
+    const profileIds = profiles?.map((p) => p.id) || []
 
     let jobCount = 0
-    if (businessIds.length > 0) {
+    if (profileIds.length > 0) {
       const { count } = await supabase
         .from('jobs')
         .select('*', { count: 'exact', head: true })
-        .in('business_id', businessIds)
+        .in('business_id', profileIds)
       jobCount = count || 0
     }
 

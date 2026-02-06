@@ -34,42 +34,37 @@ interface Job {
   is_compliant: boolean
   required_skills: string[]
   created_at: string
-  business_profiles: {
-    id: string
-    business_name: string
-    address: string
-    phone: string
+  profiles: {
+    business_profiles: {
+      id: string
+      business_name: string
+      address: string
+      phone: string
+    } | null
   } | null
-  job_assignments: Array<{
+  job_applications: Array<{
     id: string
     status: string
     started_at: string | null
     completed_at: string | null
     hours_worked: number | null
     wage_paid: number | null
-    worker_profiles: {
-      id: string
-      full_name: string
-      avatar_url: string | null
-      phone: string
-      skills: string[]
-      rating: number
-      reliability_score: number
-    } | null
-  }>
-  job_applications: Array<{
-    id: string
-    status: string
     match_score: number | null
     compliance_status: boolean | null
     applied_at: string
-    worker_profiles: {
+    worker_rating: number | null
+    business_rating: number | null
+    profiles: {
       id: string
       full_name: string
       avatar_url: string | null
-      skills: string[]
-      rating: number
-      reliability_score: number
+      skills: string[] | null
+      created_at: string
+    } | null
+    worker_profiles: {
+      job_category: string | null
+      job_role: string | null
+      years_experience: string | null
     } | null
   }>
 }
@@ -82,46 +77,44 @@ export default async function JobDetailPage({
   const supabase = await createClient()
 
   // Fetch job with related data
+  // Note: jobs.business_id references profiles.id, need to join through profiles
+  // Note: job_applications.worker_id references profiles.id
+  // Note: full_name, avatar_url, phone, skills are in profiles table, not worker_profiles
   const { data: job, error } = await supabase
     .from('jobs')
     .select(`
       *,
-      business_profiles (
-        id,
-        business_name,
-        address,
-        phone
+      profiles!jobs_business_id_fkey (
+        business_profiles (
+          id,
+          business_name,
+          address,
+          phone
+        )
       ),
-      job_assignments (
+      job_applications (
         id,
         status,
         started_at,
         completed_at,
         hours_worked,
         wage_paid,
-        worker_profiles (
-          id,
-          full_name,
-          avatar_url,
-          phone,
-          skills,
-          rating,
-          reliability_score
-        )
-      ),
-      job_applications (
-        id,
-        status,
         match_score,
         compliance_status,
         applied_at,
-        worker_profiles (
+        worker_rating,
+        business_rating,
+        profiles!job_applications_worker_id_fkey (
           id,
           full_name,
           avatar_url,
           skills,
-          rating,
-          reliability_score
+          created_at
+        ),
+        worker_profiles (
+          job_category,
+          job_role,
+          years_experience
         )
       )
     `)
@@ -148,15 +141,16 @@ export default async function JobDetailPage({
     cancelled: 'bg-gray-100 text-gray-800',
   }
 
-  const assignment = job.job_assignments?.[0]
-  const worker = assignment?.worker_profiles
+  const assignment = job.job_applications?.find((a: Job['job_applications'][number]) => a.status === 'accepted' || a.status === 'ongoing' || a.status === 'completed')
+  const worker = assignment?.profiles
+  const workerDetails = assignment?.worker_profiles
 
   // Calculate analytics
   const totalApplications = job.job_applications?.length || 0
-  const pendingApplications = job.job_applications?.filter(a => a.status === 'pending').length || 0
-  const avgMatchScore = job.job_applications?.reduce((sum, a) => sum + (a.match_score || 0), 0) / totalApplications || 0
-  const timeToFill = assignment 
-    ? Math.floor((new Date(assignment.started_at || job.start_time).getTime() - new Date(job.created_at).getTime()) / (1000 * 60 * 60))
+  const pendingApplications = job.job_applications?.filter((a: Job['job_applications'][number]) => a.status === 'pending').length || 0
+  const avgMatchScore = job.job_applications?.reduce((sum: number, a: Job['job_applications'][number]) => sum + (a.match_score || 0), 0) / totalApplications || 0
+  const timeToFill = assignment?.started_at
+    ? Math.floor((new Date(assignment.started_at).getTime() - new Date(job.created_at).getTime()) / (1000 * 60 * 60))
     : null
 
   return (
@@ -285,9 +279,9 @@ export default async function JobDetailPage({
             <div className="flex items-start">
               <Calendar className="w-5 h-5 text-gray-400 mt-0.5 mr-3" />
               <div>
-                <div className="text-sm font-medium text-gray-900">Start Time</div>
+                <div className="text-sm font-medium text-gray-900">Shift Date</div>
                 <div className="text-sm text-gray-600">
-                  {format(new Date(job.start_time), 'PPp')}
+                  {job.shift_date ? format(new Date(job.shift_date), 'PPP') : '-'}
                 </div>
               </div>
             </div>
@@ -295,9 +289,9 @@ export default async function JobDetailPage({
             <div className="flex items-start">
               <Clock className="w-5 h-5 text-gray-400 mt-0.5 mr-3" />
               <div>
-                <div className="text-sm font-medium text-gray-900">End Time</div>
+                <div className="text-sm font-medium text-gray-900">Working Hours</div>
                 <div className="text-sm text-gray-600">
-                  {format(new Date(job.end_time), 'PPp')}
+                  {job.start_time?.substring(0, 5) || '-'} - {job.end_time?.substring(0, 5) || '-'}
                 </div>
               </div>
             </div>
@@ -313,7 +307,7 @@ export default async function JobDetailPage({
               <div>
                 <div className="text-sm font-medium text-gray-900 mb-2">Required Skills</div>
                 <div className="flex flex-wrap gap-2">
-                  {job.required_skills.map((skill, index) => (
+                  {job.required_skills.map((skill: string, index: number) => (
                     <Badge key={index} variant="outline">
                       {skill}
                     </Badge>
@@ -335,26 +329,26 @@ export default async function JobDetailPage({
               <Building2 className="w-5 h-5 text-gray-400 mt-0.5 mr-3" />
               <div>
                 <div className="text-sm font-medium text-gray-900">Business Name</div>
-                <div className="text-sm text-gray-600">{job.business_profiles?.business_name || 'Unknown'}</div>
+                <div className="text-sm text-gray-600">{job.profiles?.business_profiles?.business_name || 'Unknown'}</div>
               </div>
             </div>
 
-            {job.business_profiles?.address && (
+            {job.profiles?.business_profiles?.address && (
               <div className="flex items-start">
                 <MapPin className="w-5 h-5 text-gray-400 mt-0.5 mr-3" />
                 <div>
                   <div className="text-sm font-medium text-gray-900">Address</div>
-                  <div className="text-sm text-gray-600">{job.business_profiles.address}</div>
+                  <div className="text-sm text-gray-600">{job.profiles?.business_profiles.address}</div>
                 </div>
               </div>
             )}
 
-            {job.business_profiles?.phone && (
+            {job.profiles?.business_profiles?.phone && (
               <div className="flex items-start">
                 <User className="w-5 h-5 text-gray-400 mt-0.5 mr-3" />
                 <div>
                   <div className="text-sm font-medium text-gray-900">Phone</div>
-                  <div className="text-sm text-gray-600">{job.business_profiles.phone}</div>
+                  <div className="text-sm text-gray-600">{job.profiles?.business_profiles.phone}</div>
                 </div>
               </div>
             )}
@@ -392,20 +386,22 @@ export default async function JobDetailPage({
               <div className="flex-1">
                 <div className="flex items-center space-x-2">
                   <h3 className="text-lg font-medium text-gray-900">{worker.full_name}</h3>
-                  {worker.rating && (
+                  {assignment.worker_rating && (
                     <Badge variant="outline" className="text-yellow-600 border-yellow-600">
-                      ★ {worker.rating.toFixed(1)}
+                      ★ {assignment.worker_rating}/5
                     </Badge>
                   )}
                 </div>
-                <div className="text-sm text-gray-500 mt-1">
-                  Reliability Score: {worker.reliability_score || 0}%
-                </div>
+                {workerDetails?.job_category && (
+                  <div className="text-sm text-gray-500 mt-1">
+                    {workerDetails.job_category} {workerDetails.job_role ? `- ${workerDetails.job_role}` : ''}
+                  </div>
+                )}
                 {worker.skills && worker.skills.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {worker.skills.map((skill, index) => (
+                    {worker.skills.map((skill: string, index: number) => (
                       <Badge key={index} variant="secondary" className="text-xs">
-                        {skill}
+                        {typeof skill === 'string' ? skill : JSON.stringify(skill)}
                       </Badge>
                     ))}
                   </div>
@@ -441,25 +437,25 @@ export default async function JobDetailPage({
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {job.job_applications.map((application) => (
+              {job.job_applications.map((application: Job['job_applications'][number]) => (
                 <div key={application.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <div className="flex items-center space-x-4">
                     <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                      {application.worker_profiles?.avatar_url ? (
+                      {application.profiles?.avatar_url ? (
                         <img 
-                          src={application.worker_profiles.avatar_url} 
+                          src={application.profiles.avatar_url} 
                           alt="" 
                           className="h-12 w-12 rounded-full object-cover" 
                         />
                       ) : (
                         <span className="text-lg font-bold text-blue-600">
-                          {application.worker_profiles?.full_name.charAt(0) || '?'}
+                          {application.profiles?.full_name.charAt(0) || '?'}
                         </span>
                       )}
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">
-                        {application.worker_profiles?.full_name || 'Unknown'}
+                        {application.profiles?.full_name || 'Unknown'}
                       </div>
                       <div className="text-sm text-gray-500 flex items-center mt-1">
                         <CheckCircle className="w-3 h-3 mr-1" />
@@ -468,9 +464,9 @@ export default async function JobDetailPage({
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
-                    {application.worker_profiles?.rating && (
+                    {application.worker_rating && (
                       <Badge variant="outline" className="text-yellow-600 border-yellow-600">
-                        ★ {application.worker_profiles.rating.toFixed(1)}
+                        ★ {application.worker_rating}/5
                       </Badge>
                     )}
                     <Badge 

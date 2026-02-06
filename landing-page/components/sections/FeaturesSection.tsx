@@ -1,17 +1,20 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid';
+import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 import { Search, ShieldCheck, Wallet, Globe, Star, Sparkles, Zap, GraduationCap, BarChart3 } from 'lucide-react';
 import { FEATURES } from '@/lib/constants';
 
-// Simplified features with shorter copy
+// Simplified features with shorter copy - configured for BentoGrid
 const simplifiedFeatures = [
   {
     icon: Zap,
     title: 'Smart Matching',
     description: 'AI finds the perfect worker for your job',
     color: 'from-green-500 to-emerald-500',
-    bgColor: 'bg-green-50'
+    bgColor: 'bg-green-50',
+    className: 'md:col-span-2'
   },
   {
     icon: ShieldCheck,
@@ -23,21 +26,21 @@ const simplifiedFeatures = [
   {
     icon: Wallet,
     title: 'Instant Payment',
-    description: 'Workers get paid immediately after job completion',
+    description: 'Workers get paid immediately',
     color: 'from-purple-500 to-pink-500',
     bgColor: 'bg-purple-50'
   },
   {
     icon: Globe,
     title: 'PKHL Compliant',
-    description: 'Automatically follows Bali labor regulations',
+    description: 'Follows Bali labor regulations',
     color: 'from-orange-500 to-red-500',
     bgColor: 'bg-orange-50'
   },
   {
     icon: Star,
     title: 'Two-Way Ratings',
-    description: 'Transparent feedback system builds trust',
+    description: 'Transparent feedback builds trust',
     color: 'from-yellow-500 to-amber-500',
     bgColor: 'bg-yellow-50'
   },
@@ -47,7 +50,7 @@ const simplifiedFeatures = [
     description: 'Connect, share tips, and grow together',
     color: 'from-indigo-500 to-violet-500',
     bgColor: 'bg-indigo-50',
-    highlight: true
+    className: 'md:col-span-2 md:row-span-2'
   }
 ];
 
@@ -75,12 +78,13 @@ export function FeaturesSection() {
           >
             Why Choose Us
           </motion.span>
-          
+
           <h2 className="text-4xl md:text-6xl font-bold mb-4">
-            Everything You{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">
-              Need
-            </span>
+            <TextGenerateEffect
+              words="Everything You Need"
+              className="text-4xl md:text-6xl font-bold"
+              duration={0.4}
+            />
           </h2>
 
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -88,53 +92,27 @@ export function FeaturesSection() {
           </p>
         </motion.div>
 
-        {/* Features grid - Card-based with short copy */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Features grid - BentoGrid with animated cards */}
+        <BentoGrid className="max-w-7xl mx-auto">
           {simplifiedFeatures.map((feature, index) => (
-            <motion.div
+            <BentoGridItem
               key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ 
-                scale: 1.03,
-                y: -8,
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)'
-              }}
-              className={`relative group ${feature.highlight ? 'md:col-span-2 lg:col-span-2' : ''}`}
-            >
-              <div className={`relative bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full ${feature.bgColor}`}>
-                
-                {/* Feature icon */}
-                <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.color} mb-4 group-hover:scale-110 transition-transform duration-300`}>
+              title={feature.title}
+              description={feature.description}
+              header={
+                <div className={`flex h-full min-h-[6rem] flex-col justify-between rounded-t-xl bg-gradient-to-br ${feature.color} p-4`}>
                   <feature.icon className="h-6 w-6 text-white" />
                 </div>
-
-                {/* Feature content - Short & punchy */}
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
-
-                {/* Feature highlight badge */}
-                {feature.highlight && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, margin: '-50px' }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="absolute top-6 right-6"
-                  >
-                    <Sparkles className="h-6 w-6 text-yellow-500" />
-                  </motion.div>
-                )}
-              </div>
-            </motion.div>
+              }
+              icon={
+                <div className={`inline-flex p-2 rounded-lg bg-gradient-to-br ${feature.color}`}>
+                  <feature.icon className="h-4 w-4 text-white" />
+                </div>
+              }
+              className={feature.className || ''}
+            />
           ))}
-        </div>
+        </BentoGrid>
 
         {/* Simple CTA */}
         <motion.div

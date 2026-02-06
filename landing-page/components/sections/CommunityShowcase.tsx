@@ -7,7 +7,15 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, MessageCircle, BookOpen, TrendingUp, Star, Sparkles, Share2, Zap, Heart, Briefcase, UserPlus } from 'lucide-react';
+import { Users, MessageCircle, BookOpen, TrendingUp, Star, Sparkles, Share2, Zap, Heart, Briefcase, UserPlus, LucideIcon } from 'lucide-react';
+
+type Activity = {
+  user: string;
+  action: string;
+  time: string;
+  type: string;
+  icon: LucideIcon;
+};
 
 export function CommunityShowcase() {
   const [activities, setActivities] = useState<Activity[]>([]);

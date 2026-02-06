@@ -1,0 +1,515 @@
+package com.example.dwhubfix.data.repository
+
+import android.util.Log
+import com.example.dwhubfix.domain.model.CreateJobRequest
+import com.example.dwhubfix.domain.model.Job
+import com.example.dwhubfix.domain.model.JobApplication
+import com.example.dwhubfix.domain.model.JobWithDetails
+import com.example.dwhubfix.domain.repository.JobRepository
+import com.example.dwhubfix.domain.repository.AuthRepository
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.createHttp
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import javax.inject.Inject
+import javax.inject.Singleton
+
+/**
+ * Supabase Job Repository Implementation
+ *
+ * Implements JobRepository interface using Supabase REST API.
+ * Handles all job-related database operations.
+ *
+ * @property supabaseClient Supabase client instance
+ * @property authRepository Auth repository for getting current user ID
+ */
+@Singleton
+class SupabaseJobRepository @Inject constructor(
+    private val supabaseClient: SupabaseClient,
+    private val authRepository: AuthRepository
+) : JobRepository {
+
+    companion object {
+        private const val TAG = "SupabaseJobRepository"
+        private const val TABLE_JOBS = "jobs"
+        private const val TABLE_JOB_APPLICATIONS = "job_applications"
+        private const val TABLE_PROFILES = "profiles"
+
+        private val DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        private val DATETIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+    }
+
+    /**
+     * Get worker's profile
+     */
+    override suspend fun getWorkerProfile(): Result<kotlin.Result<com.example.dwhubfix.domain.model.UserProfile>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val userId = authRepository.getUserId()
+                    ?: return@withContext Result.failure(Exception("User not logged in"))
+
+                val response = supabaseClient[TABLE_PROFILES].select(
+                    Columns.create("id", "full_name", "phone_number", "avatar_url", "role", "skills")
+                ) {
+                    eq("id", userId)
+                }.execute()
+
+                val data = response.data
+                if (data.isNullOrEmpty()) {
+                    return@withContext Result.failure(Exception("Profile not found"))
+                }
+
+                val profile = data[0]
+                val userProfile = com.example.dwhubfix.domain.model.UserProfile(
+                    id = profile["id"]?.toString() ?: "",
+                    fullName = profile["full_name"]?.toString(),
+                    email = null,
+                    phoneNumber = profile["phone_number"]?.toString(),
+                    avatarUrl = profile["avatar_url"]?.toString(),
+                    role = profile["role"]?.toString(),
+                    createdAt = profile["created_at"]?.toString(),
+                    updatedAt = profile["updated_at"]?.toString()
+                )
+
+                Result.success(userProfile)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error getting worker profile", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Get worker's job history
+     */
+    override suspend fun getWorkerHistory(): Result<kotlin.Result<List<JobApplication>>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val userId = authRepository.getUserId()
+                    ?: return@withContext Result.failure(Exception("User not logged in"))
+
+                val response = supabaseClient[TABLE_JOB_APPLICATIONS].select {
+                    order("created_at", Order.DESCENDING)
+                    limit(50)
+                }.execute()
+
+                val data = response.data ?: emptyList()
+
+                val applications = data.map { record ->
+                    JobApplication(
+                        id = record["id"]?.toString() ?: "",
+                        jobId = record["job_id"]?.toString() ?: "",
+                        workerId = record["worker_id"]?.toString() ?: "",
+                        status = record["status"]?.toString() ?: "pending",
+                        message = record["message"]?.toString(),
+                        appliedAt = record["created_at"]?.toString(),
+                        acceptedAt = record["accepted_at"]?.toString(),
+                        startedAt = record["started_at"]?.toString(),
+                        completedAt = record["completed_at"]?.toString()
+                    )
+                }
+
+                Result.success(applications)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error getting worker history", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Get worker's statistics
+     */
+    override suspend fun getWorkerStats(): Result<kotlin.Result<com.example.dwhubfix.domain.model.WorkerStats?>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val userId = authRepository.getUserId()
+                    ?: return@withContext Result.failure(Exception("User not logged in"))
+
+                // Get completed applications for stats
+                val response = supabaseClient[TABLE_JOB_APPLICATIONS].select {
+                    eq("worker_id", userId)
+                    eq("status", "completed")
+                    order("completed_at", Order.DESCENDING)
+                }.execute()
+
+                val data = response.data ?: emptyList()
+
+                if (data.isEmpty()) {
+                    return@withContext Result.success(null)
+                }
+
+                // Calculate stats
+                val totalShifts = data.size
+                val totalEarnings = data.sumOf { app ->
+                    // Get job wage from jobs table (simplified)
+                    // This would require a more complex query or joining
+                    0L // Placeholder
+                }
+                val avgRating = if (totalShifts > 0) {
+                    data.mapNotNull { it.businessRating }.average()
+                } else {
+                    0.0
+                }
+
+                val stats = com.example.dwhubfix.domain.model.WorkerStats(
+                    totalShifts = totalShifts,
+                    totalEarnings = totalEarnings,
+                    avgRating = avgRating,
+                    completedThisMonth = 0 // Calculate from completed_at dates
+                )
+
+                Result.success(stats)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error getting worker stats", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Get all available jobs
+     */
+    override suspend fun getAvailableJobs(): Result<kotlin.Result<List<Job>>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = supabaseClient[TABLE_JOBS].select {
+                    order("shift_date", Order.ASCENDING)
+                }.execute()
+
+                val data = response.data ?: emptyList()
+
+                val jobs = data.map { record ->
+                    Job(
+                        id = record["id"]?.toString() ?: "",
+                        businessId = record["business_id"]?.toString() ?: "",
+                        title = record["title"]?.toString() ?: "",
+                        description = record["description"]?.toString(),
+                        wage = record["wage"]?.toString()?.toDoubleOrNull() ?: 0.0,
+                        wageType = record["wage_type"]?.toString() ?: "shift",
+                        location = record["location"]?.toString(),
+                        category = record["category"]?.toString(),
+                        status = record["status"]?.toString() ?: "open",
+                        createdAt = record["created_at"]?.toString(),
+                        updatedAt = record["updated_at"]?.toString(),
+                        startTime = record["start_time"]?.toString(),
+                        endTime = record["end_time"]?.toString(),
+                        shiftDate = record["shift_date"]?.toString(),
+                        isUrgent = record["is_urgent"]?.toString()?.toBoolean() ?: false,
+                        isCompliant = record["is_compliant"]?.toString()?.toBoolean(),
+                        workerCount = record["worker_count"]?.toString()?.toIntOrNull() ?: 1,
+                        businessName = record["business_name"]?.toString(),
+                        businessLatitude = record["business_latitude"]?.toString()?.toDoubleOrNull(),
+                        businessLongitude = record["business_longitude"]?.toString()?.toDoubleOrNull()
+                    )
+                }
+
+                Result.success(jobs)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error getting available jobs", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Accept a job (for worker)
+     */
+    override suspend fun acceptJob(jobId: String): Result<kotlin.Result<Unit>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val userId = authRepository.getUserId()
+                    ?: return@withContext Result.failure(Exception("User not logged in"))
+
+                val response = supabaseClient[TABLE_JOB_APPLICATIONS].insert {
+                    set("job_id", jobId)
+                    set("worker_id", userId)
+                    set("status", "accepted")
+                }.execute()
+
+                if (response.error != null) {
+                    return@withContext Result.failure(Exception("Failed to accept job: ${response.error?.message}"))
+                }
+
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error accepting job", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Get job by ID
+     */
+    override suspend fun getJobById(jobId: String): Result<kotlin.Result<Job>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = supabaseClient[TABLE_JOBS].select {
+                    eq("id", jobId)
+                }.maybeSingle()
+
+                val data = response.data
+                if (data == null) {
+                    return@withContext Result.failure(Exception("Job not found"))
+                }
+
+                val record = data!!
+                val job = Job(
+                    id = record["id"]?.toString() ?: "",
+                    businessId = record["business_id"]?.toString() ?: "",
+                    title = record["title"]?.toString() ?: "",
+                    description = record["description"]?.toString(),
+                    wage = record["wage"]?.toString()?.toDoubleOrNull() ?: 0.0,
+                    wageType = record["wage_type"]?.toString() ?: "shift",
+                    location = record["location"]?.toString(),
+                    category = record["category"]?.toString(),
+                    status = record["status"]?.toString() ?: "open",
+                    createdAt = record["created_at"]?.toString(),
+                    updatedAt = record["updated_at"]?.toString(),
+                    startTime = record["start_time"]?.toString(),
+                    endTime = record["end_time"]?.toString(),
+                    shiftDate = record["shift_date"]?.toString(),
+                    isUrgent = record["is_urgent"]?.toString()?.toBoolean() ?: false,
+                    isCompliant = record["is_compliant"]?.toString()?.toBoolean(),
+                    workerCount = record["worker_count"]?.toString()?.toIntOrNull() ?: 1,
+                    businessName = record["business_name"]?.toString(),
+                    businessLatitude = record["business_latitude"]?.toString()?.toDoubleOrNull(),
+                    businessLongitude = record["business_longitude"]?.toString()?.toDoubleOrNull()
+                )
+
+                Result.success(job)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error getting job by ID", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Delete a job
+     */
+    override suspend fun deleteJob(jobId: String): Result<kotlin.Result<Unit>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = supabaseClient[TABLE_JOBS].delete {
+                    eq("id", jobId)
+                }.execute()
+
+                if (response.error != null) {
+                    return@withContext Result.failure(Exception("Failed to delete job: ${response.error?.message}"))
+                }
+
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error deleting job", e)
+                Result.failure(e)
+            }
+        }
+
+    // =====================
+    // Create Job Operations
+    // =====================
+
+    /**
+     * Create a new job
+     */
+    override suspend fun createJob(request: CreateJobRequest): Result<kotlin.Result<Job>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val businessId = authRepository.getUserId()
+                    ?: return@withContext Result.failure(Exception("User not logged in"))
+
+                val shiftDate = request.shiftDate.format(DATE_FORMATTER)
+
+                val response = supabaseClient[TABLE_JOBS].insert {
+                    set("business_id", businessId)
+                    set("title", request.title)
+                    set("description", request.description)
+                    set("wage", request.age)
+                    set("wage_type", request.wageType)
+                    set("location", request.location)
+                    set("category", request.category)
+                    set("shift_date", shiftDate)
+                    set("start_time", request.startTime)
+                    set("end_time", request.endTime)
+                    set("worker_count", request.workerCount)
+                    set("is_urgent", request.isUrgent)
+                    set("status", "open")
+                }.select().single()
+
+                val data = response.data
+                if (data == null) {
+                    return@withContext Result.failure(Exception("Failed to create job"))
+                }
+
+                val record = data!!
+                val job = Job(
+                    id = record["id"]?.toString() ?: "",
+                    businessId = businessId,
+                    title = record["title"]?.toString() ?: "",
+                    description = record["description"]?.toString(),
+                    wage = record["wage"]?.toString()?.toDoubleOrNull() ?: 0.0,
+                    wageType = record["wage_type"]?.toString() ?: "shift",
+                    location = record["location"]?.toString(),
+                    category = record["category"]?.toString(),
+                    status = record["status"]?.toString() ?: "open",
+                    createdAt = record["created_at"]?.toString(),
+                    updatedAt = record["updated_at"]?.toString(),
+                    startTime = record["start_time"]?.toString(),
+                    endTime = record["end_time"]?.toString(),
+                    shiftDate = record["shift_date"]?.toString(),
+                    isUrgent = record["is_urgent"]?.toString()?.toBoolean() ?: false,
+                    isCompliant = record["is_compliant"]?.toString()?.toBoolean(),
+                    workerCount = record["worker_count"]?.toString()?.toIntOrNull() ?: 1,
+                    businessName = null,
+                    businessLatitude = null,
+                    businessLongitude = null
+                )
+
+                Result.success(job)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error creating job", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Apply for a job
+     */
+    override suspend fun applyForJob(request: com.example.dwhubfix.domain.model.ApplyForJobRequest): Result<kotlin.Result<JobApplication>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val workerId = authRepository.getUserId()
+                    ?: return@withContext Result.failure(Exception("User not logged in"))
+
+                val response = supabaseClient[TABLE_JOB_APPLICATIONS].insert {
+                    set("job_id", request.jobId)
+                    set("worker_id", workerId)
+                    set("status", "pending")
+                    set("message", request.coverLetter)
+                }.select().single()
+
+                val data = response.data
+                if (data == null) {
+                    return@withContext Result.failure(Exception("Failed to apply for job"))
+                }
+
+                val record = data!!
+                val application = JobApplication(
+                    id = record["id"]?.toString() ?: "",
+                    jobId = record["job_id"]?.toString() ?: "",
+                    workerId = record["worker_id"]?.toString() ?: "",
+                    status = record["status"]?.toString() ?: "pending",
+                    message = record["message"]?.toString(),
+                    appliedAt = record["created_at"]?.toString(),
+                    acceptedAt = record["accepted_at"]?.toString(),
+                    startedAt = record["started_at"]?.toString(),
+                    completedAt = record["completed_at"]?.toString()
+                )
+
+                Result.success(application)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error applying for job", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Get application by ID
+     */
+    override suspend fun getApplicationById(applicationId: String): Result<kotlin.Result<JobApplication>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = supabaseClient[TABLE_JOB_APPLICATIONS].select {
+                    eq("id", applicationId)
+                }.maybeSingle()
+
+                val data = response.data
+                if (data == null) {
+                    return@withContext Result.failure(Exception("Application not found"))
+                }
+
+                val record = data!!
+                val application = JobApplication(
+                    id = record["id"]?.toString() ?: "",
+                    jobId = record["job_id"]?.toString() ?: "",
+                    workerId = record["worker_id"]?.toString() ?: "",
+                    status = record["status"]?.toString() ?: "pending",
+                    message = record["message"]?.toString(),
+                    appliedAt = record["created_at"]?.toString(),
+                    acceptedAt = record["accepted_at"]?.toString(),
+                    startedAt = record["started_at"]?.toString(),
+                    completedAt = record["completed_at"]?.toString()
+                )
+
+                Result.success(application)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error getting application by ID", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Complete a job
+     */
+    override suspend fun completeJob(
+        applicationId: String,
+        completedAt: LocalDateTime,
+        hoursWorked: Double,
+        grossAmount: Int,
+        platformCommission: Int,
+        netWorkerAmount: Int
+    ): Result<kotlin.Result<Unit>> = withContext(Dispatchers.IO) {
+            try {
+                val completedAtStr = completedAt.format(DATETIME_FORMATTER)
+
+                val response = supabaseClient[TABLE_JOB_APPLICATIONS].update {
+                    eq("id", applicationId)
+                }.set {
+                    set("status", "completed")
+                    set("completed_at", completedAtStr)
+                }.execute()
+
+                if (response.error != null) {
+                    return@withContext Result.failure(Exception("Failed to complete job: ${response.error?.message}"))
+                }
+
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error completing job", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Get job with full details
+     */
+    override suspend fun getJobDetails(jobId: String): Result<kotlin.Result<JobWithDetails>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val jobResult = getJobById(jobId)
+                if (jobResult.isFailure) {
+                    return@withContext Result.failure(jobResult.exceptionOrNull() ?: Exception("Job not found"))
+                }
+
+                val job = jobResult.getOrNull() ?: return@withContext Result.failure(Exception("Job not found"))
+
+                // Get business name from profiles table
+                val businessId = job.businessId
+                val profilesResponse = supabaseClient[TABLE_PROFILES].select {
+                    eq("id", businessId)
+                }.maybeSingle()
+
+                val businessName = profilesResponse.data?.get("full_name")?.toString()
+
+                val jobWithDetails = JobWithDetails.fromJob(
+                    job = job,
+                    businessName = businessName
+                )
+
+                Result.success(jobWithDetails)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error getting job details", e)
+                Result.failure(e)
+            }
+        }
+}

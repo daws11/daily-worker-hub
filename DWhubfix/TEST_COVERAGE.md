@@ -1,8 +1,8 @@
 # Test Coverage Documentation
 
 **Project:** Daily Worker Hub
-**Date:** 2026-02-06
-**Total Tests:** 57
+**Date:** 2026-02-07
+**Total Tests:** 75
 **Success Rate:** 100%
 
 ---
@@ -13,8 +13,8 @@
 ┌─────────────────────────────────────────────────────┐
 │              TEST COVERAGE SUMMARY                │
 ├─────────────────────────────────────────────────────┤
-│  Total Tests:        57                          │
-│  Passed:             57 (100%)                   │
+│  Total Tests:        75                          │
+│  Passed:             75 (100%)                   │
 │  Failed:             0 (0%)                      │
 │  Test Files:         4                            │
 │  Fake Repositories:   3                            │
@@ -135,6 +135,51 @@
 **Fake Repository:** `FakeJobRepository`
 - Simulates job creation
 - Optional failures for error testing
+
+---
+
+### 4. ApplyForJobUseCaseTest.kt
+**Location:** `app/src/test/java/com/example/dwhubfix/domain/usecase/ApplyForJobUseCaseTest.kt`
+**Lines:** 644 lines
+**Tests:** 18 tests
+
+**Purpose:** Tests job application logic with validation
+
+**Coverage:**
+- ✅ **Success Tests:**
+  - Applies successfully for open job
+  - Applies successfully for filled job
+  - Applies without cover letter
+- ✅ **Job Status Validation:**
+  - Fails when job status is closed
+  - Fails when job status is cancelled
+  - Fails when job status is completed
+- ✅ **Duplicate Application Prevention:**
+  - Fails when worker already applied for job
+  - Fails when worker has pending application for job
+  - Allows apply for different job even if previous application exists
+- ✅ **21 Days Rule Compliance:**
+  - Fails when worker exceeded 20 days for same client
+  - Allows apply when worker worked exactly 20 days for same client
+  - Allows apply when worker worked less than 20 days for same client
+  - Only counts completed applications (not pending/rejected/in_progress)
+  - Only counts applications within last 30 days
+  - Allows apply for different client even if exceeded 20 days for another
+- ✅ **Error Handling:**
+  - Fails when get job by id fails
+  - Succeeds with graceful degradation when get worker history fails
+  - Fails when apply for job repository fails
+
+**Fake Repository:** `FakeJobRepository`
+- Simulates job fetching
+- Simulates worker history with dynamic dates
+- Simulates application creation
+- Configurable success/failure states
+
+**Key Implementation Notes:**
+- Uses `LocalDate.now()` for dynamic date calculations (no hardcoded dates)
+- Helper function `createApplication()` wraps `createApplicationWithDate()` with default date
+- Duplicate check runs before 21 days rule validation
 
 ---
 
@@ -283,17 +328,17 @@ assertThat(actual).isInstanceOf(MyClass::class.java)
 
 ### Execution Command
 ```bash
-cd daily-worker-hub/DWhubfix
+cd DWhubfix
 ./gradlew :app:testDebugUnitTest --tests "com.example.dwhubfix.domain.usecase.*"
 ```
 
 ### Results
 ```
-BUILD SUCCESSFUL in 0.515s
+BUILD SUCCESSFUL in 0.278s
 
 Package                                 Tests   Failures   Ignored   Duration   Success rate
 ────────────────────────────────────────────────────────────────────────────────────────────────
-com.example.dwhubfix.domain.usecase    57       0           0           0.515s     100%
+com.example.dwhubfix.domain.usecase    75       0           0           0.278s     100%
 ```
 
 ### Test Report
@@ -308,6 +353,7 @@ com.example.dwhubfix.domain.usecase    57       0           0           0.515s  
 | LoginUseCase | Authentication & Session | 19/19 | ✅ 100% | ✅ PERFECT |
 | GetJobsForWorkerUseCase | Job Matching & Prioritization | 15/15 | ✅ 100% | ✅ PERFECT |
 | CreateJobUseCase | Job Creation Validation | 23/23 | ✅ 100% | ✅ PERFECT |
+| ApplyForJobUseCase | Job Application & Validation | 18/18 | ✅ 100% | ✅ PERFECT |
 
 ---
 
@@ -315,7 +361,7 @@ com.example.dwhubfix.domain.usecase    57       0           0           0.515s  
 
 ### 1. Isolated Testing
 - **No network calls:** All tests use fake repositories
-- **Fast execution:** All 57 tests complete in ~0.5s
+- **Fast execution:** All 75 tests complete in ~0.3s
 - **Reliable:** Tests are deterministic and repeatable
 
 ### 2. Comprehensive Coverage
@@ -324,9 +370,10 @@ com.example.dwhubfix.domain.usecase    57       0           0           0.515s  
 - **Edge cases:** Boundary conditions tested (0, 1, max, etc.)
 
 ### 3. Business Logic Validation
-- **21 Days Rule:** Tested thoroughly (0-20 days, different clients)
+- **21 Days Rule:** Tested thoroughly (0-20 days, different clients, time windows)
 - **Job Matching:** Distance, urgency, sorting, compliance
 - **Input Validation:** Wage, worker count, dates, times, types
+- **Duplicate Prevention:** Workers cannot apply to same job twice
 
 ### 4. Test Quality
 - **Descriptive test names:** "login with null password returns failure"
@@ -360,6 +407,13 @@ com.example.dwhubfix.domain.usecase    57       0           0           0.515s  
 - ✅ Date validation (no past dates)
 - ✅ Wage type validation (per_shift, per_hour, per_day)
 - ✅ Error handling (repository failures)
+
+### Job Application & Validation (18 tests)
+- ✅ Job status validation (open/filled/closed/cancelled/completed)
+- ✅ Duplicate application prevention
+- ✅ 21 Days Rule enforcement with dynamic dates
+- ✅ Graceful degradation on repository failures
+- ✅ Application creation with/without cover letter
 
 ---
 
@@ -406,8 +460,10 @@ private class FakeJobRepository : JobRepository {
 // Reusable test data creation
 private fun createJob(id: String, status: String): Job { ... }
 private fun createApplication(id: String, status: String): JobApplication { ... }
-private fun create20DaysHistory(businessId: String): List<JobApplication> { ... }
-private fun create21DaysHistory(businessId: String): List<JobApplication> { ... }
+private fun createApplicationWithDate(id: String, status: String, date: LocalDate): JobApplication { ... }
+private fun create20DaysHistoryDynamic(businessId: String): List<JobApplication> { ... }
+private fun create21DaysHistoryDynamic(businessId: String): List<JobApplication> { ... }
+private fun createNDaysHistoryDynamic(businessId: String, n: Int): List<JobApplication> { ... }
 ```
 
 ---
@@ -429,6 +485,9 @@ private fun create21DaysHistory(businessId: String): List<JobApplication> { ... 
 
 # Job creation tests only
 ./gradlew :app:testDebugUnitTest --tests "*CreateJobUseCaseTest"
+
+# Job application tests only
+./gradlew :app:testDebugUnitTest --tests "*ApplyForJobUseCaseTest"
 ```
 
 ### Run Specific Test
@@ -446,17 +505,6 @@ app/build/reports/tests/testDebugUnitTest/index.html
 
 ---
 
-## 🐛 Known Issues
-
-### ApplyForJobUseCaseTest
-**Status:** ⚠️ Needs Fix
-**Issue:** 21 Days Rule date calculation logic
-**Tests:** 7 failing out of 18
-**Root Cause:** Logika tanggal yang kompleks dengan tanggal hardcoded yang sudah lalu saat test dijalankan
-**Fix Required:** Perbaikan logika date calculation di helper functions
-
----
-
 ## 📊 Test Coverage Metrics
 
 ### Code Coverage by Use Case
@@ -466,13 +514,14 @@ app/build/reports/tests/testDebugUnitTest/index.html
 | LoginUseCase | Medium | 352 | 19 | ~18.5:1 |
 | GetJobsForWorkerUseCase | High | 524 | 15 | ~35:1 |
 | CreateJobUseCase | High | 663 | 23 | ~28.8:1 |
-| **Average** | - | - | - | ~28:1 |
+| ApplyForJobUseCase | High | 644 | 18 | ~35.8:1 |
+| **Average** | - | - | - | ~29:1 |
 
 ### Test Execution Time
-- **Total Time:** 0.515s
-- **Average per Test:** 9ms
+- **Total Time:** 0.278s
+- **Average per Test:** 3.7ms
 - **Fastest Test:** ~1ms
-- **Slowest Test:** ~50ms
+- **Slowest Test:** ~20ms
 
 ---
 
@@ -491,19 +540,27 @@ All dependencies are compatible with Kotlin 2.0.21.
 
 ## 🎓 Conclusion
 
-✅ **57 Use Case tests successfully created and passing**
+✅ **75 Use Case tests successfully created and passing**
 
 **Coverage Areas:**
-1. Authentication & Session Management
-2. Job Matching & Prioritization (Smart Scoring Algorithm)
-3. Job Creation Validation (21 Days Rule Compliance)
+1. Authentication & Session Management (19 tests)
+2. Job Matching & Prioritization - Smart Scoring Algorithm (15 tests)
+3. Job Creation Validation (23 tests)
+4. Job Application & Validation with 21 Days Rule (18 tests)
 
 **Quality Metrics:**
 - 100% Test Pass Rate
-- Fast Execution (< 1s total)
+- Fast Execution (~0.3s total)
 - Isolated Tests (No Network Calls)
 - Comprehensive Coverage
 - Best Practices Applied
+- Dynamic Date Handling (no hardcoded dates)
+
+**Recent Updates (2026-02-07):**
+- ✅ Fixed syntax error in ApplyForJobUseCaseTest.kt
+- ✅ Added missing helper function `createApplication()`
+- ✅ Corrected test logic to avoid duplicate check conflicts
+- ✅ All tests now using dynamic date calculations with `LocalDate.now()`
 
 **Next Steps:**
 1. 📝 Document test coverage for other modules (ViewModels, Fragments)

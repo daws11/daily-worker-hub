@@ -14,8 +14,8 @@ import android.content.SharedPreferences
  */
 object SessionManager {
     private const val PREF_NAME = "user_session"
-    private const val KEY_ACCESS_TOKEN = "access_token"
-    private const val KEY_USER_ID = "user_id"
+    const val KEY_ACCESS_TOKEN = "access_token"
+    const val KEY_USER_ID = "user_id"
     private const val KEY_PENDING_ROLE = "pending_role"
     private const val KEY_PHONE_NUMBER = "phone_number"
     private const val KEY_SELECTED_ROLE = "selected_role"
@@ -82,4 +82,38 @@ object SessionManager {
     fun getPhoneNumber(context: Context): String? {
         return getPrefs(context).getString(KEY_PHONE_NUMBER, null)
     }
+}
+
+// ==================== TEST EXTENSIONS ====================
+// These extensions allow tests to use SharedPreferences directly without a Context
+
+/**
+ * Save user session using SharedPreferences directly (for testing)
+ */
+fun saveSessionToPreferences(prefs: SharedPreferences, accessToken: String, userId: String) {
+    prefs.edit()
+        .putString(SessionManager.KEY_ACCESS_TOKEN, accessToken)
+        .putString(SessionManager.KEY_USER_ID, userId)
+        .commit()
+}
+
+/**
+ * Get access token from SharedPreferences (for testing)
+ */
+fun getAccessTokenFromPreferences(prefs: SharedPreferences): String? {
+    return prefs.getString(SessionManager.KEY_ACCESS_TOKEN, null)
+}
+
+/**
+ * Get user ID from SharedPreferences (for testing)
+ */
+fun fetchUserIdFromPreferences(prefs: SharedPreferences): String? {
+    return prefs.getString(SessionManager.KEY_USER_ID, null)
+}
+
+/**
+ * Clear session from SharedPreferences (for testing)
+ */
+fun clearSessionFromPreferences(prefs: SharedPreferences) {
+    prefs.edit().clear().commit()
 }

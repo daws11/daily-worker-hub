@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Integration test configuration (contains credentials)
+app/src/test/resources/test-config.properties

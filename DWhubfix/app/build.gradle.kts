@@ -88,10 +88,24 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
     testImplementation(libs.truth)
+
+    // Integration test dependencies - JVM-based Supabase testing
+    testImplementation("io.ktor:ktor-client-cio:3.0.1")
+    testImplementation("ch.qos.logback:logback-classic:1.4.14")
+
+    // Instrumentation (Android) test dependencies
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // Instrumentation test dependencies for Supabase integration testing
+    androidTestImplementation("io.github.jan-tennert.supabase:auth-kt:3.0.0")
+    androidTestImplementation("io.github.jan-tennert.supabase:postgrest-kt:3.0.0")
+    androidTestImplementation("io.ktor:ktor-client-android:3.0.1")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+    androidTestImplementation("com.google.truth:truth:1.1.5")
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 

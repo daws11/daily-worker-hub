@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Service Area</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "text-main": "#111813",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom styles for range slider to match theme */
+        input[type=range] {
+            -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+            width: 100%; /* Specific width is required for Firefox. */
+            background: transparent; /* Otherwise white in Chrome */
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #13ec5b;
+            cursor: pointer;
+            margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e5e7eb;
+            border-radius: 2px;
+        }
+        
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #e5e7eb;
+        }
+
+        /* Dark mode overrides for slider */
+        .dark input[type=range]::-webkit-slider-runnable-track {
+            background: #374151;
+        }
+
+        /* Custom toggle switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #13ec5b;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #13ec5b;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased">
+<div class="relative flex h-screen w-full flex-col overflow-hidden max-w-md mx-auto shadow-2xl bg-white dark:bg-background-dark">
+<!-- Top App Bar -->
+<div class="absolute top-0 left-0 right-0 z-20 flex items-center bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm p-4 pt-12 pb-2 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="text-text-main dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</div>
+<h2 class="text-text-main dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Area Layanan</h2>
+<div class="size-10"></div> <!-- Spacer for visual balance -->
+</div>
+<!-- Map Area -->
+<div class="relative flex-1 w-full bg-gray-200 overflow-hidden">
+<!-- Map Background Image -->
+<div class="absolute inset-0 bg-cover bg-center z-0" data-alt="Map view of Bali showing streets and terrain" data-location="Bali, Indonesia" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC0ThgA6a3kpoCK80TYzrQdgHQJJBzF9dTwkKh3a0XMNbmSkZCI-mH0N8Y4DleaFSjd1DSPiuHaZO3zYyOAAgPebl9Bzv3OiCLQ_QY0jbMZupi5uMrCR_hBiYSGwuU9iGAJ_AuSvCIHS1rX1fqPGz2WlSxd7F7UOJN8Y5iOXqgm1yBQRWIsXQRve3WgOsbVix87TO6XiuA0TaA4xqzan3mfqW4l8MbZKPsahQ5mE5_RkPIkClDQ27tdZ7UvLu456yksN4wNolVJ4rs");'>
+</div>
+<!-- Map Overlay Gradients for readability -->
+<div class="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
+<!-- Interactive Elements on Map -->
+<div class="relative z-10 w-full h-full">
+<!-- Search Bar (Floating) -->
+<div class="absolute top-28 left-4 right-4">
+<div class="flex w-full items-center bg-white dark:bg-gray-800 rounded-full shadow-lg h-12 px-4 transition-colors">
+<span class="material-symbols-outlined text-primary dark:text-primary mr-3">search</span>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-text-main dark:text-white placeholder-gray-400 text-sm font-medium" placeholder="Cari lokasi bisnis Anda" value="Jl. Pantai Batu Bolong, Canggu"/>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 cursor-pointer">close</span>
+</div>
+</div>
+<!-- Radius Circle Visualization -->
+<!-- Centered in the view -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
+<!-- The Circle -->
+<div class="w-64 h-64 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center shadow-[0_0_0_9999px_rgba(0,0,0,0.3)] animate-pulse-slow">
+<!-- Label on radius edge -->
+<div class="absolute -top-3 bg-primary text-background-dark text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                            10 KM
+                        </div>
+</div>
+<!-- The Pin -->
+<div class="absolute text-primary drop-shadow-md">
+<span class="material-symbols-outlined text-5xl fill-1" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<!-- Pulse effect under pin -->
+<div class="absolute w-4 h-4 bg-primary rounded-full animate-ping opacity-75"></div>
+</div>
+<!-- Map Controls (Bottom Right) -->
+<div class="absolute bottom-6 right-4 flex flex-col gap-3">
+<div class="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+<button class="flex size-10 items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700">
+<span class="material-symbols-outlined text-text-main dark:text-white">add</span>
+</button>
+<button class="flex size-10 items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-text-main dark:text-white">remove</span>
+</button>
+</div>
+<button class="flex size-10 items-center justify-center rounded-lg bg-white dark:bg-gray-800 shadow-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-primary">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Sheet Control Panel -->
+<div class="relative z-20 bg-white dark:bg-background-dark rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.1)] border-t border-gray-100 dark:border-gray-800 -mt-4 pb-6">
+<!-- Handle -->
+<div class="flex justify-center pt-3 pb-2">
+<div class="h-1.5 w-12 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+</div>
+<div class="px-5 pt-2">
+<!-- Header Text -->
+<div class="flex justify-between items-start mb-1">
+<h2 class="text-text-main dark:text-white text-[22px] font-bold leading-tight">Atur Area Jangkauan</h2>
+<span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold px-2 py-1 rounded">AKTIF</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal mb-6">
+                    Mencari pekerja dalam radius <span class="font-bold text-text-main dark:text-white">10 km</span> dari lokasi Anda.
+                </p>
+<!-- Radius Slider Control -->
+<div class="mb-8">
+<div class="flex justify-between items-center mb-3">
+<label class="text-sm font-semibold text-text-main dark:text-white">Radius Pencarian</label>
+<span class="text-primary font-bold text-sm">10 km</span>
+</div>
+<div class="relative w-full h-6 flex items-center">
+<!-- Custom track visual to show 'filled' state -->
+<div class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary rounded-l-full pointer-events-none" style="width: 20%;"></div>
+<input class="relative z-10 w-full focus:outline-none" max="50" min="1" type="range" value="10"/>
+</div>
+<div class="flex justify-between mt-1 text-xs text-gray-400 dark:text-gray-500 font-medium">
+<span>5km</span>
+<span>50km</span>
+</div>
+</div>
+<!-- Priority Area Toggle -->
+<div class="flex items-center justify-between py-3 border-t border-gray-100 dark:border-gray-800">
+<div class="flex flex-col gap-1">
+<span class="text-text-main dark:text-white font-semibold text-sm">Area Prioritas</span>
+<span class="text-gray-500 dark:text-gray-400 text-xs">Fokuskan di zona turis ramai</span>
+</div>
+<!-- Toggle Switch -->
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-200 dark:border-gray-600 appearance-none cursor-pointer outline-none transition-all duration-300 left-0" id="priority-toggle" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-200 dark:bg-gray-700 cursor-pointer transition-colors duration-300" for="priority-toggle"></label>
+</div>
+</div>
+<!-- Example Chips (Contextual) -->
+<div class="flex gap-2 mt-3 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary text-primary text-xs font-semibold whitespace-nowrap">
+<span class="material-symbols-outlined text-[16px]">check</span> Canggu
+                    </button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs font-medium border border-transparent whitespace-nowrap hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        Seminyak
+                    </button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs font-medium border border-transparent whitespace-nowrap hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        Kuta
+                    </button>
+</div>
+<!-- Primary Action Button -->
+<button class="w-full bg-primary hover:bg-[#0fd650] text-background-dark font-bold text-base py-3.5 px-4 rounded-xl shadow-lg shadow-primary/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">save</span>
+                    Simpan Pengaturan
+                </button>
+</div>
+<!-- Home Indicator Safe Area -->
+<div class="h-4 w-full"></div>
+</div>
+</div>
+</body></html>

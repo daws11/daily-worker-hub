@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Verification Pending</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "text-primary-light": "#111813",
+                        "text-primary-dark": "#f0f2f0",
+                        "text-secondary-light": "#61896f",
+                        "text-secondary-dark": "#9abfac",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', "Noto Sans", sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col justify-between overflow-hidden relative">
+<!-- Decorative Background Blob -->
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[30%] bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[30%] bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
+<main class="flex-1 flex flex-col items-center justify-center px-6 py-8 w-full max-w-md mx-auto relative z-10">
+<!-- Central Visual: Animated Scanning/Processing Concept -->
+<div class="w-full flex justify-center mb-8">
+<div class="relative w-48 h-48 flex items-center justify-center">
+<!-- Outer Pulse Effect -->
+<div class="absolute inset-0 bg-primary/20 rounded-full animate-pulse"></div>
+<div class="absolute inset-4 bg-white dark:bg-background-dark rounded-full flex items-center justify-center shadow-lg border border-gray-100 dark:border-gray-800">
+<!-- Image representing document verification -->
+<div class="w-24 h-24 bg-center bg-contain bg-no-repeat" data-alt="Illustration of a magnifying glass scanning a business document with a checkmark" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAlgsHmPw_vJxNdEWfFbJAHu9GmzcYv-KeUdbLzqDHXJ1ovFAntooWMKbDFXG4BA-52GRqVfbJZh0iEMvv5Zm5SlY__ebfqkOuiskya0eZGBQ-qXeyAubBmhkX_iTZBNuVZZRzAb2vYP2auiqydkSvJxt_iefBmg5B7KE0lSGJJGAygPUBN0RdhNNL7ZUOY1P7esSXaENrn1BPL_u5E8fDS5VQ_qJidZkCvOLpjn_5h2_zrSwjCoAFn0cvlHdVPER3hjLbSalV7BZo");'>
+</div>
+</div>
+<!-- Status Badge Icon -->
+<div class="absolute bottom-2 right-2 bg-primary rounded-full p-2 shadow-md border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-white text-xl font-bold">
+                        hourglass_top
+                    </span>
+</div>
+</div>
+</div>
+<!-- Headline -->
+<h3 class="text-text-primary-light dark:text-text-primary-dark tracking-tight text-2xl font-bold leading-tight text-center mb-3">
+            Verifikasi Dokumen Bisnis Anda otomatis diproses.
+        </h3>
+<!-- Body Text -->
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-base font-normal leading-relaxed text-center mb-8 max-w-[320px]">
+            Mohon tunggu sebentar. Sistem kami sedang melakukan pengecekan data Anda.
+        </p>
+<!-- Progress Indicator -->
+<div class="w-full max-w-[300px] flex flex-col gap-3">
+<div class="flex justify-between items-center px-1">
+<span class="text-text-primary-light dark:text-text-primary-dark text-sm font-medium">Processing...</span>
+<span class="text-primary text-sm font-bold">~5 min</span>
+</div>
+<!-- Progress Bar -->
+<div class="h-2 w-full bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full relative w-2/3">
+<div class="absolute inset-0 bg-white/30 w-full animate-[shimmer_2s_infinite] transform -skew-x-12 translate-x-[-100%]"></div>
+</div>
+</div>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark text-center mt-2">
+                Jangan tutup aplikasi ini untuk proses lebih cepat.
+            </p>
+</div>
+</main>
+<!-- Footer Meta -->
+<footer class="w-full py-6 flex justify-center relative z-10">
+<div class="flex items-center gap-2 opacity-60">
+<span class="material-symbols-outlined text-primary text-lg">
+                verified_user
+            </span>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-medium">
+                Powered by BaliWork Security
+            </p>
+</div>
+</footer>
+<!-- Custom Animation for Shimmer Effect -->
+<style>
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+    </style>
+</body></html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Find Worker Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c2e22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased selection:bg-primary selection:text-black">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-hidden max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
+<!-- Top Bar -->
+<div class="flex items-center p-6 justify-end z-10">
+<button class="flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
+<span class="text-sm font-semibold tracking-wide text-slate-500 dark:text-slate-400">Skip</span>
+</button>
+</div>
+<!-- Main Content Area (Carousel) -->
+<div class="flex-1 flex flex-col justify-center relative">
+<div class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar w-full h-full pb-8">
+<!-- Slide 1: Post & Scan -->
+<div class="w-full flex-shrink-0 snap-center flex flex-col items-center justify-center px-8 gap-8">
+<!-- Illustration Area -->
+<div class="w-full aspect-square max-w-[280px] relative flex items-center justify-center">
+<!-- Abstract Background Decoration -->
+<div class="absolute inset-0 bg-primary/5 rounded-full blur-2xl"></div>
+<!-- Radar Animation Static Representation -->
+<div class="relative flex items-center justify-center">
+<!-- Outer Ring -->
+<div class="absolute w-64 h-64 border border-primary/20 rounded-full dark:border-primary/10"></div>
+<!-- Middle Ring -->
+<div class="absolute w-48 h-48 border border-primary/40 rounded-full dark:border-primary/20 bg-primary/5"></div>
+<!-- Inner Ring -->
+<div class="absolute w-32 h-32 border-2 border-primary rounded-full bg-surface-light dark:bg-surface-dark shadow-lg flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-4xl text-primary">sensors</span>
+</div>
+<!-- Floating Avatars (Workers) -->
+<div class="absolute top-0 right-4 w-10 h-10 rounded-full bg-cover bg-center border-2 border-white dark:border-gray-800 shadow-md" data-alt="Portrait of a smiling male worker" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBCEf0GclFvANIt0y-U3AKvhw0l1Kq-dyBMxSJ-3F22rnnvkAkLoSwGJeqUqYpJr1TksfDsh3qFh0-PxSUNbw3k4N0Od50BDs-Tkg2wOyucRL-AEpRI_gApW5DFUWioxk4j-Ux9pWZD61cXcDqLE5IwOITQuq7kzwhlMSveb1r88J4vGq0jj-ti1sXk0Jp6VPXFDg0D8yjDk_V8QU4hLP1qe71-NpvQQ0a1_cBXu0pBnQ7QNJZDUZIhXETfqsHjMfMpgRp9Gy89Cfo');"></div>
+<div class="absolute bottom-4 left-4 w-10 h-10 rounded-full bg-cover bg-center border-2 border-white dark:border-gray-800 shadow-md" data-alt="Portrait of a smiling female worker" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdexTvkqEH-gdiRUPHm-Fal4Oi1IdWaR9SPKozkd_V-vajIpA02Ol5J7kGG3nluKfypUR0F5nar0Q2NoAYAnownYWHBXsV6KP5bF9u5xdp1KOCGuBEEKasbS72nZn9u44WVR5VLyTWinfnBc_SqYvK49xiVuIgaF0DVUwVz3ZRtmXgBHb8KIDgdnjZ5W-LspJQ4-vC6itUWVwz-uKfQzQHtPaItmXYUwlMA_I1YCjjSUi3fYfF-s6vabWJGai70ohPI24dcZOovCs');"></div>
+<div class="absolute bottom-10 right-10 w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-md">
+<span class="material-symbols-outlined text-black text-sm">check</span>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="text-center space-y-3 max-w-xs">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Post &amp; Scan</h2>
+<p class="text-slate-500 dark:text-slate-400 leading-relaxed">Broadcast your shift instantly. Our radar notifies qualified professionals nearby in real-time.</p>
+</div>
+</div>
+<!-- Slide 2: Select Your Match -->
+<div class="w-full flex-shrink-0 snap-center flex flex-col items-center justify-center px-8 gap-8">
+<!-- Illustration Area -->
+<div class="w-full aspect-square max-w-[280px] relative flex items-center justify-center">
+<div class="absolute inset-0 bg-blue-500/5 rounded-full blur-3xl"></div>
+<!-- Stacked Cards Effect -->
+<div class="absolute top-4 scale-90 opacity-60 w-56 h-72 bg-white dark:bg-surface-dark rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 rotate-6"></div>
+<div class="absolute top-2 scale-95 opacity-80 w-56 h-72 bg-white dark:bg-surface-dark rounded-2xl shadow-md border border-slate-100 dark:border-slate-800 -rotate-3"></div>
+<!-- Main Card -->
+<div class="relative w-56 h-72 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 flex flex-col overflow-hidden transform transition-transform hover:scale-105 duration-300">
+<div class="h-3/5 w-full bg-cover bg-center relative" data-alt="Worker profile photo in hospitality uniform" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDw-FeKGpX9Dl0UQnJ2yJqHm1hAlgR0NBpK9AbJtiQN8WP1KhKV2cb9_StSLaaWqwSaHyYgJJSO4-6KE2nchuFS423tOvuWyWdCd4wXdppka2_BPo51ElRuw-SZrwlaXWL8uhQHFDyOPf8w-MoxQchJaTTHKt0WEE5DWCkZgSK-DqYUOe5sfr2vBsd9WciquPyxMYyEqvsT55XomkIkzJWba84CPr--k0msxdoVslhhsSjakxFcPpTXhq5nT-JWll0g1QHIeQCuTJQ');">
+<div class="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-3 text-white font-medium text-sm">Wayan S.</div>
+</div>
+<div class="flex-1 p-3 flex flex-col justify-between">
+<div class="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-[14px] text-yellow-500 fill-current">star</span>
+<span class="font-bold text-slate-700 dark:text-slate-200">4.9</span>
+<span>• Barista</span>
+</div>
+<div class="flex justify-between items-center mt-2 px-1">
+<button class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+<button class="w-14 h-14 -mt-1 rounded-full bg-primary text-black shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">check</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="text-center space-y-3 max-w-xs">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Select Your Match</h2>
+<p class="text-slate-500 dark:text-slate-400 leading-relaxed">You're in control. Review profiles and ratings, then tap Green to Accept or pass.</p>
+</div>
+</div>
+<!-- Slide 3: Connect Instantly -->
+<div class="w-full flex-shrink-0 snap-center flex flex-col items-center justify-center px-8 gap-8">
+<!-- Illustration Area -->
+<div class="w-full aspect-square max-w-[280px] relative flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-3xl"></div>
+<!-- Connection Visual -->
+<div class="relative w-full h-full flex flex-col items-center justify-center">
+<!-- Chat Bubble -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 bg-white dark:bg-surface-dark rounded-2xl rounded-bl-none shadow-xl border border-slate-100 dark:border-slate-700 p-4 z-10 animate-bounce" style="animation-duration: 3s;">
+<div class="flex gap-2 items-center mb-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="text-xs font-bold text-primary uppercase tracking-wider">It's a Match!</span>
+</div>
+<div class="h-2 w-24 bg-slate-100 dark:bg-slate-700 rounded mb-2"></div>
+<div class="h-2 w-16 bg-slate-100 dark:bg-slate-700 rounded"></div>
+</div>
+<!-- Avatars connecting -->
+<div class="absolute top-10 left-10">
+<div class="w-16 h-16 rounded-full border-4 border-white dark:border-gray-800 shadow-lg overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Business owner avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAABatAZbVz3gEL_uAgKtp4G2ToyYLoSE6SQcMyggcnHVXqBqlMBo2beDR4Tum0H3g2FOkROms5CRhaHKQ1fi5hELImzoJi2EBOjwj4yOLtCdZrjGvulUNSqd0vAMccbXVHlblkjZt4v9tUCpaZd_lA90zmUARaZIN6TuqsaIi4pf5cjWWI2phgxVYLX1YryTIFUhyx5R4LfJNLuQwE5uviuCE9CHxitjteiJp_yl-W38EllGppNjA0pL9g37XYgd27glvGR96atzY"/>
+</div>
+</div>
+<div class="absolute bottom-16 right-10">
+<div class="w-16 h-16 rounded-full border-4 border-primary shadow-lg overflow-hidden relative">
+<div class="absolute inset-0 bg-primary/20"></div>
+<img class="w-full h-full object-cover" data-alt="Selected worker avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCV3B2V6jr4dlJIVmReQZqMzOUPrP2QrsnVwQckURtyp-R4wtATkzqdDI_VrR8YuEEOmBWW-DLYB80NSnTBDG5ZywQeZA47j7pKzYDsGTXh3ayRO9OBrQ6mX14IbzollNoDdqGwoRT13i9ZIU3h1mq8GjxJZpihmLvhJw7mdjB_LW9SQywVyv0go7qrwhduoWEhfN4la_u4Asb2eC-IX2qlqplSFOyIblYSnF21lJAfMx-DMK_aRy-LN7AfdBRuxTD99A2RP1KCeuo"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-black rounded-full p-1 border-2 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-sm font-bold">chat</span>
+</div>
+</div>
+<!-- Dotted Line -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
+<path class="text-slate-400" d="M70 70 Q 140 140 200 200" fill="none" stroke="currentColor" stroke-dasharray="6 6" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Text Content -->
+<div class="text-center space-y-3 max-w-xs">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Connect Instantly</h2>
+<p class="text-slate-500 dark:text-slate-400 leading-relaxed">Chat directly to coordinate arrival details. Get your business moving.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Controls -->
+<div class="w-full px-6 py-8 flex flex-col items-center gap-6 bg-background-light dark:bg-background-dark z-20">
+<!-- Page Indicators -->
+<div class="flex flex-row items-center justify-center gap-2">
+<div class="h-2 w-6 rounded-full bg-primary transition-all duration-300"></div>
+<div class="h-2 w-2 rounded-full bg-slate-200 dark:bg-slate-700 transition-all duration-300"></div>
+<div class="h-2 w-2 rounded-full bg-slate-200 dark:bg-slate-700 transition-all duration-300"></div>
+</div>
+<!-- Primary Action -->
+<button class="w-full max-w-[320px] group relative flex items-center justify-center overflow-hidden rounded-xl bg-primary h-14 px-8 transition-all hover:brightness-105 active:scale-95 shadow-[0_4px_14px_0_rgba(19,236,91,0.39)]">
+<span class="relative z-10 text-slate-900 text-lg font-bold tracking-tight">Get Started</span>
+<span class="material-symbols-outlined relative z-10 ml-2 text-slate-900 transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

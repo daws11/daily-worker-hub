@@ -1,0 +1,24 @@
+# Supabase Development/Staging Configuration for Integration Tests
+# Copy this file to test-config.properties and fill in your values
+
+# Supabase Project URL (development/staging environment)
+supabase.test.url=https://your-project.supabase.co
+
+# Supabase Anon Key (development/staging environment)
+supabase.test.key=your-anon-key-here
+
+# Test User Credentials
+# These users should be created in your development environment before running tests
+# You can create them manually or via Supabase dashboard
+
+# Worker test user
+test.user.worker.email=integration-test-worker@example.com
+test.user.worker.password=TestWorker123!
+
+# Business test user
+test.user.business.email=integration-test-business@example.com
+test.user.business.password=TestBusiness123!
+
+# Optional: Service role key for cleanup operations (higher privileges)
+# Leave empty if not needed - tests will use anon key with proper RLS policies
+supabase.test.service.role.key=

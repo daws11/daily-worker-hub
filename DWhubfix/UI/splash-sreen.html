@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Daily Worker Hub Splash</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Import Font directly in style as per common practice if link isn't enough for some environments, 
+           but relying on the link provided in head for Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display antialiased selection:bg-primary selection:text-background-dark">
+    <div class="relative flex h-screen w-full flex-col justify-between overflow-hidden">
+        <!-- Decorative Background Elements -->
+        <div class="absolute top-[-10%] right-[-10%] w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none">
+        </div>
+        <div
+            class="absolute bottom-[-10%] left-[-10%] w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none">
+        </div>
+        <!-- Top Spacer -->
+        <div class="flex-1"></div>
+        <!-- Main Center Content -->
+        <div class="flex w-full flex-col items-center px-6 z-10">
+            <!-- Logo Container -->
+            <div class="relative mb-8 group/logo">
+                <!-- Outer Glow/Ring -->
+                <div class="absolute inset-0 rounded-full bg-primary/20 blur-xl scale-110 animate-pulse"></div>
+                <!-- Logo Circle -->
+                <div
+                    class="relative flex h-32 w-32 items-center justify-center rounded-full bg-white dark:bg-[#1a3322] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50 dark:border-white/5">
+                    <!-- Icon representing Hospitality & Connection -->
+                    <span class="material-symbols-outlined text-6xl text-primary"
+                        style="font-variation-settings: 'FILL' 1, 'wght' 600;">
+                        handshake
+                    </span>
+                </div>
+            </div>
+            <!-- Typography -->
+            <div class="flex flex-col items-center gap-2 mb-12">
+                <!-- HeadlineText Component Adapted -->
+                <h1
+                    class="text-background-dark dark:text-white tracking-tight text-[32px] font-extrabold leading-tight text-center">
+                    Daily Worker Hub
+                </h1>
+                <!-- BodyText Component Adapted -->
+                <p class="text-background-dark/70 dark:text-white/70 text-base font-medium leading-normal text-center">
+                    Bali's Hospitality Workforce
+                </p>
+            </div>
+            <!-- Loader / ProgressBar Component Adapted -->
+            <div class="flex flex-col gap-3 w-full max-w-[200px]">
+                <div class="rounded-full bg-primary/10 dark:bg-white/10 overflow-hidden h-1.5 w-full">
+                    <!-- Indeterminate loading effect using width and position hack or just standard width -->
+                    <div class="h-full rounded-full bg-primary w-1/3 animate-[pulse_1.5s_ease-in-out_infinite] mx-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bottom Spacer -->
+        <div class="flex-1"></div>
+        <!-- Footer / MetaText Component Adapted -->
+        <div class="w-full pb-8 z-10">
+            <p
+                class="text-background-dark/30 dark:text-white/20 text-xs font-semibold tracking-wider text-center uppercase">
+                v1.0.0
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

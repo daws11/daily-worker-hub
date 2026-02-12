@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Tutorial Completion</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased">
+<div class="relative flex h-full min-h-screen w-full max-w-md mx-auto flex-col overflow-hidden bg-white dark:bg-[#1A2E22] shadow-xl">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between bg-white dark:bg-[#1A2E22]">
+<button class="text-[#111813] dark:text-white flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+</button>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Tutorial Selesai</h2>
+</div>
+<!-- Progress Bar -->
+<div class="flex flex-col gap-3 px-6 pt-2 pb-4">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-[#111813] dark:text-gray-200 text-sm font-medium leading-normal">Langkah 4 dari 4</p>
+<p class="text-primary font-bold text-sm">100%</p>
+</div>
+<div class="rounded-full bg-[#dbe6df] dark:bg-white/20 h-2 w-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-500 ease-out" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Main Content Scroll Area -->
+<div class="flex-1 overflow-y-auto pb-24">
+<!-- Headline & Hero Image -->
+<div class="flex flex-col items-center pt-2">
+<div class="relative w-32 h-32 mb-4 flex items-center justify-center">
+<!-- Circular Confetti Background -->
+<div class="absolute inset-0 bg-primary/20 rounded-full animate-pulse"></div>
+<!-- Trophy Icon -->
+<img alt="Celebratory golden trophy with sparkles" class="w-24 h-24 object-contain z-10 rounded-full" data-alt="Golden trophy icon representing success" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANKVE-wLaR3br6KvZM5cUybXiiU6_5O4NV0vCuOW0uZB9GY23-A4qPNvIsBjqYY16UegT_HIvL6iNxhRFEtwwPV1jPqs0fo0GGPChHSVcuza-ZjvBS5Q9FImotCD5VNLI4LriYemQU3Bj0uDskvRG05PMW-XB09YhxSZzdfJVjvXvGAtSDatioiyRxQLhjy2zjFNiCqKgxM5Ta2aPry6jRMYi7iBk4256wG_jCETzDKcgiRWvuhOVHZqg8TQxwcsu1obPj4S55B1A"/>
+<div class="absolute -top-2 -right-2 bg-primary text-[#102216] text-xs font-bold px-2 py-1 rounded-full shadow-md rotate-12">
+                        Siap Kerja!
+                    </div>
+</div>
+<h2 class="text-[#111813] dark:text-white tracking-tight text-[28px] font-bold leading-tight px-6 text-center pb-2">
+                    Hampir Selesai!
+                </h2>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-relaxed px-8 text-center">
+                    Jawab satu pertanyaan terakhir untuk membuka akun Anda dan dapatkan bonus.
+                </p>
+</div>
+<!-- Quiz Card -->
+<div class="px-4 py-6">
+<div class="bg-[#f0f4f2] dark:bg-white/5 border border-transparent dark:border-white/10 rounded-xl p-6 shadow-sm">
+<div class="flex items-start gap-3 mb-4">
+<span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary-dark font-bold text-sm shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">quiz</span>
+</span>
+<p class="text-[#111813] dark:text-white text-base font-semibold leading-snug">
+                            Kuis Singkat: Jika Anda membatalkan pekerjaan 1 jam sebelum mulai, apa yang terjadi?
+                        </p>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Option 1: Correct Answer (Simulated selection state for demo) -->
+<button class="group relative flex items-center justify-between w-full p-4 rounded-full bg-white dark:bg-white/10 border-2 border-transparent hover:border-primary/50 transition-all text-left shadow-sm">
+<span class="text-[#111813] dark:text-gray-200 text-sm font-medium pl-2">Tidak ada masalah</span>
+<div class="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 group-hover:border-primary"></div>
+</button>
+<!-- Option 2: Wrong Answer -->
+<button class="group relative flex items-center justify-between w-full p-4 rounded-full bg-white dark:bg-white/10 border-2 border-primary shadow-md transition-all text-left ring-2 ring-primary/20">
+<span class="text-[#111813] dark:text-gray-200 text-sm font-bold pl-2">Saya kena denda rating</span>
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-white">
+<span class="material-symbols-outlined" style="font-size: 16px;">check</span>
+</div>
+</button>
+</div>
+<div class="mt-4 flex items-center gap-2 text-xs text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/30 p-3 rounded-lg">
+<span class="material-symbols-outlined" style="font-size: 18px;">lightbulb</span>
+<span>Tips: Pembatalan mendadak merugikan operasional hotel.</span>
+</div>
+</div>
+</div>
+<!-- Reward Section -->
+<div class="mx-4 mb-6">
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#102216] to-[#1a3b25] p-6 text-white shadow-lg">
+<!-- Background Pattern -->
+<div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
+<div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<div>
+<p class="text-primary text-xs font-bold uppercase tracking-wider mb-1">Reward Menanti</p>
+<h3 class="text-xl font-bold">Bonus Pertama Kali</h3>
+<p class="text-white/70 text-sm mt-1">Dikreditkan ke dompet Anda</p>
+</div>
+<div class="flex flex-col items-end">
+<div class="bg-primary text-[#102216] font-bold text-lg px-4 py-2 rounded-full shadow-lg transform rotate-2">
+                                Rp 50.000
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom CTA -->
+<div class="absolute bottom-0 left-0 w-full bg-white dark:bg-[#1A2E22] border-t border-gray-100 dark:border-white/5 p-4 pb-8 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<button class="flex w-full items-center justify-center gap-2 rounded-full bg-primary py-4 px-6 text-[#102216] font-bold text-lg hover:bg-[#10d650] active:scale-[0.98] transition-all shadow-lg shadow-primary/30">
+<span>Ambil Job Sekarang</span>
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

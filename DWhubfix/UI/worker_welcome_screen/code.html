@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Welcome Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "text-main": "#111813",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-text-main dark:text-white overflow-x-hidden selection:bg-primary selection:text-background-dark">
+<div class="relative flex flex-col min-h-screen w-full max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden">
+<!-- Hero Section with Overlay Header -->
+<div class="relative w-full h-[58vh] bg-gray-200 rounded-b-[3rem] overflow-hidden shadow-lg z-0">
+<!-- Background Image -->
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105" data-alt="Smiling Balinese hospitality worker wearing an apron in a lush green tropical cafe setting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAX-dYoHkXdBbTS9JD_WMhfiAIT8HtxaDMZaZExWxu9SdTSnjQ4ibFN1wIcgs5qcILZfy-qLoNfAFegH7z7kFcNU79b5dj6JbIOiI4h0sSSsm0K-ccibWmGV2D2WyhejXhQfwAPdNlcSL9THKMG-_q--C6bVPTMGGSwIGiwwV7m056vtERtz6o34Koum1jyMzQQPXEHQB6S3ALlthZoV8men55IgwLEyK2igu60UCwE2T1PuXhMwhFT0lXDlmaQKdQUOsOGr8TwHDs');">
+</div>
+<!-- Gradient Overlay for legibility of top elements -->
+<div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/10"></div>
+<!-- Top Header (Overlay) -->
+<div class="absolute top-0 left-0 w-full z-20 p-5 flex items-center justify-between">
+<!-- Logo Area -->
+<div class="flex items-center gap-2 text-white drop-shadow-md">
+<div class="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
+<span class="material-symbols-outlined text-white text-[24px]">work</span>
+</div>
+</div>
+<!-- Language Toggle -->
+<button class="flex items-center h-9 bg-black/20 backdrop-blur-md rounded-full px-1 py-1 border border-white/20">
+<div class="bg-white text-background-dark text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ID</div>
+<div class="text-white text-xs font-medium px-3">EN</div>
+</button>
+</div>
+</div>
+<!-- Content Section -->
+<div class="flex-1 flex flex-col justify-between px-6 pt-8 pb-8 -mt-2 z-10">
+<!-- Text Content -->
+<div class="flex flex-col items-center">
+<h1 class="text-[#111813] dark:text-white text-[32px] leading-[1.2] font-extrabold text-center tracking-tight mb-3">
+                    Jadi pekerja harian Bali, siap bekerja kapan saja!
+                </h1>
+<p class="text-gray-600 dark:text-gray-400 text-base font-medium text-center leading-relaxed max-w-[320px]">
+                    Hubungkan dirimu dengan ratusan bisnis hospitality di Bali. Dapatkan penghasilan tambahan dengan jadwal fleksibel.
+                </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-4 mt-6 w-full">
+<!-- Primary CTA -->
+<button class="relative w-full h-14 bg-primary hover:bg-[#0fd650] active:scale-[0.98] transition-all rounded-full flex items-center justify-center shadow-lg shadow-primary/20 overflow-hidden group">
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+<span class="relative text-[#111813] text-[17px] font-bold tracking-wide mr-2">Daftar Sekarang</span>
+<span class="relative material-symbols-outlined text-[#111813] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<!-- Secondary Link -->
+<div class="flex items-center justify-center gap-1.5 py-1">
+<span class="text-gray-500 dark:text-gray-400 font-medium text-sm">Sudah punya akun?</span>
+<button class="text-green-700 dark:text-green-400 font-bold text-sm hover:underline focus:outline-none">
+                        Masuk
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

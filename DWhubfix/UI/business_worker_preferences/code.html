@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Worker Preferences</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#111813] dark:text-white font-display">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="text-[#111813] dark:text-white flex size-12 shrink-0 items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</div>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Preferensi Pekerja</h2>
+</header>
+<!-- Main Content Scroll Area -->
+<main class="flex-1 pb-24">
+<!-- Skill Section -->
+<section>
+<div class="flex items-center justify-between px-4 pt-6 pb-3">
+<h3 class="text-[#111813] dark:text-white tracking-light text-xl font-bold leading-tight">Skill yang sering dibutuhkan</h3>
+<button class="text-sm font-medium text-primary dark:text-primary">Edit</button>
+</div>
+<!-- Chips Grid -->
+<div class="flex gap-3 px-4 flex-wrap">
+<!-- Selected State -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/20 border border-primary px-4 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm text-green-800 dark:text-green-300">restaurant</span>
+<p class="text-green-900 dark:text-green-100 text-sm font-semibold leading-normal">Waiter</p>
+</button>
+<!-- Unselected States -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-gray-800 border border-transparent shadow-sm px-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm text-gray-500">coffee</span>
+<p class="text-[#111813] dark:text-gray-200 text-sm font-medium leading-normal">Barista</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-gray-800 border border-transparent shadow-sm px-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm text-gray-500">bed</span>
+<p class="text-[#111813] dark:text-gray-200 text-sm font-medium leading-normal">Housekeeping</p>
+</button>
+<!-- Selected State -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/20 border border-primary px-4 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm text-green-800 dark:text-green-300">skillet</span>
+<p class="text-green-900 dark:text-green-100 text-sm font-semibold leading-normal">Cook</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-gray-800 border border-transparent shadow-sm px-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm text-gray-500">water_drop</span>
+<p class="text-[#111813] dark:text-gray-200 text-sm font-medium leading-normal">Dishwasher</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-gray-800 border border-transparent shadow-sm px-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm text-gray-500">security</span>
+<p class="text-[#111813] dark:text-gray-200 text-sm font-medium leading-normal">Security</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-gray-800 border border-transparent shadow-sm px-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm text-gray-500">villa</span>
+<p class="text-[#111813] dark:text-gray-200 text-sm font-medium leading-normal">Villa Attendant</p>
+</button>
+</div>
+<div class="px-4 pt-3">
+<button class="text-xs text-gray-500 flex items-center gap-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                        Tambah skill lainnya
+                    </button>
+</div>
+</section>
+<div class="h-px bg-gray-200 dark:bg-gray-800 mx-4 my-6"></div>
+<!-- Experience Section -->
+<section>
+<h3 class="text-[#111813] dark:text-white tracking-light text-xl font-bold leading-tight px-4 pb-4">Tingkat pengalaman</h3>
+<div class="px-4">
+<div class="flex h-12 w-full items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800 p-1 relative">
+<!-- Segmented Buttons -->
+<label class="group flex cursor-pointer h-full flex-1 items-center justify-center overflow-hidden rounded-lg px-2 relative z-10 transition-all">
+<input class="peer invisible w-0 absolute" name="experience" type="radio" value="&lt; 1 Tahun"/>
+<div class="absolute inset-0 bg-white dark:bg-gray-700 rounded-lg shadow-sm opacity-0 peer-checked:opacity-100 transition-opacity duration-200"></div>
+<span class="relative z-20 truncate text-sm font-medium text-gray-500 peer-checked:text-[#111813] dark:text-gray-400 dark:peer-checked:text-white transition-colors">&lt; 1 Tahun</span>
+</label>
+<label class="group flex cursor-pointer h-full flex-1 items-center justify-center overflow-hidden rounded-lg px-2 relative z-10 transition-all">
+<input checked="" class="peer invisible w-0 absolute" name="experience" type="radio" value="1-3 Tahun"/>
+<div class="absolute inset-0 bg-white dark:bg-gray-700 rounded-lg shadow-sm opacity-0 peer-checked:opacity-100 transition-opacity duration-200"></div>
+<span class="relative z-20 truncate text-sm font-medium text-gray-500 peer-checked:text-[#111813] dark:text-gray-400 dark:peer-checked:text-white transition-colors">1-3 Tahun</span>
+</label>
+<label class="group flex cursor-pointer h-full flex-1 items-center justify-center overflow-hidden rounded-lg px-2 relative z-10 transition-all">
+<input class="peer invisible w-0 absolute" name="experience" type="radio" value="&gt; 3 Tahun"/>
+<div class="absolute inset-0 bg-white dark:bg-gray-700 rounded-lg shadow-sm opacity-0 peer-checked:opacity-100 transition-opacity duration-200"></div>
+<span class="relative z-20 truncate text-sm font-medium text-gray-500 peer-checked:text-[#111813] dark:text-gray-400 dark:peer-checked:text-white transition-colors">&gt; 3 Tahun</span>
+</label>
+</div>
+<p class="text-xs text-gray-400 mt-2 px-1">Pilih tingkat pengalaman minimum yang diharapkan.</p>
+</div>
+</section>
+<div class="h-px bg-gray-200 dark:bg-gray-800 mx-4 my-6"></div>
+<!-- Language Section -->
+<section>
+<h3 class="text-[#111813] dark:text-white tracking-light text-xl font-bold leading-tight px-4 pb-3">Bahasa yang dibutuhkan</h3>
+<div class="px-4 space-y-3">
+<label class="flex items-center justify-between p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-lg">🇮🇩</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-[#111813] dark:text-white">Bahasa Indonesia</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Native / Fluent</span>
+</div>
+</div>
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-300 transition-all checked:border-primary checked:bg-primary" type="checkbox"/>
+<span class="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[16px] text-white opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-lg">🇬🇧</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-[#111813] dark:text-white">English</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Conversational</span>
+</div>
+</div>
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-300 transition-all checked:border-primary checked:bg-primary" type="checkbox"/>
+<span class="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[16px] text-white opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-lg">🇨🇳</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-[#111813] dark:text-white">Mandarin</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Basic</span>
+</div>
+</div>
+<div class="relative flex items-center">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-300 transition-all checked:border-primary checked:bg-primary" type="checkbox"/>
+<span class="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[16px] text-white opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+</label>
+</div>
+</section>
+<div class="h-px bg-gray-200 dark:bg-gray-800 mx-4 my-6"></div>
+<!-- Priority Toggle -->
+<section class="px-4 pb-4">
+<div class="flex items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+<div class="flex items-center gap-3">
+<div class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-full text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-[20px]">near_me</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-[#111813] dark:text-white">Butuh Cepat?</h4>
+<p class="text-xs text-gray-500 dark:text-gray-400">Prioritaskan pekerja terdekat</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</section>
+</main>
+<!-- Sticky Footer -->
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-[#102216]/80 backdrop-blur-md border-t border-gray-100 dark:border-gray-800 p-4 max-w-md mx-auto">
+<button class="flex w-full items-center justify-center rounded-xl bg-primary px-4 py-3.5 text-[#111813] font-bold text-base tracking-wide shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-[0.98]">
+                Simpan Preferensi
+            </button>
+</div>
+</div>
+</body></html>

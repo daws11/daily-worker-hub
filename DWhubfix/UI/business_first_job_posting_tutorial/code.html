@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business First Job Posting Tutorial</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "primary-dark": "#0eb545",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1C2E24",
+                        "text-main": "#111813",
+                        "text-muted": "#6b7280",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        /* Custom scrollbar hide for cleaner mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-white antialiased transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full max-w-md mx-auto flex-col overflow-hidden bg-background-light dark:bg-background-dark shadow-xl">
+<!-- TopAppBar -->
+<div class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between">
+<div class="text-text-main dark:text-white flex size-12 shrink-0 items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 rounded-full justify-center transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-text-main dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Post a Job</h2>
+</div>
+<!-- PageIndicators -->
+<div class="flex w-full flex-row items-center justify-center gap-2 py-4 px-6">
+<div class="h-1.5 w-8 rounded-full bg-primary"></div>
+<div class="h-1.5 w-2 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+<div class="h-1.5 w-2 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto pb-24 no-scrollbar">
+<!-- HeadlineText -->
+<div class="px-6 pt-2">
+<h2 class="text-text-main dark:text-white tracking-tight text-[28px] font-bold leading-tight text-left">Let's post your first shift!</h2>
+</div>
+<!-- BodyText -->
+<div class="px-6 pt-2 pb-6">
+<p class="text-text-muted dark:text-gray-400 text-base font-normal leading-normal">We'll help you find staff in minutes. Fill in the details below or use our smart tools.</p>
+</div>
+<!-- ListItem: Auto-fill Feature -->
+<div class="px-4 mb-6">
+<div class="flex items-center gap-4 bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-4 flex-1">
+<div class="text-text-main dark:text-primary flex items-center justify-center rounded-lg bg-[#f0f4f2] dark:bg-primary/10 shrink-0 size-12">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<p class="text-text-main dark:text-white text-base font-semibold leading-tight">Auto-fill dari profile bisnis</p>
+<p class="text-xs text-text-muted dark:text-gray-400 mt-1">Use saved location &amp; details</p>
+</div>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[28px] w-[48px] cursor-pointer items-center rounded-full border-none bg-gray-200 dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-300">
+<div class="h-[24px] w-[24px] rounded-full bg-white shadow-sm transform transition-transform"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Form Section -->
+<div class="px-4 space-y-5">
+<!-- Job Role -->
+<div class="space-y-2">
+<label class="text-sm font-medium text-text-main dark:text-gray-300 ml-1">Job Position</label>
+<div class="relative">
+<select class="w-full bg-surface-light dark:bg-surface-dark text-text-main dark:text-white rounded-xl border-gray-200 dark:border-gray-700 h-14 px-4 appearance-none focus:border-primary focus:ring-1 focus:ring-primary">
+<option>Barista</option>
+<option>Server</option>
+<option>Cook Helper</option>
+<option>Dishwasher</option>
+</select>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Date & Time Row -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-sm font-medium text-text-main dark:text-gray-300 ml-1">Date</label>
+<div class="relative">
+<input class="w-full bg-surface-light dark:bg-surface-dark text-text-main dark:text-white rounded-xl border-gray-200 dark:border-gray-700 h-14 px-4 focus:border-primary focus:ring-1 focus:ring-primary font-medium" readonly="" type="text" value="Today, 24 Oct"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-muted text-[20px]">calendar_today</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-text-main dark:text-gray-300 ml-1">Time</label>
+<div class="relative">
+<input class="w-full bg-surface-light dark:bg-surface-dark text-text-main dark:text-white rounded-xl border-gray-200 dark:border-gray-700 h-14 px-4 focus:border-primary focus:ring-1 focus:ring-primary font-medium" readonly="" type="text" value="17:00 - 23:00"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-muted text-[20px]">schedule</span>
+</div>
+</div>
+</div>
+<!-- Suggestion Rate Section (Highlight) -->
+<div class="space-y-2 relative group/price">
+<div class="flex justify-between items-center ml-1">
+<label class="text-sm font-medium text-text-main dark:text-gray-300">Hourly Rate (IDR)</label>
+<!-- Tooltip Icon -->
+<div class="flex items-center gap-1">
+<span class="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-md">High Demand</span>
+</div>
+</div>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted font-medium">Rp</span>
+<input class="w-full bg-surface-light dark:bg-surface-dark text-text-main dark:text-white rounded-xl border-gray-200 dark:border-gray-700 h-14 pl-12 pr-4 text-lg font-bold focus:border-primary focus:ring-1 focus:ring-primary transition-all" type="number" value="50000"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2">
+<div class="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
+</div>
+</div>
+<!-- Suggestion Message Bubble -->
+<div class="flex items-start gap-2 bg-primary/10 dark:bg-primary/5 p-3 rounded-lg border border-primary/20">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5">trending_up</span>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-text-main dark:text-white">Suggestion rate per jam: <span class="font-bold">Rp 50.000</span></p>
+<p class="text-xs text-text-muted dark:text-gray-400">Matches market average in Canggu today.</p>
+</div>
+</div>
+</div>
+<!-- Uniform / Notes -->
+<div class="space-y-2">
+<label class="text-sm font-medium text-text-main dark:text-gray-300 ml-1">Uniform &amp; Requirements</label>
+<div class="relative">
+<textarea class="w-full bg-surface-light dark:bg-surface-dark text-text-main dark:text-white rounded-xl border-gray-200 dark:border-gray-700 p-4 focus:border-primary focus:ring-1 focus:ring-primary resize-none text-sm" placeholder="e.g. Black shirt, closed shoes..." rows="3">Black shirt, black pants, closed shoes. Must be friendly!</textarea>
+</div>
+</div>
+</div>
+<div class="h-8"></div>
+</div>
+<!-- Sticky Footer -->
+<div class="absolute bottom-0 w-full bg-background-light dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 p-4 pb-8">
+<button class="w-full bg-primary hover:bg-primary-dark active:scale-[0.98] transition-all text-[#102216] font-bold text-lg h-14 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+                Post Job
+                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

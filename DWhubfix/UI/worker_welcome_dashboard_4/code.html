@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Earnings Wallet</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c3024",
+                        "text-main-light": "#111813",
+                        "text-main-dark": "#f0f4f2",
+                        "text-sub-light": "#61896f",
+                        "text-sub-dark": "#a3c2b0",
+                        "expense": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "1.5rem", 
+                        "xl": "2rem", 
+                        "2xl": "2.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark min-h-screen flex flex-col antialiased selection:bg-primary selection:text-black">
+<header class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm px-4 pt-6 pb-2">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-text-sub-light dark:text-text-sub-dark text-sm font-medium">Earnings</span>
+<h2 class="text-text-main-light dark:text-text-main-dark text-2xl font-bold leading-tight tracking-tight">Dompet Saya</h2>
+</div>
+<div class="flex items-center justify-end gap-3">
+<button class="flex items-center justify-center rounded-full h-10 w-10 bg-transparent text-text-sub-light dark:text-text-sub-dark hover:bg-gray-100 dark:hover:bg-white/5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[24px]">help</span>
+</button>
+<button class="flex items-center justify-center rounded-full h-12 w-12 bg-white dark:bg-surface-dark shadow-sm text-text-main-light dark:text-text-main-dark hover:bg-gray-50 dark:hover:bg-opacity-80 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 px-4 flex flex-col gap-6 pb-24">
+<section class="mt-4">
+<div class="relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark p-6 shadow-md border border-gray-100 dark:border-gray-800">
+<div class="flex flex-col gap-1 mb-6">
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm font-medium flex items-center gap-1">
+                    Saldo Tersedia
+                    <span class="material-symbols-outlined text-[16px] cursor-pointer">visibility</span>
+</p>
+<h1 class="text-text-main-light dark:text-text-main-dark text-4xl font-extrabold tracking-tight">Rp 2.450.000</h1>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 bg-primary text-black font-bold py-3.5 px-4 rounded-xl hover:bg-opacity-90 active:scale-[0.98] transition-all shadow-sm">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span>Tarik</span>
+</button>
+<button class="flex items-center justify-center gap-2 bg-gray-100 dark:bg-white/5 text-text-main-light dark:text-text-main-dark font-semibold py-3.5 px-4 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 active:scale-[0.98] transition-all border border-transparent dark:border-white/10">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span>Detail</span>
+</button>
+</div>
+</div>
+</section>
+<section class="grid grid-cols-2 gap-4">
+<div class="p-4 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col gap-3">
+<div class="h-10 w-10 rounded-full bg-orange-100 dark:bg-orange-500/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-600 dark:text-orange-400">pending</span>
+</div>
+<div>
+<p class="text-xs font-medium text-text-sub-light dark:text-text-sub-dark">Dalam Proses</p>
+<p class="text-lg font-bold text-text-main-light dark:text-text-main-dark">Rp 450.000</p>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col gap-3">
+<div class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600 dark:text-blue-400">calendar_month</span>
+</div>
+<div>
+<p class="text-xs font-medium text-text-sub-light dark:text-text-sub-dark">Pendapatan Okt</p>
+<p class="text-lg font-bold text-text-main-light dark:text-text-main-dark">Rp 3.1jt</p>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center justify-between mb-3 px-1">
+<h3 class="text-text-main-light dark:text-text-main-dark text-lg font-bold">Riwayat Transaksi</h3>
+<a class="text-sm font-semibold text-primary hover:text-opacity-80" href="#">Lihat Semua</a>
+</div>
+<div class="flex flex-col rounded-2xl bg-surface-light dark:bg-surface-dark overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 divide-y divide-gray-100 dark:divide-gray-800">
+<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 rounded-full bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">work</span>
+</div>
+<div class="flex flex-col">
+<p class="text-text-main-light dark:text-text-main-dark font-bold text-sm">Bartender - Potato Head</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">12 Okt • Pembayaran Job</p>
+</div>
+</div>
+<span class="text-primary font-bold text-sm">+ Rp 250.000</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 rounded-full bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">work</span>
+</div>
+<div class="flex flex-col">
+<p class="text-text-main-light dark:text-text-main-dark font-bold text-sm">Server - La Favela</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">10 Okt • Pembayaran Job</p>
+</div>
+</div>
+<span class="text-primary font-bold text-sm">+ Rp 180.000</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 rounded-full bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-text-sub-light dark:text-text-sub-dark">arrow_upward</span>
+</div>
+<div class="flex flex-col">
+<p class="text-text-main-light dark:text-text-main-dark font-bold text-sm">Penarikan ke BCA</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">08 Okt • Selesai</p>
+</div>
+</div>
+<span class="text-text-main-light dark:text-text-main-dark font-bold text-sm">- Rp 500.000</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 rounded-full bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">work</span>
+</div>
+<div class="flex flex-col">
+<p class="text-text-main-light dark:text-text-main-dark font-bold text-sm">Dishwasher - Finns</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">05 Okt • Pembayaran Job</p>
+</div>
+</div>
+<span class="text-primary font-bold text-sm">+ Rp 150.000</span>
+</div>
+</div>
+</section>
+<section>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-4 border border-gray-100 dark:border-gray-800 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-3">
+<div class="bg-blue-600/10 dark:bg-blue-500/20 p-2 rounded-lg text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-text-main-light dark:text-text-main-dark">Rekening Bank</span>
+<span class="text-xs text-text-sub-light dark:text-text-sub-dark">BCA •••• 8832</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-sub-light dark:text-text-sub-dark">chevron_right</span>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 border-t border-gray-100 dark:border-gray-800 bg-surface-light dark:bg-surface-dark px-6 py-2 pb-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+<div class="flex items-center justify-between max-w-md mx-auto">
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="h-8 w-16 rounded-full flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[26px] text-text-sub-light dark:text-text-sub-dark">home</span>
+</div>
+<span class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="h-8 w-16 rounded-full flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[26px] text-text-sub-light dark:text-text-sub-dark">work</span>
+</div>
+<span class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">Job</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="h-8 w-16 rounded-full flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[26px] text-text-main-light dark:text-text-main-dark font-filled">account_balance_wallet</span>
+</div>
+<span class="text-text-main-light dark:text-text-main-dark text-xs font-semibold">Dompet</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="h-8 w-16 rounded-full flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[26px] text-text-sub-light dark:text-text-sub-dark">person</span>
+</div>
+<span class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium">Profil</span>
+</a>
+</div>
+</nav>
+
+</body></html>

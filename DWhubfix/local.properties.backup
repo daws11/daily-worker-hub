@@ -1,0 +1,6 @@
+# Supabase Configuration (LOCAL DEV)
+# Use 10.0.2.2 for Android emulator (localhost on host machine)
+supabase.url=http://10.0.2.2:54321
+supabase.anonKey=PUBLISHABLE_KEY_REMOVED
+
+sdk.dir=/home/dev/android-sdk

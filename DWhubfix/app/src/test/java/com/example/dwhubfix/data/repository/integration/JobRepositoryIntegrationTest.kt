@@ -300,7 +300,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
         authenticateAsWorker()
 
         // Act - Get profile
-        val userId = getStoredUserId() ?: throw IllegalStateException("No user ID")
+        val userId = currentUserId ?: throw IllegalStateException("No user ID")
 
         // For this test, we'll create a profile if it doesn't exist
         val profiles = client.from("profiles").select() {

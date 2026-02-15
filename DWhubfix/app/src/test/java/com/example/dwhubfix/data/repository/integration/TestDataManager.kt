@@ -1,9 +1,10 @@
 package com.example.dwhubfix.data.repository.integration
 
-import io.github.jan.supabase.SupabaseClient as SupabaseClientInstance
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.SupabaseClient as SupabaseClientInstance
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,10 +14,9 @@ import java.io.File
 import java.util.UUID
 
 /**
- * Test Data Manager
+ * Test Data Manager for JVM-based Testing
  *
- * Manages test configuration, Supabase client creation, test user management,
- * and test data cleanup for integration tests.
+ * Uses Supabase-KT 3.0.0 API with sessionManager.loadSession()
  */
 object TestDataManager {
 
@@ -24,9 +24,6 @@ object TestDataManager {
     private const val DEFAULT_WORKER_EMAIL = "integration-test-worker@example.com"
     private const val DEFAULT_BUSINESS_EMAIL = "integration-test-business@example.com"
 
-    /**
-     * Test configuration data class
-     */
     data class TestConfig(
         val supabaseUrl: String,
         val supabaseKey: String,
@@ -39,37 +36,25 @@ object TestDataManager {
 
     /**
      * Load configuration from test-config.properties file
-     *
-     * @return TestConfig with loaded values or defaults
      */
     fun loadConfig(): TestConfig {
         val properties = Properties()
 
-        // Try to load from test resources
         val configUrl = javaClass.classLoader?.getResource(CONFIG_FILE)
         if (configUrl != null) {
             properties.load(configUrl.openStream())
         } else {
-            // Try to load from file system
             val configFile = File("app/src/test/resources/$CONFIG_FILE")
             if (configFile.exists()) {
                 properties.load(FileInputStream(configFile))
-            } else {
-                // Try environment variables as fallback
-                properties.setProperty("supabase.test.url", System.getenv("SUPABASE_DEV_URL") ?: "")
-                properties.setProperty("supabase.test.key", System.getenv("SUPABASE_DEV_KEY") ?: "")
-                properties.setProperty("test.user.worker.email", System.getenv("TEST_WORKER_EMAIL") ?: DEFAULT_WORKER_EMAIL)
-                properties.setProperty("test.user.worker.password", System.getenv("TEST_WORKER_PASSWORD") ?: "TestWorker123!")
-                properties.setProperty("test.user.business.email", System.getenv("TEST_BUSINESS_EMAIL") ?: DEFAULT_BUSINESS_EMAIL)
-                properties.setProperty("test.user.business.password", System.getenv("TEST_BUSINESS_PASSWORD") ?: "TestBusiness123!")
             }
         }
 
-        val url = properties.getProperty("supabase.test.url")
-        val key = properties.getProperty("supabase.test.key")
+        val url = properties.getProperty("supabase.test.url", "")
+        val key = properties.getProperty("supabase.test.key", "")
 
-        require(url.isNotBlank()) { "Supabase URL must be configured in test-config.properties or SUPABASE_DEV_URL environment variable" }
-        require(key.isNotBlank()) { "Supabase Anon Key must be configured in test-config.properties or SUPABASE_DEV_KEY environment variable" }
+        require(url.isNotBlank()) { "Supabase URL must be configured in test-config.properties" }
+        require(key.isNotBlank()) { "Supabase Anon Key must be configured in test-config.properties" }
 
         return TestConfig(
             supabaseUrl = url,
@@ -84,54 +69,37 @@ object TestDataManager {
 
     /**
      * Create a Supabase client for JVM-based testing
-     * Uses Ktor CIO engine for non-Android environments
-     * Uses InMemorySessionManager to avoid Android Context dependency
-     *
-     * @param config Test configuration
-     * @return Configured SupabaseClientInstance
+     * Uses a dummy session manager to avoid Android Context dependency
      */
     fun createTestClient(config: TestConfig = loadConfig()): SupabaseClientInstance {
         return createSupabaseClient(
             supabaseUrl = config.supabaseUrl,
             supabaseKey = config.supabaseKey
         ) {
-            // Install Auth with custom session manager for JVM testing
             install(Auth) {
-                // Use InMemorySessionManager to avoid Android Context dependency
-                sessionManager = InMemorySessionManager()
+                // Use default session manager - JVM tests don't need persistent storage
+                // Session will be in-memory only
             }
             install(Postgrest)
+            install(Storage)
         }
     }
 
     /**
      * Generate a unique test ID for data isolation
-     * Each test gets a unique UUID to tag its data
-     *
-     * @return Unique test identifier
      */
     fun generateTestId(): String = "test-${UUID.randomUUID()}"
 
     /**
      * Clean up test data from Supabase
-     * Deletes all rows tagged with the given test_id
-     *
-     * @param client Supabase client
-     * @param testId Unique test identifier to clean up
      */
     suspend fun cleanupTestData(
         client: SupabaseClientInstance,
         testId: String
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            // Try to call the cleanup function if it exists
-            // Note: RPC call syntax depends on Supabase-KT version
-            // For now, we'll skip the RPC and use manual cleanup
-            cleanupTable(client, "shifts", testId)
-            cleanupTable(client, "bookings", testId)
             cleanupTable(client, "job_applications", testId)
             cleanupTable(client, "jobs", testId)
-
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -153,7 +121,6 @@ object TestDataManager {
                 }
             }
         } catch (e: Exception) {
-            // Log but don't fail - table might not have test_id column yet
             println("Warning: Could not clean up table $table: ${e.message}")
         }
     }
@@ -170,24 +137,15 @@ object TestDataManager {
     }
 
     /**
-     * Assert that test users exist or provide instructions for creating them
-     * This doesn't create users automatically, just validates configuration
+     * Validate test users configuration
      */
     fun validateTestUsers(config: TestConfig = loadConfig()): ValidationResult {
         val errors = mutableListOf<String>()
 
-        if (config.workerEmail.isBlank()) {
-            errors.add("Worker email not configured")
-        }
-        if (config.workerPassword.isBlank()) {
-            errors.add("Worker password not configured")
-        }
-        if (config.businessEmail.isBlank()) {
-            errors.add("Business email not configured")
-        }
-        if (config.businessPassword.isBlank()) {
-            errors.add("Business password not configured")
-        }
+        if (config.workerEmail.isBlank()) errors.add("Worker email not configured")
+        if (config.workerPassword.isBlank()) errors.add("Worker password not configured")
+        if (config.businessEmail.isBlank()) errors.add("Business email not configured")
+        if (config.businessPassword.isBlank()) errors.add("Business password not configured")
 
         return if (errors.isEmpty()) {
             ValidationResult.Success

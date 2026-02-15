@@ -21,7 +21,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== CLOCK-IN TESTS ====================
 
     @Test
-    fun `clock in with location saves location data`() = runTest {
+    fun clock_in_with_location_saves_location_data() = runTest {
         // Arrange - Create booking in confirmed state
         val (businessId, workerId, shiftId, bookingId) = createConfirmedBooking()
 
@@ -53,7 +53,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `clock in when already clocked in returns failure`() = runTest {
+    fun clock_in_when_already_clocked_in_returns_failure() = runTest {
         // Arrange - Create booking and clock in
         val (_, workerId, shiftId, bookingId) = createConfirmedBooking()
 
@@ -88,7 +88,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `clock in to non-existent booking returns failure`() = runTest {
+    fun clock_in_to_nonexistent_booking_returns_failure() = runTest {
         // Arrange
         authenticateAsWorker()
         val fakeBookingId = "00000000-0000-0000-0000-000000000000"
@@ -111,7 +111,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== CLOCK-OUT TESTS ====================
 
     @Test
-    fun `clock out with location saves location data`() = runTest {
+    fun clock_out_with_location_saves_location_data() = runTest {
         // Arrange - Create booking, clock in
         val (businessId, workerId, shiftId, bookingId) = createConfirmedBooking()
         val clockInLat = -6.2088
@@ -157,7 +157,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `clock out when not clocked in returns failure`() = runTest {
+    fun clock_out_when_not_clocked_in_returns_failure() = runTest {
         // Arrange - Create booking in confirmed state (not clocked in)
         val (businessId, workerId, shiftId, bookingId) = createConfirmedBooking()
 
@@ -179,7 +179,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `clock out calculates duration correctly`() = runTest {
+    fun clock_out_calculates_duration_correctly() = runTest {
         // This test verifies duration calculation
         val startTime = "09:00"
         val endTime = "17:00"
@@ -204,7 +204,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== GET BOOKINGS TESTS ====================
 
     @Test
-    fun `get bookings for worker returns list`() = runTest {
+    fun get_bookings_for_worker_returns_list() = runTest {
         // Arrange - Create bookings for worker
         val (businessId, workerId, shiftId, bookingId) = createConfirmedBooking()
 
@@ -218,7 +218,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get bookings empty returns empty list`() = runTest {
+    fun get_bookings_empty_returns_empty_list() = runTest {
         // Arrange - New worker with no bookings
         val workerId = authenticateAsWorker()
 
@@ -232,7 +232,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get shift details returns shift data`() = runTest {
+    fun get_shift_details_returns_shift_data() = runTest {
         // Arrange - Create shift
         val (businessId, workerId, shiftId, _) = createConfirmedBooking()
 
@@ -250,7 +250,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== EARNINGS CALCULATION TESTS ====================
 
     @Test
-    fun `earnings calculation hourly rate correct amount`() = runTest {
+    fun earnings_calculation_hourly_rate_correct_amount() = runTest {
         // Test calculation: 8 hours * 15000 IDR/hour = 120000 IDR
         val hoursWorked = 8.0
         val ratePerHour = 15000L
@@ -260,7 +260,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `earnings calculation daily rate correct amount`() = runTest {
+    fun earnings_calculation_daily_rate_correct_amount() = runTest {
         // Test calculation: 1 day * 150000 IDR/day = 150000 IDR
         val dailyRate = 150000L
         val daysWorked = 1
@@ -270,7 +270,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `earnings calculation with overtime includes overtime`() = runTest {
+    fun earnings_calculation_with_overtime_includes_overtime() = runTest {
         // Test: 8 regular hours + 2 overtime hours
         val regularHours = 8.0
         val overtimeHours = 2.0
@@ -289,7 +289,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== UPDATE BOOKING STATUS TESTS ====================
 
     @Test
-    fun `update booking status changes status`() = runTest {
+    fun update_booking_status_changes_status() = runTest {
         // Arrange - Create booking
         val (businessId, workerId, shiftId, bookingId) = createConfirmedBooking()
 
@@ -309,7 +309,7 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `multiple clock-in-out cycles track correctly`() = runTest {
+    fun multiple_clock_in_out_cycles_track_correctly() = runTest {
         // This test verifies that we can track multiple state changes
         val (businessId, workerId, shiftId, bookingId) = createConfirmedBooking()
 
@@ -360,26 +360,28 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
         // Create business user
         val businessId = authenticateAsBusiness()
 
-        // Create job
-        val job = client.from("jobs").insert(buildTestData(
-            "business_id" to businessId,
-            "title" to "Test Job for Booking $testId",
-            "description" to "Test job",
-            "wage" to 15000.0,
-            "wage_type" to "per_hour",
-            "location" to "Jakarta, Indonesia",
-            "category" to "hospitality",
-            "start_time" to "09:00",
-            "end_time" to "17:00",
-            "shift_date" to java.time.LocalDate.now().plusDays(1).toString(),
-            "is_urgent" to false,
-            "worker_count" to 1,
-            "status" to "open"
-        )).decodeSingle<Map<String, Any?>>()
+        // Create job using typed TestJobData
+        val jobData = createTestJobData(
+            businessId = businessId,
+            title = "Test Job for Booking $testId",
+            description = "Test job",
+            wage = 15000.0,
+            wageType = "per_hour",
+            location = "Jakarta, Indonesia",
+            category = "hospitality",
+            startTime = "09:00",
+            endTime = "17:00",
+            shiftDate = java.time.LocalDate.now().plusDays(1).toString(),
+            isUrgent = false,
+            workerCount = 1,
+            status = "open",
+            testId = testId
+        )
+        val job = client.from("jobs").insert(jobData).decodeSingle<Map<String, Any?>>()
         val jobId = job["id"] as? String ?: throw IllegalStateException("No job ID")
 
-        // Create shift
-        val shift = client.from("shifts").insert(buildTestData(
+        // Create shift using map (no typed class for shift yet)
+        val shiftData = mapOf(
             "job_id" to jobId,
             "job_type" to "hospitality",
             "job_title" to "Test Shift $testId",
@@ -392,21 +394,29 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
             "required_workers_count" to 1,
             "filled_workers_count" to 1,
             "urgency_level" to "normal",
-            "status" to "active"
-        )).decodeSingle<Map<String, Any?>>()
+            "status" to "active",
+            "test_id" to testId,
+            "is_test_data" to true
+        )
+        val shift = client.from("shifts").insert(shiftData).decodeSingle<Map<String, Any?>>()
         val shiftId = shift["id"] as? String ?: throw IllegalStateException("No shift ID")
 
         logoutIfNeeded()
 
-        // Create worker and booking
+        // Create worker and booking using typed TestBookingData
         val workerId = authenticateAsWorker()
 
-        val booking = client.from("bookings").insert(buildTestData(
-            "shift_id" to shiftId,
-            "worker_id" to workerId,
-            "business_id" to businessId,
-            "status" to "confirmed"
-        )).decodeSingle<Map<String, Any?>>()
+        val bookingData = createTestBookingData(
+            jobId = jobId,
+            workerId = workerId,
+            businessId = businessId,
+            bookingDate = java.time.LocalDate.now().plusDays(1).toString(),
+            startTime = "09:00",
+            endTime = "17:00",
+            status = "confirmed",
+            testId = testId
+        )
+        val booking = client.from("bookings").insert(bookingData).decodeSingle<Map<String, Any?>>()
         val bookingId = booking["id"] as? String ?: throw IllegalStateException("No booking ID")
 
         return Quadruple(businessId, workerId, shiftId, bookingId)

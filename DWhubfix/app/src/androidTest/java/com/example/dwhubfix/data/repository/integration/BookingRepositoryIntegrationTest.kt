@@ -360,26 +360,28 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
         // Create business user
         val businessId = authenticateAsBusiness()
 
-        // Create job
-        val job = client.from("jobs").insert(buildTestData(
-            "business_id" to businessId,
-            "title" to "Test Job for Booking $testId",
-            "description" to "Test job",
-            "wage" to 15000.0,
-            "wage_type" to "per_hour",
-            "location" to "Jakarta, Indonesia",
-            "category" to "hospitality",
-            "start_time" to "09:00",
-            "end_time" to "17:00",
-            "shift_date" to java.time.LocalDate.now().plusDays(1).toString(),
-            "is_urgent" to false,
-            "worker_count" to 1,
-            "status" to "open"
-        )).decodeSingle<Map<String, Any?>>()
+        // Create job using typed TestJobData
+        val jobData = createTestJobData(
+            businessId = businessId,
+            title = "Test Job for Booking $testId",
+            description = "Test job",
+            wage = 15000.0,
+            wageType = "per_hour",
+            location = "Jakarta, Indonesia",
+            category = "hospitality",
+            startTime = "09:00",
+            endTime = "17:00",
+            shiftDate = java.time.LocalDate.now().plusDays(1).toString(),
+            isUrgent = false,
+            workerCount = 1,
+            status = "open",
+            testId = testId
+        )
+        val job = client.from("jobs").insert(jobData).decodeSingle<Map<String, Any?>>()
         val jobId = job["id"] as? String ?: throw IllegalStateException("No job ID")
 
-        // Create shift
-        val shift = client.from("shifts").insert(buildTestData(
+        // Create shift using map (no typed class for shift yet)
+        val shiftData = mapOf(
             "job_id" to jobId,
             "job_type" to "hospitality",
             "job_title" to "Test Shift $testId",
@@ -392,21 +394,29 @@ class BookingRepositoryIntegrationTest : BaseIntegrationTest() {
             "required_workers_count" to 1,
             "filled_workers_count" to 1,
             "urgency_level" to "normal",
-            "status" to "active"
-        )).decodeSingle<Map<String, Any?>>()
+            "status" to "active",
+            "test_id" to testId,
+            "is_test_data" to true
+        )
+        val shift = client.from("shifts").insert(shiftData).decodeSingle<Map<String, Any?>>()
         val shiftId = shift["id"] as? String ?: throw IllegalStateException("No shift ID")
 
         logoutIfNeeded()
 
-        // Create worker and booking
+        // Create worker and booking using typed TestBookingData
         val workerId = authenticateAsWorker()
 
-        val booking = client.from("bookings").insert(buildTestData(
-            "shift_id" to shiftId,
-            "worker_id" to workerId,
-            "business_id" to businessId,
-            "status" to "confirmed"
-        )).decodeSingle<Map<String, Any?>>()
+        val bookingData = createTestBookingData(
+            jobId = jobId,
+            workerId = workerId,
+            businessId = businessId,
+            bookingDate = java.time.LocalDate.now().plusDays(1).toString(),
+            startTime = "09:00",
+            endTime = "17:00",
+            status = "confirmed",
+            testId = testId
+        )
+        val booking = client.from("bookings").insert(bookingData).decodeSingle<Map<String, Any?>>()
         val bookingId = booking["id"] as? String ?: throw IllegalStateException("No booking ID")
 
         return Quadruple(businessId, workerId, shiftId, bookingId)

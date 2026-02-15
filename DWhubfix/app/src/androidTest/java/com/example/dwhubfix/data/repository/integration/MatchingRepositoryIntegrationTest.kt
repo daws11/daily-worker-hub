@@ -147,9 +147,9 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         val score2 = calculateDistanceScore(distance2)
         val score3 = calculateDistanceScore(distance3)
 
-        assertEquals("Very close (<2km) should get 30 points", 30.0, score1)
-        assertEquals("Very close (<2km) should get 30 points", 30.0, score2)
-        assertEquals("Very close (<2km) should get 30 points", 30.0, score3)
+        assertEquals("Very close (<2km) should get 30 points", 30.0, score1, 0.001)
+        assertEquals("Very close (<2km) should get 30 points", 30.0, score2, 0.001)
+        assertEquals("Very close (<2km) should get 30 points", 30.0, score3, 0.001)
     }
 
     @Test
@@ -161,8 +161,8 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         val score1 = calculateDistanceScore(distance1)
         val score2 = calculateDistanceScore(distance2)
 
-        assertEquals("Close (2-5km) should get 25 points", 25.0, score1)
-        assertEquals("Close (2-5km) should get 25 points", 25.0, score2)
+        assertEquals("Close (2-5km) should get 25 points", 25.0, score1, 0.001)
+        assertEquals("Close (2-5km) should get 25 points", 25.0, score2, 0.001)
     }
 
     @Test
@@ -174,8 +174,8 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         val score1 = calculateDistanceScore(distance1)
         val score2 = calculateDistanceScore(distance2)
 
-        assertEquals("Medium (5-10km) should get 15 points", 15.0, score1)
-        assertEquals("Medium (5-10km) should get 15 points", 15.0, score2)
+        assertEquals("Medium (5-10km) should get 15 points", 15.0, score1, 0.001)
+        assertEquals("Medium (5-10km) should get 15 points", 15.0, score2, 0.001)
     }
 
     @Test
@@ -189,9 +189,9 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         val score2 = calculateDistanceScore(distance2)
         val score3 = calculateDistanceScore(distance3)
 
-        assertEquals("Very far (20-30km) should get 5 points", 5.0, score1)
-        assertEquals("Out of range (>30km) should get 2 points", 2.0, score2)
-        assertEquals("Out of range (>30km) should get 2 points", 2.0, score3)
+        assertEquals("Very far (20-30km) should get 5 points", 5.0, score1, 0.001)
+        assertEquals("Out of range (>30km) should get 2 points", 2.0, score2, 0.001)
+        assertEquals("Out of range (>30km) should get 2 points", 2.0, score3, 0.001)
     }
 
     // ==================== SKILLS MATCHING TESTS ====================
@@ -202,7 +202,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         // This test verifies that scoring weight is correct
         val expectedSkillScore = MatchingConstants.WEIGHT_SKILL
 
-        assertEquals("Skill score weight should be 25", 25.0, expectedSkillScore)
+        assertEquals("Skill score weight should be 25", 25.0, expectedSkillScore, 0.001)
     }
 
     // ==================== JOB PRIORITIZATION TESTS ====================
@@ -234,7 +234,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
 
         val totalScore = distanceScore + skillScore + ratingScore + reliabilityScore + urgencyScore
 
-        assertEquals("Total score should be 100", 100.0, totalScore)
+        assertEquals("Total score should be 100", 100.0, totalScore, 0.001)
     }
 
     // ==================== GET ELIGIBLE WORKERS TESTS ====================
@@ -294,20 +294,22 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         businessId: String,
         title: String = "Test Job $testId"
     ): Map<String, Any?> {
-        return client.from("jobs").insert(buildTestData(
-            "business_id" to businessId,
-            "title" to title,
-            "description" to "Test job description",
-            "wage" to 50000.0,
-            "wage_type" to "per_hour",
-            "location" to "Jakarta, Indonesia",
-            "category" to "hospitality",
-            "start_time" to "09:00",
-            "end_time" to "17:00",
-            "shift_date" to java.time.LocalDate.now().plusDays(1).toString(),
-            "is_urgent" to false,
-            "worker_count" to 1,
-            "status" to "open"
-        )).decodeSingle<Map<String, Any?>>()
+        val jobData = createTestJobData(
+            businessId = businessId,
+            title = title,
+            description = "Test job description",
+            wage = 50000.0,
+            wageType = "per_hour",
+            location = "Jakarta, Indonesia",
+            category = "hospitality",
+            startTime = "09:00",
+            endTime = "17:00",
+            shiftDate = java.time.LocalDate.now().plusDays(1).toString(),
+            isUrgent = false,
+            workerCount = 1,
+            status = "open",
+            testId = testId
+        )
+        return client.from("jobs").insert(jobData).decodeSingle<Map<String, Any?>>()
     }
 }

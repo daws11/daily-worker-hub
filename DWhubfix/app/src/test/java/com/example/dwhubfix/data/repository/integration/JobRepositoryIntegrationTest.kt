@@ -27,27 +27,30 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== CREATE JOB TESTS ====================
 
     @Test
-    fun `create job with valid data returns success`() = runTest {
+    fun create_job_with_valid_data_returns_success() = runTest {
         // Arrange
         val businessId = authenticateAsBusiness()
         val request = buildCreateJobRequest()
 
-        // Act
-        val result = client.from("jobs").insert(buildTestData(
-            "business_id" to businessId,
-            "title" to request.title,
-            "description" to request.description,
-            "wage" to request.wage,
-            "wage_type" to request.wageType,
-            "location" to request.location,
-            "category" to request.category,
-            "start_time" to request.startTime,
-            "end_time" to request.endTime,
-            "shift_date" to request.shiftDate.toString(),
-            "is_urgent" to request.isUrgent,
-            "worker_count" to request.workerCount,
-            "status" to "open"
-        )).decodeSingle<Map<String, Any?>>()
+        // Act - Use typed TestJobData instead of Map
+        val jobData = createTestJobData(
+            businessId = businessId,
+            title = request.title,
+            description = request.description,
+            wage = request.wage,
+            wageType = request.wageType,
+            location = request.location,
+            category = request.category,
+            startTime = request.startTime,
+            endTime = request.endTime,
+            shiftDate = request.shiftDate.toString(),
+            isUrgent = request.isUrgent,
+            workerCount = request.workerCount,
+            status = "open",
+            testId = testId
+        )
+
+        val result = client.from("jobs").insert(jobData).decodeSingle<Map<String, Any?>>()
 
         // Assert
         assertNotNull("Job ID should be generated", result["id"])
@@ -56,7 +59,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get available jobs returns list`() = runTest {
+    fun get_available_jobs_returns_list() = runTest {
         // Arrange - Create some jobs
         val businessId = authenticateAsBusiness()
         createTestJob(businessId)
@@ -73,7 +76,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get job by ID exists returns job`() = runTest {
+    fun get_job_by_id_exists_returns_job() = runTest {
         // Arrange - Create a job
         val businessId = authenticateAsBusiness()
         val createdJob = createTestJob(businessId)
@@ -92,7 +95,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get job by ID not exists returns failure`() = runTest {
+    fun get_job_by_id_not_exists_returns_failure() = runTest {
         // Arrange
         authenticateAsWorker()
         val fakeJobId = "00000000-0000-0000-0000-000000000000"
@@ -110,21 +113,23 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== APPLY FOR JOB TESTS ====================
 
     @Test
-    fun `apply for job new application returns success`() = runTest {
+    fun apply_for_job_new_application_returns_success() = runTest {
         // Arrange - Create a job
         val businessId = authenticateAsBusiness()
         val createdJob = createTestJob(businessId)
         val jobId = createdJob["id"] as? String ?: throw IllegalStateException("No job ID")
         logoutIfNeeded()
 
-        // Act - Apply as worker
+        // Act - Apply as worker using typed TestJobApplicationData
         val workerId = authenticateAsWorker()
-        val application = client.from("job_applications").insert(buildTestData(
-            "job_id" to jobId,
-            "worker_id" to workerId,
-            "status" to "pending",
-            "message" to "I am interested in this job"
-        )).decodeSingle<Map<String, Any?>>()
+        val applicationData = createTestJobApplicationData(
+            jobId = jobId,
+            workerId = workerId,
+            status = "pending",
+            message = "I am interested in this job",
+            testId = testId
+        )
+        val application = client.from("job_applications").insert(applicationData).decodeSingle<Map<String, Any?>>()
 
         // Assert
         assertNotNull("Application ID should be generated", application["id"])
@@ -133,7 +138,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `apply for job duplicate returns failure`() = runTest {
+    fun apply_for_job_duplicate_returns_failure() = runTest {
         // Arrange - Create and apply once
         val businessId = authenticateAsBusiness()
         val createdJob = createTestJob(businessId)
@@ -141,19 +146,17 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
         logoutIfNeeded()
 
         val workerId = authenticateAsWorker()
-        client.from("job_applications").insert(buildTestData(
-            "job_id" to jobId,
-            "worker_id" to workerId,
-            "status" to "pending"
-        ))
+        val applicationData = createTestJobApplicationData(
+            jobId = jobId,
+            workerId = workerId,
+            status = "pending",
+            testId = testId
+        )
+        client.from("job_applications").insert(applicationData)
 
         // Act & Assert - Try to apply again
         val exception = kotlin.runCatching {
-            client.from("job_applications").insert(buildTestData(
-                "job_id" to jobId,
-                "worker_id" to workerId,
-                "status" to "pending"
-            ))
+            client.from("job_applications").insert(applicationData)
         }.exceptionOrNull()
 
         assertNotNull("Duplicate application should fail", exception)
@@ -162,7 +165,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== ACCEPT JOB TESTS ====================
 
     @Test
-    fun `accept job changes status to accepted`() = runTest {
+    fun accept_job_changes_status_to_accepted() = runTest {
         // Arrange - Create job and application
         val businessId = authenticateAsBusiness()
         val createdJob = createTestJob(businessId)
@@ -170,11 +173,13 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
         logoutIfNeeded()
 
         val workerId = authenticateAsWorker()
-        val application = client.from("job_applications").insert(buildTestData(
-            "job_id" to jobId,
-            "worker_id" to workerId,
-            "status" to "pending"
-        )).decodeSingle<Map<String, Any?>>()
+        val applicationData = createTestJobApplicationData(
+            jobId = jobId,
+            workerId = workerId,
+            status = "pending",
+            testId = testId
+        )
+        val application = client.from("job_applications").insert(applicationData).decodeSingle<Map<String, Any?>>()
         val applicationId = application["id"] as? String ?: throw IllegalStateException("No application ID")
 
         // Act - Accept the job (update status to accepted)
@@ -195,7 +200,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== COMPLETE JOB TESTS ====================
 
     @Test
-    fun `complete job updates status to completed`() = runTest {
+    fun complete_job_updates_status_to_completed() = runTest {
         // Arrange - Create job, accept it
         val businessId = authenticateAsBusiness()
         val createdJob = createTestJob(businessId)
@@ -203,12 +208,13 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
         logoutIfNeeded()
 
         val workerId = authenticateAsWorker()
-        val application = client.from("job_applications").insert(buildTestData(
-            "job_id" to jobId,
-            "worker_id" to workerId,
-            "status" to "accepted",
-            "accepted_at" to java.time.Instant.now().toString()
-        )).decodeSingle<Map<String, Any?>>()
+        val applicationData = createTestJobApplicationData(
+            jobId = jobId,
+            workerId = workerId,
+            status = "accepted",
+            testId = testId
+        ).copy(accepted_at = java.time.Instant.now().toString())
+        val application = client.from("job_applications").insert(applicationData).decodeSingle<Map<String, Any?>>()
         val applicationId = application["id"] as? String ?: throw IllegalStateException("No application ID")
 
         val completedAt = java.time.Instant.now().toString()
@@ -237,7 +243,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `complete job calculates 6% platform commission`() = runTest {
+    fun complete_job_calculates_platform_commission() = runTest {
         // This test verifies the commission calculation logic
         val grossAmount = 100000
         val expectedCommission = (grossAmount * 0.06).toInt() // 6000
@@ -250,7 +256,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== DELETE JOB TESTS ====================
 
     @Test
-    fun `delete job by owner returns success`() = runTest {
+    fun delete_job_by_owner_returns_success() = runTest {
         // Arrange - Create a job
         val businessId = authenticateAsBusiness()
         val createdJob = createTestJob(businessId)
@@ -272,7 +278,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `delete job by different user returns failure`() = runTest {
+    fun delete_job_by_different_user_returns_failure() = runTest {
         // This would require RLS policies to be set up correctly
         // For now, we'll just verify the deletion mechanism works
         val businessId = authenticateAsBusiness()
@@ -295,12 +301,12 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== WORKER PROFILE & STATS ====================
 
     @Test
-    fun `get worker profile returns profile data`() = runTest {
+    fun get_worker_profile_returns_profile_data() = runTest {
         // Arrange
         authenticateAsWorker()
 
         // Act - Get profile
-        val userId = currentUserId ?: throw IllegalStateException("No user ID")
+        val userId = getStoredUserId() ?: throw IllegalStateException("No user ID")
 
         // For this test, we'll create a profile if it doesn't exist
         val profiles = client.from("profiles").select() {
@@ -313,7 +319,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get worker history returns applications`() = runTest {
+    fun get_worker_history_returns_applications() = runTest {
         // Arrange - Create job and apply
         val businessId = authenticateAsBusiness()
         val createdJob = createTestJob(businessId)
@@ -321,11 +327,13 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
         logoutIfNeeded()
 
         val workerId = authenticateAsWorker()
-        client.from("job_applications").insert(buildTestData(
-            "job_id" to jobId,
-            "worker_id" to workerId,
-            "status" to "pending"
-        ))
+        val applicationData = createTestJobApplicationData(
+            jobId = jobId,
+            workerId = workerId,
+            status = "pending",
+            testId = testId
+        )
+        client.from("job_applications").insert(applicationData)
 
         // Act - Get history
         val history = client.from("job_applications").select() {
@@ -339,7 +347,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== JOB DETAILS TESTS ====================
 
     @Test
-    fun `get job details returns full details`() = runTest {
+    fun get_job_details_returns_full_details() = runTest {
         // Arrange
         val businessId = authenticateAsBusiness()
         val createdJob = createTestJob(businessId)
@@ -359,7 +367,7 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get business jobs returns only business jobs`() = runTest {
+    fun get_business_jobs_returns_only_business_jobs() = runTest {
         // Arrange - Create jobs as business
         val businessId = authenticateAsBusiness()
         createTestJob(businessId, "Business Job 1")
@@ -402,20 +410,22 @@ class JobRepositoryIntegrationTest : BaseIntegrationTest() {
         businessId: String,
         title: String = "Test Job $testId"
     ): Map<String, Any?> {
-        return client.from("jobs").insert(buildTestData(
-            "business_id" to businessId,
-            "title" to title,
-            "description" to "Test job description",
-            "wage" to 50000.0,
-            "wage_type" to "per_hour",
-            "location" to "Jakarta, Indonesia",
-            "category" to "hospitality",
-            "start_time" to "09:00",
-            "end_time" to "17:00",
-            "shift_date" to LocalDate.now().plusDays(1).toString(),
-            "is_urgent" to false,
-            "worker_count" to 1,
-            "status" to "open"
-        )).decodeSingle<Map<String, Any?>>()
+        val jobData = createTestJobData(
+            businessId = businessId,
+            title = title,
+            description = "Test job description",
+            wage = 50000.0,
+            wageType = "per_hour",
+            location = "Jakarta, Indonesia",
+            category = "hospitality",
+            startTime = "09:00",
+            endTime = "17:00",
+            shiftDate = LocalDate.now().plusDays(1).toString(),
+            isUrgent = false,
+            workerCount = 1,
+            status = "open",
+            testId = testId
+        )
+        return client.from("jobs").insert(jobData).decodeSingle<Map<String, Any?>>()
     }
 }

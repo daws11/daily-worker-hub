@@ -28,7 +28,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== GET JOBS FOR WORKER TESTS ====================
 
     @Test
-    fun `get jobs for worker empty returns empty list`() = runTest {
+    fun get_jobs_for_worker_empty_returns_empty_list() = runTest {
         // Arrange - New worker with no jobs in database
         authenticateAsWorker()
 
@@ -41,7 +41,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get jobs for worker with jobs returns jobs`() = runTest {
+    fun get_jobs_for_worker_with_jobs_returns_jobs() = runTest {
         // Arrange - Create jobs
         val businessId = authenticateAsBusiness()
         createTestJob(businessId, "Test Job 1 $testId")
@@ -58,7 +58,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `get jobs filters by distance when location provided`() = runTest {
+    fun get_jobs_filters_by_distance_when_location_provided() = runTest {
         // This test verifies the distance filtering logic
         val workerLocation = GeoPoint(-6.2088, 106.8456) // Jakarta
         val jobLocation = GeoPoint(-6.2100, 106.8500) // Near Jakarta
@@ -78,7 +78,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== 21 DAYS RULE TESTS ====================
 
     @Test
-    fun `21 Days Rule under limit allows application`() = runTest {
+    fun check_21_days_rule_under_limit_allows_application() = runTest {
         // Arrange - Create business and worker
         val businessId = authenticateAsBusiness()
         logoutIfNeeded()
@@ -117,7 +117,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `21 Days Rule at limit 20 days allows application`() = runTest {
+    fun check_21_days_rule_at_limit_20_days_allows_application() = runTest {
         // This test verifies the boundary condition at exactly 20 days
         val daysWorked = 20
 
@@ -126,7 +126,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `21 Days Rule over limit blocks application`() = runTest {
+    fun check_21_days_rule_over_limit_blocks_application() = runTest {
         // This test verifies the boundary condition over 20 days
         val daysWorked = 21
 
@@ -137,7 +137,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
     // ==================== DISTANCE SCORING TESTS ====================
 
     @Test
-    fun `distance scoring 0-5 km returns 30 points`() = runTest {
+    fun distance_scoring_0_to_5_km_returns_30_points() = runTest {
         // Test distances under 2km
         val distance1 = 0.5
         val distance2 = 1.0
@@ -147,13 +147,13 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         val score2 = calculateDistanceScore(distance2)
         val score3 = calculateDistanceScore(distance3)
 
-        assertEquals("Very close (<2km) should get 30 points", 30.0, score1)
-        assertEquals("Very close (<2km) should get 30 points", 30.0, score2)
-        assertEquals("Very close (<2km) should get 30 points", 30.0, score3)
+        assertEquals("Very close (<2km) should get 30 points", 30.0, score1, 0.001)
+        assertEquals("Very close (<2km) should get 30 points", 30.0, score2, 0.001)
+        assertEquals("Very close (<2km) should get 30 points", 30.0, score3, 0.001)
     }
 
     @Test
-    fun `distance scoring 5-10 km returns 20 points`() = runTest {
+    fun distance_scoring_5_to_10_km_returns_20_points() = runTest {
         // Test distances between 2-5km
         val distance1 = 2.5
         val distance2 = 4.0
@@ -161,12 +161,12 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         val score1 = calculateDistanceScore(distance1)
         val score2 = calculateDistanceScore(distance2)
 
-        assertEquals("Close (2-5km) should get 25 points", 25.0, score1)
-        assertEquals("Close (2-5km) should get 25 points", 25.0, score2)
+        assertEquals("Close (2-5km) should get 25 points", 25.0, score1, 0.001)
+        assertEquals("Close (2-5km) should get 25 points", 25.0, score2, 0.001)
     }
 
     @Test
-    fun `distance scoring 10-20 km returns 10 points`() = runTest {
+    fun distance_scoring_10_to_20_km_returns_10_points() = runTest {
         // Test distances between 5-10km
         val distance1 = 6.0
         val distance2 = 9.0
@@ -174,12 +174,12 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         val score1 = calculateDistanceScore(distance1)
         val score2 = calculateDistanceScore(distance2)
 
-        assertEquals("Medium (5-10km) should get 15 points", 15.0, score1)
-        assertEquals("Medium (5-10km) should get 15 points", 15.0, score2)
+        assertEquals("Medium (5-10km) should get 15 points", 15.0, score1, 0.001)
+        assertEquals("Medium (5-10km) should get 15 points", 15.0, score2, 0.001)
     }
 
     @Test
-    fun `distance scoring 20+ km returns 0 points`() = runTest {
+    fun distance_scoring_20_plus_km_returns_0_points() = runTest {
         // Test distances over 30km
         val distance1 = 25.0
         val distance2 = 35.0
@@ -189,26 +189,26 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         val score2 = calculateDistanceScore(distance2)
         val score3 = calculateDistanceScore(distance3)
 
-        assertEquals("Very far (20-30km) should get 5 points", 5.0, score1)
-        assertEquals("Out of range (>30km) should get 2 points", 2.0, score2)
-        assertEquals("Out of range (>30km) should get 2 points", 2.0, score3)
+        assertEquals("Very far (20-30km) should get 5 points", 5.0, score1, 0.001)
+        assertEquals("Out of range (>30km) should get 2 points", 2.0, score2, 0.001)
+        assertEquals("Out of range (>30km) should get 2 points", 2.0, score3, 0.001)
     }
 
     // ==================== SKILLS MATCHING TESTS ====================
 
     @Test
-    fun `skills matching calculates score correctly`() = runTest {
+    fun skills_matching_calculates_score_correctly() = runTest {
         // In the current implementation, skill score is a fixed 25 points
         // This test verifies that scoring weight is correct
         val expectedSkillScore = MatchingConstants.WEIGHT_SKILL
 
-        assertEquals("Skill score weight should be 25", 25.0, expectedSkillScore)
+        assertEquals("Skill score weight should be 25", 25.0, expectedSkillScore, 0.001)
     }
 
     // ==================== JOB PRIORITIZATION TESTS ====================
 
     @Test
-    fun `job prioritization sorts by total score`() = runTest {
+    fun job_prioritization_sorts_by_total_score() = runTest {
         // This test verifies sorting logic
         val jobs = listOf(
             JobScoreData("job1", 85.0),
@@ -224,7 +224,7 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `match score calculation correct total`() = runTest {
+    fun match_score_calculation_correct_total() = runTest {
         // Test total score calculation
         val distanceScore = 30.0
         val skillScore = 25.0
@@ -234,13 +234,13 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
 
         val totalScore = distanceScore + skillScore + ratingScore + reliabilityScore + urgencyScore
 
-        assertEquals("Total score should be 100", 100.0, totalScore)
+        assertEquals("Total score should be 100", 100.0, totalScore, 0.001)
     }
 
     // ==================== GET ELIGIBLE WORKERS TESTS ====================
 
     @Test
-    fun `get eligible workers for job returns workers`() = runTest {
+    fun get_eligible_workers_for_job_returns_workers() = runTest {
         // This test verifies we can query workers who haven't exceeded 20 days
         val businessId = authenticateAsBusiness()
         val job = createTestJob(businessId)
@@ -294,20 +294,22 @@ class MatchingRepositoryIntegrationTest : BaseIntegrationTest() {
         businessId: String,
         title: String = "Test Job $testId"
     ): Map<String, Any?> {
-        return client.from("jobs").insert(buildTestData(
-            "business_id" to businessId,
-            "title" to title,
-            "description" to "Test job description",
-            "wage" to 50000.0,
-            "wage_type" to "per_hour",
-            "location" to "Jakarta, Indonesia",
-            "category" to "hospitality",
-            "start_time" to "09:00",
-            "end_time" to "17:00",
-            "shift_date" to java.time.LocalDate.now().plusDays(1).toString(),
-            "is_urgent" to false,
-            "worker_count" to 1,
-            "status" to "open"
-        )).decodeSingle<Map<String, Any?>>()
+        val jobData = createTestJobData(
+            businessId = businessId,
+            title = title,
+            description = "Test job description",
+            wage = 50000.0,
+            wageType = "per_hour",
+            location = "Jakarta, Indonesia",
+            category = "hospitality",
+            startTime = "09:00",
+            endTime = "17:00",
+            shiftDate = java.time.LocalDate.now().plusDays(1).toString(),
+            isUrgent = false,
+            workerCount = 1,
+            status = "open",
+            testId = testId
+        )
+        return client.from("jobs").insert(jobData).decodeSingle<Map<String, Any?>>()
     }
 }

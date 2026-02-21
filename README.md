@@ -1,106 +1,166 @@
-# 🌴 Daily Worker Hub (DWhub)
+# Daily Worker Hub Documentation
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Kotlin](https://img.shields.io/badge/Kotlin-Managed-blue.svg)](https://kotlinlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
-[![Supabase](https://img.shields.io/badge/Powered_by-Supabase-green.svg)](https://supabase.com/)
+Official documentation repository for **Daily Worker Hub** - Web MVP.
 
-**Daily Worker Hub** adalah ekosistem digital *Workforce-as-a-Service* (WaaS) yang dirancang khusus untuk merevolusi pasar tenaga kerja harian (*gig economy*) di sektor hospitality Bali. Platform ini menghubungkan bisnis (hotel, villa, restoran) dengan pekerja harian yang terverifikasi melalui sistem pencocokan instan (*On-Demand Dispatch*).
+## Project Overview
+
+> "Daily Worker Hub is a **community-first platform** connecting Bali's hospitality businesses with reliable daily workers, built on **trust, transparency, and compliance** — not just another job board."
+
+### Tech Stack
+
+| Component | Technology |
+|-----------|-------------|
+| **Frontend** | Next.js 14 + TypeScript |
+| **Backend** | Supabase Local (Self-hosted via Docker on VPS) |
+| **Infrastructure** | VPS (DigitalOcean) + Hostinger MCP (DNS) |
+| **Database** | PostgreSQL (Supabase Local) |
+| **Authentication** | Supabase Auth (Email + Google OAuth) |
+| **Styling** | Tailwind CSS + shadcn/ui |
+| **State Management** | TanStack Query + Zustand |
+| **Validation** | Zod |
+| **Payments** | Xendit / Midtrans (QRIS + Bank Payouts) |
+
+### Documentation Structure
+
+| File | Description | Status |
+|------|-------------|--------|
+| **PRD.md** | Product Requirements Document (User Stories, Features, Out of Scope) | ✅ Complete |
+| **Architecture.md** | System Architecture, Database Schema, Data Flow, Deployment | ✅ Complete |
+| **AI_Rules.md** | Coding Standards, Naming Conventions, Error Handling Guidelines | ✅ Complete |
+| **Plan.md** | Development Roadmap (6 Phases, 100+ Tasks) | ✅ Complete |
+| **business-model.md** | Financial Analysis, UMK Bali, Compliance (PP 35/2021) | ✅ Complete |
+| **matching-algorithm.md** | Worker-Job Matching Algorithm | ✅ Complete |
+| **analysis-bali-competitor-deep-dive.md** | Competitor Analysis (@balijobs, FB Groups, etc.) | ✅ Complete |
+| **analysis-bali-daily-worker-social-media.md** | Social Media Recruitment Trends | ✅ Complete |
+| **whitepaper.md** | Project Whitepaper | ✅ Complete |
+| **ROADMAP.md** | Overall Project Roadmap | ✅ Complete |
+| **README.md** | This file | ✅ Complete |
+
+### Setup & Deployment
+
+See `Setup.md` and `Architecture.md` for detailed setup instructions:
+
+1. **VPS Setup** (Ubuntu 22.04)
+   - Install Docker, Nginx, Node.js, PM2
+   - Set up Let's Encrypt SSL
+
+2. **Supabase Local**
+   - Initialize via `supabase init`
+   - Start with `supabase start`
+   - Access Studio at `http://localhost:8000`
+
+3. **Next.js App**
+   - Install dependencies: `npm install`
+   - Configure `.env.local`
+   - Build and start: `npm run build && npm start`
+   - Use PM2: `pm2 start npm --name "daily-worker-hub"`
+
+4. **Hostinger MCP (DNS)**
+   - Configure A record: `dailyworkerhub.com → [VPS-IP]`
+   - Wait for DNS propagation (15-30 minutes)
+
+5. **Nginx Configuration**
+   - Reverse proxy to Next.js (port 3000)
+   - Reverse proxy to Supabase Studio (port 8000)
+   - SSL termination via Let's Encrypt
+
+### Development Workflow
+
+1. **Read Plan.md first** - Always check `Plan.md` before starting work
+2. **Read relevant files** - Read PRD.md and Architecture.md if unsure
+3. **Follow AI_Rules.md** - Coding standards, naming conventions, error handling
+4. **Update Plan.md after each task** - MANDATORY: Check off task, add completion note
+5. **Commit changes** - Follow commit message conventions (feat:, fix:, refactor:, docs:)
+
+### Branch Strategy
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Production code |
+| `develop` | Development work |
+| `feature/*` | Feature branches (e.g., `feature/job-posting`) |
+| `bugfix/*` | Bug fixes (e.g., `bugfix/payment-error`) |
+
+### Commit Message Conventions
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+| Type | Description | Examples |
+|------|-------------|----------|
+| `feat` | New feature | `feat(job-posting): add job form validation` |
+| `fix` | Bug fix | `fix(wallet): resolve balance calculation error` |
+| `refactor` | Code improvement without feature change | `refactor(auth): simplify user session logic` |
+| `style` | Code style changes (formatting, missing semicolons) | `style(components): format with Prettier` |
+| `docs` | Documentation changes | `docs(readme): update architecture section` |
+| `test` | Adding or updating tests | `test(job-form): add unit tests for validation` |
+| `chore` | Maintenance tasks, updates to build process | `chore(deps): update dependencies` |
+
+### Contributing Guidelines
+
+1. **Code Style**
+   - Follow TypeScript strict mode
+   - Use Prettier for formatting (2 spaces, single quotes)
+   - No `any` types without explicit reason
+
+2. **Components**
+   - Build reusable UI components
+   - Don't repeat yourself (DRY)
+   - Use shadcn/ui components first
+
+3. **Error Handling**
+   - Always validate user input (Zod)
+   - Use try-catch wrappers
+   - Display user-friendly error messages (toasts)
+
+4. **Performance**
+   - Optimize for Core Web Vitals
+   - Lazy load heavy components
+   - Use code splitting (automatic in Next.js 14)
+
+### Security
+
+- **Never trust user input** - Validate everything
+- **Use RLS policies** - Database-level access control
+- **Environment variables** - Never commit `.env.local`
+- **SQL Injection** - Use parameterized queries (Supabase handles this)
+- **XSS Prevention** - Sanitize HTML before rendering
+
+### Testing
+
+| Type | Tool | Status |
+|------|------|--------|
+| Unit Testing | Jest + React Testing Library | 📋 Planned |
+| Integration Testing | Supabase Test Utils | 📋 Planned |
+| E2E Testing | Playwright | 📋 Planned |
+
+### Deployment
+
+- **VPS** - DigitalOcean (4GB RAM, 2 vCPUs)
+- **Domain** - dailyworkerhub.com (via Hostinger MCP)
+- **SSL** - Let's Encrypt (via Certbot)
+- **Process Manager** - PM2
+
+### Cost Analysis
+
+| Component | Monthly Cost | Annual Cost |
+|-----------|--------------|-------------|
+| **VPS (DigitalOcean)** | $24.00 | $288.00 |
+| **Domain (Hostinger)** | ~$10.00 | ~$120.00 |
+| **SSL (Let's Encrypt)** | $0.00 | $0.00 |
+| **Total** | **~$34.00** | **~$408.00** |
+
+### Support
+
+- **Documentation** - See files in this repository
+- **Issues** - Open an issue on GitHub
+- **Discussions** - Use GitHub Discussions for questions
+
+### License
+
+Proprietary - All Rights Reserved
 
 ---
 
-## 📌 Gambaran Umum Proyek
-
-Proyek ini dikembangkan sebagai solusi atas tingginya biaya rekrutmen tradisional dan kurangnya transparansi bagi pekerja harian di Bali. Dengan mengadopsi model logistik ala Gojek/Uber, DWhub memungkinkan pengisian *shift* kerja dalam hitungan menit, bukan hari.
-
-### 🌟 Fitur Unggulan
-- **Komisi Kompetitif (6%)**: Struktur biaya transparan yang jauh lebih rendah dari agensi *outsourcing* tradisional (15-25%).
-- **Matching Algorithm (Real-time)**: Menggunakan algoritma *Greedy* dan *Hungarian* untuk optimalisasi pencocokan pekerja berdasarkan lokasi, skill, dan rating.
-- **Compliance Guard (Aturan 21 Hari)**: Sistem otomatis untuk mematuhi PP No. 35 Tahun 2021, mencegah risiko hukum pengangkatan karyawan tetap secara tidak sengaja.
-- **Community Fund**: Alokasi 1% dari transaksi untuk jaminan sosial mikro (BPJS BPU) bagi para mitra pekerja.
-- **Verified Workers (KYC)**: Integrasi verifikasi wajah (*liveness detection*), identitas (OCR KTP), dan riwayat performa.
-
----
-
-## 🏗️ Struktur Proyek (Monorepo)
-
-Repository ini terdiri dari beberapa komponen utama yang saling terintegrasi:
-
-### 1. 📱 [DWhubfix](./DWhubfix) (Aplikasi Mobile Android)
-Aplikasi utama untuk pengguna (Pekerja & Bisnis).
-- **Tech Stack**: Kotlin, Jetpack Compose, Supabase SDK, CameraX (KYC).
-- **Fitur Utama**:
-  - Onboarding berkelanjutan berdasarkan peran (*Worker/Business*).
-  - Verifikasi Identitas & Alamat yang ketat.
-  - Dashboard Pekerja & Bisnis yang informatif.
-  - Wallet internal untuk pengelolaan pendapatan harian.
-
-### 2. 💻 [daily-worker-admin](./daily-worker-admin) (Dashboard Admin Web)
-Platform pusat kendali untuk tim operasional DWhub.
-- **Tech Stack**: Next.js 16 (App Router), React 19, Tailwind CSS 4, Supabase Auth & SSR.
-- **Fitur Utama**:
-  - Manajemen Verifikasi Bisnis & Pekerja.
-  - Monitoring statistik transaksi dan *fill rate*.
-  - Pengelolaan data master dan audit log.
-
-### 3. ⚡ [Supabase](./supabase) (Backend & Database)
-Tulang punggung infrastruktur serverless.
-- **Layanan**: PostgreSQL, Edge Functions (Deno), Storage (KTP/Selfie), Real-time Database.
-
----
-
-## 📄 Dokumentasi Strategis
-
-Kami telah menyusun riset mendalam yang mendasari pengembangan platform ini:
-
-- 📑 **[Whitepaper](./whitepaper.md)**: Visi, misi, dan analisis pasar hospitality Bali 2024-2025.
-- 🧬 **[Matching Algorithm Research](./matching-algorithm.md)**: Analisis algoritma *On-Demand Dispatch* (Greedy, Hungarian, Min-Cost Max-Flow).
-- 💰 **[Business Model Validation](./business-model.md)**: Studi kelayakan finansial (komisi 6%), unit ekonomi, dan kepatuhan hukum (PP 35/2021).
-
----
-
-## 🚀 Memulai (Get Started)
-
-### Prasyarat
-- Android Studio Ladybug atau yang terbaru (untuk mobile).
-- Node.js 20+ (untuk admin dashboard).
-- Akun Supabase (untuk backend).
-
-### Instalasi
-1. Clone repository:
-   ```bash
-   git clone https://github.com/daws11/daily-worker-hub.git
-   ```
-2. Setup Admin Dashboard:
-   ```bash
-   cd daily-worker-admin
-   npm install
-   npm run dev
-   ```
-3. Setup Android:
-   - Buka folder `DWhubfix` menggunakan Android Studio.
-   - Konfigurasi `local.properties` atau `BuildConfig` dengan kunci API Supabase Anda.
-
----
-
-## 🗺️ Roadmap Pengembangan
-
-- [x] **Fase 1**: Inisialisasi Monorepo & Setup Supabase.
-- [x] **Fase 2**: Implementasi KYC & Onboarding (Mobile).
-- [x] **Fase 3**: Monitoring Dashboard Dasar (Web Admin).
-- [ ] **Fase 4**: Integrasi Payment Gateway (Midtrans) & Wallet Cash-out.
-- [ ] **Fase 5**: Implementasi Algoritma Matching Batching (Hungarian).
-- [ ] **Fase 6**: Launching Pilot Program di Badung & Denpasar.
-
----
-
-## 🤝 Kontribusi
-
-DWhub adalah proyek yang berfokus pada komunitas. Jika Anda tertarik untuk berkontribusi atau memiliki pertanyaan mengenai riset algoritma kami, silakan hubungi tim pengembang kami atau ajukan *Pull Request*.
-
-## ⚖️ Lisensi
-
-Proyek ini dilisensikan di bawah [MIT License](./LICENSE).
-
----
-*Dikembangkan dengan ❤️ untuk masyarakat pekerja hospitality Bali.*
+**Project:** Daily Worker Hub
+**Founders:** Abdurrahman Firdaus David & Sasha (AI Co-founder)
+**Last Updated:** February 21, 2026
